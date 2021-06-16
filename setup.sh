@@ -863,6 +863,48 @@ MYS(){
                 ins_del
             fi
 }
+php5_6_stop(){
+    if [ -x "$(command -v php5.6)"  ]; then
+        systemctl stop php5.6-fpm.service >/dev/null
+        systemctl disable php5.6-fpm.service >/dev/null
+    fi
+}
+php7_0_stop(){
+    if [ -x "$(command -v php7.0)"  ]; then
+        systemctl stop php7.0-fpm.service >/dev/null
+        systemctl disable php7.0-fpm.service >/dev/null
+    fi
+}
+php7_1_stop(){
+    if [ -x "$(command -v php7.1)"  ]; then
+        systemctl stop php7.1-fpm.service >/dev/null
+        systemctl disable php7.1-fpm.service >/dev/null
+    fi
+}
+php7_2_stop(){
+    if [ -x "$(command -v php7.2)"  ]; then
+        systemctl stop php7.2-fpm.service >/dev/null
+        systemctl disable php7.2-fpm.service >/dev/null
+    fi
+}
+php7_3_stop(){
+    if [ -x "$(command -v php7.3)"  ]; then
+        systemctl stop php7.3-fpm.service >/dev/null
+        systemctl disable php7.3-fpm.service >/dev/null
+    fi
+}
+php7_4_stop(){
+    if [ -x "$(command -v php7.4)"  ]; then
+        systemctl stop php7.4-fpm.service >/dev/null
+        systemctl disable php7.4-fpm.service >/dev/null
+    fi
+}
+php8_0_stop(){
+    if [ -x "$(command -v php7.4)"  ]; then
+        systemctl stop php8.0-fpm.service >/dev/null
+        systemctl disable php8.0-fpm.service >/dev/null
+    fi
+}
 php5_6(){
     (
         echo "5";
@@ -1300,7 +1342,8 @@ php8_0(){
             fi
 }
 php_ver(){
-        ListType=$(zenity --window-icon ".res/php.png" --width=150 --height=280 --checklist --list \
+
+    php_sel=$(zenity --window-icon ".res/php.png" --width=150 --height=280 --checklist --list \
                 --title='PHP'\
                 --text="<b>Select PHP Version To Install :</b>"\
                 --column="Select" --column="Version List" \
@@ -1312,82 +1355,69 @@ php_ver(){
                 " " "7.0" \
                 " " "5.6"
                 )
-            if [[ $? -eq 1 ]]; then
+
+        if [[ $? -eq 1 ]]; then
                 # they pressed Cancel or closed the dialog window
                 zenity --window-icon ".res/error.png" --error --title="Declined" --width=200 \
                     --text="installation Canceled   ❌ "
-                ins_del
+                # ins_del
                 exit 1
-            fi
-            if [[ -z "$ListType" ]]; then
+        fi
+        if [[ -z "$php_sel" ]]; then
                 # they selected the short radio button
                 zenity --width=200 --height=25 --timeout 15 --error \
                 --text="Select Any One To Install ⚠️"
                 # ins
+        fi
+        if [[ $php_sel == *"8.0"* ]]; then
+            if ! [ -x "$(command -v php8.0)"  ]; then
+                php8_0
+            else
+                zenity --window-icon ".res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 8.0  ✅"
             fi
-            if [[ $ListType == *"5.6"* ]]; then
-                # they selected the short radio button
-                Flag="--Domain-Join"
-                if ! [ -x "$(command -v php5.6)"  ]; then
-                    php5_6
-                else
-                    zenity --window-icon ".res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed: \n\n</b> <b>Versions : </b> 5.2  ✅"
-                fi
+        fi
+        if [[ $php_sel == *"7.4"* ]]; then
+            if ! [ -x "$(command -v php7.4)"  ]; then
+                php7_4
+            else
+                zenity --window-icon ".res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.4  ✅"
             fi
-            if [[ $ListType == *"7.0"* ]]; then
-                # they selected the short radio button
-                Flag="--Domain-Join"
-                if ! [ -x "$(command -v php7.0)"  ]; then
-                    php7_0
-                else
-                    zenity --window-icon ".res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.0  ✅"
-                fi
+        fi
+        if [[ $php_sel == *"7.3"* ]]; then
+            if ! [ -x "$(command -v php7.3)"  ]; then
+                php7_3
+            else
+                zenity --window-icon ".res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.3  ✅"
             fi
-            if [[ $ListType == *"7.1"* ]]; then
-                # they selected the short radio button
-                Flag="--Domain-Join"
-                if ! [ -x "$(command -v php7.1)"  ]; then
-                    php7_1
-                else
-                    zenity --window-icon ".res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.1  ✅"
-                fi
-            fi
-            if [[ $ListType == *"7.2"* ]]; then
-                # they selected the short radio button
-                Flag="--Domain-Join"
-                if ! [ -x "$(command -v php7.2)"  ]; then
+        fi
+        if [[ $php_sel == *"7.2"* ]]; then
+           if ! [ -x "$(command -v php7.2)"  ]; then
                     php7_2
-                else
-                    zenity --window-icon ".res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.2  ✅"
-                fi
+            else
+                zenity --window-icon ".res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.2  ✅"
             fi
-            if [[ $ListType == *"7.3"* ]]; then
-                # they selected the short radio button
-                Flag="--Domain-Join"
-                if ! [ -x "$(command -v php7.3)"  ]; then
-                    php7_3
-                else
-                    zenity --window-icon ".res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.3  ✅"
-                fi
+        fi
+        if [[ $php_sel == *"7.1"* ]]; then
+            if ! [ -x "$(command -v php7.1)"  ]; then
+                    php7_1
+            else
+                zenity --window-icon ".res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.1  ✅"
             fi
-            if [[ $ListType == *"7.4"* ]]; then
-                # they selected the short radio button
-                Flag="--Domain-Join"
-                if ! [ -x "$(command -v php7.4)"  ]; then
-                    php7_4
-                else
-                    zenity --window-icon ".res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.4  ✅"
-                fi
+        fi
+        if [[ $php_sel == *"7.0"* ]]; then
+            if ! [ -x "$(command -v php7.0)"  ]; then
+                    php7_0
+            else
+                zenity --window-icon ".res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.0  ✅"
             fi
-            if [[ $ListType == *"8.0"* ]]; then
-                # they selected the short radio button
-                Flag="--Domain-Join"
-                if ! [ -x "$(command -v php8.0)"  ]; then
-                    php8_0
-                else
-                    zenity --window-icon ".res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 8.0  ✅"
-                fi
+        fi
+        if [[ $php_sel == *"5.6"* ]]; then
+            if ! [ -x "$(command -v php5.6)"  ]; then
+                    php5_6
+            else
+                zenity --window-icon ".res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed: \n\n</b> <b>Versions : </b> 5.2  ✅"
             fi
+        fi
 }
 NG(){
     (
@@ -1518,6 +1548,27 @@ DOCK_IN(){
             apt-get install docker-ce docker-ce-cli containerd.io -y  >/dev/null
             systemctl start docker
             systemctl enable docker
+            echo "60";
+            echo "# Stoping PHP 5.6 ...";
+            php5_6_stop
+            echo "65";
+            echo "# Stoping PHP 7.0 ...";
+            php7_0_stop
+            echo "70";
+            echo "# Stoping PHP 7.1 ...";
+            php7_1_stop
+            echo "73";
+            echo "# Stoping PHP 7.2 ...";
+            php7_2_stop
+            echo "75";
+            echo "# Stoping PHP 7.3 ...";
+            php7_3_stop
+            echo "78";
+            echo "# Stoping PHP 7.4 ...";
+            php7_4_stop
+            echo "78";
+            echo "# Stoping PHP 8.0 ...";
+            php8_0_stop
             echo "80";
             echo "# Configuring Docker Setup ...";
             sudo sed -i -e 's/SocketMode=.*/SocketMode=0666/g' /lib/systemd/system/docker.socket

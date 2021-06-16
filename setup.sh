@@ -1553,13 +1553,13 @@ RES(){
 }
 ins(){
     clear
+    RES
     if [ `whoami` != root ]; then
             zenity --window-icon "res/error.png" --width=350 --error \
             --text="Please Run This Scripts As <b>root</b> Or As <b>Sudo User</b>"
             exit
     else
             # apt-get install -y zenity >/dev/null
-            RES
             ListType=$(zenity --window-icon "res/rage.png" --width=400 --height=350 --checklist --list \
                 --title='Installation'\
                 --text="<b>Select Software to install :</b>\n <span color=\"red\" font='10'> ⚠️ NOTE : Don't select Domain-join in multi selection. ⚠️ </span>"\                --column="Select" --column="Software List" \

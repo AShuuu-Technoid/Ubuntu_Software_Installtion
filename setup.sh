@@ -1,18 +1,18 @@
 #!/bin/bash
 #!/bin/sh
 cra(){
-    IFS='|' read user pw domi  < <( zenity --window-icon "res/rage.jpg" --width=300  --height=190 --forms --title="Credentials" --text="Login Details"    --add-entry="Username"    --add-password="Password"    --add-entry="Domain" )
+    IFS='|' read user pw domi  < <( zenity --window-icon "res/rage.png" --width=300  --height=190 --forms --title="Credentials" --text="Login Details"    --add-entry="Username"    --add-password="Password"    --add-entry="Domain" )
     dom=`echo $domi | awk '{print toupper($0)}'`
     us=$user
     if [[ $? -eq 1 ]]; then
-            zenity --width=200 --height=25 --error \
+            zenity --window-icon "res/error.png" --width=200 --height=25 --error \
             --text="Login Failed !!!"
             # cra
             exit;
     fi
 }
 ins_del(){
-    zenity --window-icon "res/rage.jpg" --question --title="Exit" --width=350 --text="Are you sure, You want to delect this Script ?"
+    zenity --window-icon "res/question.png" --question --title="Exit" --width=350 --text="Are you sure, You want to delect this Script ?"
     if [ $? = 0 ]; then
         SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
         rm -rf $SCRIPT_DIR
@@ -26,12 +26,12 @@ rsrt(){
         echo "# System will restart in $[ $timeout - $i ] ..."
         echo $[ 100 * $i / $timeout ]
         sleep 1
-    done | zenity  --window-icon "Hourglass.gif" --progress --title="Restarting ..."  \
+    done | zenity  --window-icon "res/progress.png" --progress --title="Restarting ..."  \
         --window-icon=warning --width=500 --auto-close
     if [ $? = 0 ] ; then
         /sbin/reboot
     else
-        zenity --info --width=280 --height=100 --timeout 15  --title="Restart" --text "<b>Restart manually ...</b>"
+        zenity --window-icon "res/info.png" --info --width=280 --height=100 --timeout 15  --title="Restart" --text "<b>Restart manually ...</b>"
     fi
 }
 cl(){
@@ -51,7 +51,7 @@ domainjoin(){
         cd /tmp
         echo "10" ; sleep 3
         echo "# Downloading Packages ..."
-        wget https://github.com/Darkshadee/pbis-open/releases/download/9.1.0/pbis-open-9.1.0.551.linux.x86_64.deb.sh 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity  --window-icon "res/download.jpg" --progress --width=500 --auto-close  --title="Domain Joining"
+        wget https://github.com/Darkshadee/pbis-open/releases/download/9.1.0/pbis-open-9.1.0.551.linux.x86_64.deb.sh 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity  --window-icon "res/download.png" --progress --width=500 --auto-close  --title="Domain Joining"
         echo "15" ; sleep 3
         echo "# Running Script ..."
         sh pbis-open-9.1.0.551.linux.x86_64.deb.sh >/dev/null 2>&1
@@ -83,26 +83,26 @@ domainjoin(){
         echo "# Rebooting system ..."
         rsrt
         ) |
-        zenity --width=500 --window-icon "Hourglass.gif" --progress \
+        zenity --width=500 --window-icon "res/progress.png"  --progress \
         --title="Domain Joining" \
         --text="Domain Joining..." \
         --percentage=0 --auto-close
         if [[ $? == 1 ]]; then
-            zenity --width=200 --error \
-            --text="Installtion Canceled   ❌"
+            zenity --window-icon "res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
             ins_del
         fi
 }
 domain(){
-            ListType=`zenity --window-icon "res/rage.jpg"  --width=400 --height=200 --list --radiolist \
-                --title 'Installaion'\
+            ListType=`zenity --window-icon "res/rage.png"  --width=400 --height=200 --list --radiolist \
+                --title 'Installation'\
                 --text 'Select Software to install:' \
                 --column 'Select' \
                 --column 'Actions' TRUE "Join" FALSE "Remove"`
             if [[ $? -eq 1 ]]; then
                 # they pressed Cancel or closed the dialog window
-                zenity --error --title="Declined" --width=200 \
-                    --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --error --title="Declined" --width=200 \
+                    --text="installation Canceled   ❌"
                 exit 1
             elif [ $ListType == "Join" ]; then
                 # they selected the short radio button
@@ -120,7 +120,7 @@ php_nl_in(){
         (
             echo "25";
             echo "# Downloading php-composer ..." ; sleep 3
-            wget $php_comp_nl_url -P /tmp/ 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon "res/download.jpg" --progress --width=500 --auto-close  --title="Downloading Php-composer..."
+            wget $php_comp_nl_url -P /tmp/ 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon "res/download.png" --progress --width=500 --auto-close  --title="Downloading Php-composer..."
             echo "70";
             echo "# Installing Php-composer ..." ; sleep 3
             mkdir /usr/local/bin/composer >/dev/null 2>&1
@@ -133,15 +133,15 @@ php_nl_in(){
             echo "95";
             echo "# Installation Done ..." ;
             rm -rf /tmp/composer.phar >/dev/null 2>&1
-            zenity --window-icon "res/rage.jpg" --info --width=280 --height=100 --timeout 15  --title="PHP-Composer" --text "<b>PHP Composer has been installed  ✅</b>"
         ) |
-            zenity --width=500 --window-icon "Hourglass.gif" --progress \
+            zenity --width=500 --window-icon "res/php-com.png"  --progress \
             --title="Installing PHP-Composer" \
             --text="Please wait ..." \
             --percentage=0 --auto-close
+            zenity --window-icon "res/done.png" --info --width=280 --height=100 --timeout 15  --title="PHP-Composer" --text "<b>PHP Composer has been installed  ✅</b>"
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌"
                 ins_del
             fi
 }
@@ -150,7 +150,7 @@ php_comp_lst(){
             url="https://github.com/composer/composer/releases/download/$choice/composer.phar"
             echo "25";
             echo "# Downloading php-composer ..." ; sleep 3
-            wget $url -P /tmp/ 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon "res/download.jpg" --progress --width=500 --auto-close  --title="Downloading Php-composer..."
+            wget $url -P /tmp/ 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon "res/download.png" --progress --width=500 --auto-close  --title="Downloading Php-composer..."
             echo "70";
             echo "# Installing Php-composer ..." ; sleep 3
             mkdir /usr/local/bin/composer >/dev/null 2>&1
@@ -164,26 +164,26 @@ php_comp_lst(){
             echo "95";
             echo "# Installation Done ..." ;
             rm -rf /tmp/composer.phar >/dev/null 2>&1
-            zenity --info --width=280 --height=100 --timeout 15  --title="PHP-Composer" --text "<b>PHP Composer has been installed   ✅</b>"
         ) |
-            zenity --width=500 --window-icon "Hourglass.gif" --progress \
+            zenity --width=500 --window-icon "res/php-com.png"  --progress \
             --title="Installing PHP-Composer" \
             --text="Please wait ..." \
             --percentage=0 --auto-close
+            zenity --window-icon "res/done.png" --info --width=280 --height=100 --timeout 15  --title="PHP-Composer" --text "<b>PHP Composer has been installed   ✅</b>"
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌"
                 ins_del
             fi
 }
 php_comp_nl(){
-        ver_ned=$(zenity --entry --width=200  --title "PHP-Composer" --text "PHP-Composer" --text="Enter Correct Version : ")
+        ver_ned=$(zenity --window-icon "res/php-com.png" --entry --width=200  --title "PHP-Composer" --text "PHP-Composer" --text="Enter Correct Version : ")
         php_comp_nl_url="https://github.com/composer/composer/releases/download/$ver_ned/composer.phar"
         # echo "$lan_nl_url"
         if curl --output /dev/null --silent --head --fail "$php_comp_nl_url"; then
             php_nl_in
         else
-            zenity --error --width=150  --title="Error" --text "<b>Incorrect Version !</b>"
+            zenity --window-icon "res/error.png" --error --width=150  --title="Error" --text "<b>Incorrect Version !</b>"
         fi
 }
 php_comp(){
@@ -194,7 +194,7 @@ php_comp(){
             choices=("${choices[@]}" "$mode" "$name")
             mode="false"
         done
-        choice=`zenity --window-icon "res/rage.jpg" --width=300 --height=380 \
+        choice=`zenity --window-icon "res/php-com.png" --width=300 --height=380 \
             --list \
             --separator="$IFS" \
             --radiolist \
@@ -205,8 +205,8 @@ php_comp(){
             False "Version Not Listed Here"`
         if [[ $? -eq 1 ]]; then
                 # they pressed Cancel or closed the dialog window
-                zenity --error --title="Declined" --width=200 \
-                    --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --error --title="Declined" --width=200 \
+                    --text="installation Canceled   ❌"
                 ins_del
                 exit 1
         fi
@@ -215,14 +215,14 @@ php_comp(){
         elif [[ $choice == *"$choice"* ]]; then
             php_comp_lst
         else
-            zenity --error --width=150  --title="Error" --text "<b>Incorrect Selections !</b>"
+            zenity --window-icon "res/error.png" --error --width=150  --title="Error" --text "<b>Incorrect Selections !</b>"
         fi
 }
 php_comp_chk(){
 	    file="/usr/bin/php"
        # file1="/usr/local/bin/node"
         if [[ ! -e "$file" ]]; then
-        	zenity --width=200 --error \
+        	zenity --window-icon "res/error.png" --width=200 --error \
                 --text="<b>PHP is not installed  ❌</b>"
         else
       		php_comp
@@ -237,58 +237,58 @@ lan_las(){
         url="https://github.com/lando/lando/releases/download/$lan_lat/$selver"
         echo "50";
         echo "# Downloading Lando ..." ; sleep 3
-        wget $url -P /tmp/ 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon "res/download.jpg" --progress --width=500 --auto-close  --title="Downloading Lando..."
+        wget $url -P /tmp/ 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon "res/download.png" --progress --width=500 --auto-close  --title="Downloading Lando..."
         echo "70";
         echo "# Installing Lando ..." ; sleep 3
         dpkg -i --ignore-depends=docker-ce /tmp/$selver > /dev/null 2>&1
         echo "95";
         echo "# Installation Done ..." ; sleep 3
         rm -rf /tmp/$selver
-        LAN_VER=$(dpkg -s lando | grep "Version:" | awk '{print $2}')
-        zenity --info --width=150 --height=100 --timeout 15 --title="Version Details" --text "<b>Lando Ver : </b> $LAN_VER"
     ) |
-            zenity --width=500 --window-icon "Hourglass.gif" --progress \
+            zenity --width=500 --window-icon "res/lando.png"  --progress \
             --title="Installing Lando" \
             --text="Please Wait ..." \
             --percentage=0 --auto-close
+            LAN_VER=$(dpkg -s lando | grep "Version:" | awk '{print $2}')
+            zenity --window-icon "res/done.png" --info --width=200 --height=100 --timeout 15 --title="Version Details" --text "<b>Lando Version : </b> v$LAN_VER   ✅"
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌"
                 ins_del
             fi
 }
 lan_nl(){
-        ver_ned=$(zenity --entry --width=200  --title "Lando" --text "Lando" --text="Enter Correct Version : ")
+        ver_ned=$(zenity --window-icon "res/lando.png" --entry --width=200  --title "Lando" --text "Lando" --text="Enter Correct Version : ")
         selver=`echo "lando-v$ver_ned.deb"`
         lan_nl_url="https://github.com/lando/lando/releases/download/v$ver_ned/$selver"
         # echo "$lan_nl_url"
         if curl --output /dev/null --silent --head --fail "$lan_nl_url"; then
             lan_nl_in
         else
-            zenity --error --width=150  --title="Error" --text "<b>Incorrect Version !</b>"
+            zenity --window-icon "res/error.png" --error --width=150  --title="Error" --text "<b>Incorrect Version !</b>"
         fi
 }
 lan_nl_in(){
     (
             echo "50";
             echo "# Downloading Lando ..." ; sleep 3
-            wget $lan_nl_url -P /tmp/ 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon "res/download.jpg" --progress --width=500 --auto-close  --title="Downloading Lando..."
+            wget $lan_nl_url -P /tmp/ 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon "res/download.png" --progress --width=500 --auto-close  --title="Downloading Lando..."
             echo "70";
             echo "# Installing Lando ..." ; sleep 3
             dpkg -i --ignore-depends=docker-ce /tmp/$selver > /dev/null 2>&1
             echo "95";
             echo "# Installation Done ..." ; sleep 3
             rm -rf /tmp/$selver
-            LAN_VER=$(dpkg -s lando | grep "Version:" | awk '{print $2}')
-            zenity --info --width=150 --height=100 --timeout 15 --title="Version Details" --text "<b>Lando Ver : </b> $LAN_VER"
     ) |
-            zenity --width=500 --window-icon "Hourglass.gif" --progress \
+            zenity --width=500 --window-icon "res/lando.png"  --progress \
             --title="Installing Lando" \
             --text="Please Wait ..." \
             --percentage=0 --auto-close
+            LAN_VER=$(dpkg -s lando | grep "Version:" | awk '{print $2}')
+            zenity --window-icon "res/done.png" --info --width=200 --height=100 --timeout 15 --title="Version Details" --text "<b>Lando Version : </b> $LAN_VER   ✅"
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌"
                 ins_del
             fi
 }
@@ -298,23 +298,23 @@ lan_spc_l(){
         url="https://github.com/lando/lando/releases/download/$choice/$selver"
         echo "50";
         echo "# Downloading Lando ..." ; sleep 3
-        wget $url -P /tmp/ 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon "res/download.jpg" --progress --width=500 --auto-close  --title="Downloading Lando..."
+        wget $url -P /tmp/ 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon "res/download.png" --progress --width=500 --auto-close  --title="Downloading Lando..."
         echo "70";
         echo "# Installing Lando ..." ; sleep 3
         dpkg -i --ignore-depends=docker-ce /tmp/$selver > /dev/null 2>&1
         echo "95";
         echo "# Installation Done ..." ; sleep 3
         rm -rf /tmp/$selver
-        LAN_VER=$(dpkg -s lando | grep "Version:" | awk '{print $2}')
-        zenity --info --width=150 --height=100 --timeout 15 --title="Version Details" --text "<b>Lando Ver : </b> $LAN_VER"
     ) |
-            zenity --width=500 --window-icon "Hourglass.gif" --progress \
+            zenity --width=500 --window-icon "res/lando.png"  --progress \
             --title="Installing Lando" \
             --text="Please Wait ..." \
             --percentage=0 --auto-close
+            LAN_VER=$(dpkg -s lando | grep "Version:" | awk '{print $2}')
+            zenity --window-icon "res/done.png" --info --width=200 --height=100 --timeout 15 --title="Version Details" --text "<b>Lando Version : </b> $LAN_VER   ✅"
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌"
                 ins_del
             fi
 }
@@ -326,7 +326,7 @@ lan_spc(){
             choices=("${choices[@]}" "$mode" "$name")
             mode="false"
         done
-        choice=`zenity --width=300 --height=380 \
+        choice=`zenity --window-icon "res/lando.png" --width=300 --height=380 \
             --list \
             --separator="$IFS" \
             --radiolist \
@@ -337,8 +337,8 @@ lan_spc(){
             False "Version Not Listed Here"`
         if [[ $? -eq 1 ]]; then
                 # they pressed Cancel or closed the dialog window
-                zenity --error --title="Declined" --width=200 \
-                    --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --error --title="Declined" --width=200 \
+                    --text="installation Canceled   ❌"
                 ins_del
                 exit 1
         fi
@@ -356,13 +356,13 @@ lan_rm(){
         echo "95";
         echo "# Removed Lando ..." ; sleep 3
     ) |
-            zenity --width=500 --window-icon "Hourglass.gif" --progress \
+            zenity --width=500 --window-icon "res/lando.png"  --progress \
             --title="Removing Lando" \
             --text="Lando..." \
             --percentage=0 --auto-close
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌"
                 ins_del
             fi
 }
@@ -373,29 +373,27 @@ lan_chk(){
     fi
 }
 lan(){
-        lan_chk
-     ListType=`zenity --width=170 --height=170 --list --radiolist \
-                --title 'Lando Installaion'\
-                --text 'Select Version to install:' \
-                --column 'Select' \
-                --column 'Actions' TRUE "Latest" FALSE "Specific"`
-            if [[ $? -eq 1 ]]; then
-                # they pressed Cancel or closed the dialog window
-                zenity --error --title="Declined" --width=200 \
-                    --text="Installtion Canceled   ❌"
+    lan_chk
+    lan_sel=`zenity --window-icon "res/lando.png" --width=170 --height=170 --list --radiolist \
+                    --title 'Lando Installation'\
+                    --text 'Select Version to install:' \
+                    --column 'Select' \
+                    --column 'Actions' TRUE "Latest" FALSE "Specific"`
+
+        if [[ $? -eq 1 ]]; then
+                    # they pressed Cancel or closed the dialog window
+            zenity --window-icon "res/error.png" --error --title="Declined" --width=200 \
+                --text="installation Canceled   ❌"
                 exit 1
-            elif [ $ListType == "Latest" ]; then
-                # they selected the short radio button
-                    Flag="--Lando-Latest"
-                    lan_las
-            elif [ $ListType == "Specific" ]; then
-                # they selected the short radio button
-                    Flag="--Lando-Specific"
-                    lan_spc
-            else
-                # they selected the long radio button
-                Flag=""
-            fi
+        elif [[ $lan_sel == "Latest" ]]; then
+            # they selected the short radio button
+                Flag="--Lando-Latest"
+                lan_las
+        elif [[ $lan_sel == "Specific" ]]; then
+            # they selected the short radio button
+                Flag="--Lando-Specific"
+                lan_spc
+        fi
 }
 nj_rm(){
     (
@@ -408,13 +406,13 @@ nj_rm(){
         echo "95";
         echo "# Removed NodeJs ..." ; sleep 3
     ) |
-            zenity --width=500 --window-icon "Hourglass.gif" --progress \
+            zenity --width=500 --window-icon "res/nodejs.png"  --progress \
             --title="Removing NodeJs" \
             --text="NodeJs..." \
             --percentage=0 --auto-close
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌"
                 ins_del
             fi
 }
@@ -444,18 +442,18 @@ npm_bichk(){
             echo "# Removed NodeJs ..." ; sleep 3
         fi
     ) |
-            zenity --width=500 --window-icon "Hourglass.gif" --progress \
+            zenity --width=500 --window-icon "res/nodejs.png"  --progress \
             --title="Removing NodeJs" \
             --text="NodeJs..." \
             --percentage=0 --auto-close
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌"
                 ins_del
             fi
 }
 npm_in(){
-    zenity --question --width=350  --text="Did you want to install  <b>NPM Latest Version</b> ?" --ok-label="Yes" --cancel-label="No"
+    zenity --window-icon "res/question.png" --question --width=350  --text="Did you want to install  <b>NPM Latest Version</b> ?" --ok-label="Yes" --cancel-label="No"
     if [ $? = 0 ] ; then
     echo "yes"
     npm install -g npm@latest &>/dev/null
@@ -474,7 +472,7 @@ nj_in(){
             ver=$(curl -s "https://nodejs.org/dist/latest-$choice/" | grep "node" | awk -F 'node-' '{print $2 FS "/"}' | grep "v" | awk -F "/" '{print $1}' | grep "linux-x64.tar.gz" | awk -F "-" '{print $1}')
             selver=`echo "node-$ver-linux-x64.tar.gz"`
             url="https://nodejs.org/dist/latest-$choice/$selver"
-            curl -o /tmp/$selver $url 2>&1 | stdbuf -oL tr '\r' '\n' | sed -u 's/^ *\([0-9][0-9]*\).*\( [0-9].*$\)/\1\n#Download Speed\:\2/' | zenity --width=500 --window-icon "res/download.jpg" --progress --auto-close --title "Downloading NodeJs"
+            curl -o /tmp/$selver $url 2>&1 | stdbuf -oL tr '\r' '\n' | sed -u 's/^ *\([0-9][0-9]*\).*\( [0-9].*$\)/\1\n#Download Speed\:\2/' | zenity --width=500 --window-icon "res/download.png" --progress --auto-close --title "Downloading NodeJs"
             echo "70";
             echo "# Installing NodeJs ..." ; sleep 3
             tar -C /usr/local --strip-components 1 -xzf /tmp/$selver >/dev/null
@@ -484,17 +482,17 @@ nj_in(){
             echo "95"
             echo "# Installation Done ..." ; sleep 3
             rm -rvf /tmp/$selver
-            NODE_VER=$(node -v)
-            NPM_VER=$(npm -v)
-            zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>NodeJS :</b> $NODE_VER   ✅\n \n <b>Npm :</b> $NPM_VER  ✅"
         ) |
-            zenity --width=500 --window-icon "Hourglass.gif" --progress \
+            zenity --width=500 --window-icon "res/nodejs.png"  --progress \
             --title="Installing NodeJs" \
             --text="Please Wait ..." \
             --percentage=0 --auto-close
+            NODE_VER=$(node -v)
+            NPM_VER=$(npm -v)
+            zenity --window-icon "res/done.png" --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>NodeJS :</b> $NODE_VER   ✅\n \n <b>Npm :</b> $NPM_VER  ✅"
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌"
                 ins_del
             fi
 }
@@ -509,7 +507,8 @@ nj_list(){
             choices=("${choices[@]}" "$mode" "$name")
             mode="false"
         done
-        choice=`zenity --width=300 --height=380 \
+        choice=`zenity --window-icon "res/nodejs.png" --width=300 --height=380 \
+            --title 'NodeJS Versions'\
             --list \
             --separator="$IFS" \
             --radiolist \
@@ -519,14 +518,14 @@ nj_list(){
             "${choices[@]}"`
         if [[ $? -eq 1 ]]; then
                 # they pressed Cancel or closed the dialog window
-            zenity --error --title="Declined" --width=200 \
-                --text="Canceled Installtion"
+            zenity --window-icon "res/error.png" --error --title="Declined" --width=200 \
+                --text="Canceled installation"
             ins_del
             exit 1
         elif [[ $choice == *"$choice"* ]]; then
             nj_in
         else
-            zenity --error --width=150  --title="Error" --text "<b>Incorrect Selections !</b>"
+            zenity --window-icon "res/error.png" --error --width=150  --title="Error" --text "<b>Incorrect Selections !</b>"
         fi
 }
 nj_entr(){
@@ -535,11 +534,11 @@ nj_entr(){
                 --text="Enter Specific Version:"`
                 if [[ $? -eq 1 ]]; then
                     # they pressed Cancel or closed the dialog window
-                    zenity --error --title="Declined" --width=200 --timeout 15 \
-                        --text="Installtion Canceled   ❌"
+                    zenity --window-icon "res/error.png" --error --title="Declined" --width=200 --timeout 15 \
+                        --text="installation Canceled   ❌"
                     exit 1
                 elif [[ -z "$njent" ]]; then
-                    zenity --error --title="Error" --width=200 \
+                    zenity --window-icon "res/error.png" --error --title="Error" --width=200 \
                         --text="Invalid Version"
                     nj
                 else
@@ -561,7 +560,7 @@ nj_entr_pack(){
             echo "# Getting Data from NodeJs ..." ; sleep 3
             nfn="node-v$njent-linux-x64.tar.gz"
             pack_down="$nj_url/$nfn"
-            curl -o /tmp/$nfn $pack_down 2>&1 | stdbuf -oL tr '\r' '\n' | sed -u 's/^ *\([0-9][0-9]*\).*\( [0-9].*$\)/\1\n#Download Speed\:\2/' | zenity --width=500 --window-icon "res/download.jpg" --progress --auto-close --title "Downloading NodeJs v$njent"
+            curl -o /tmp/$nfn $pack_down 2>&1 | stdbuf -oL tr '\r' '\n' | sed -u 's/^ *\([0-9][0-9]*\).*\( [0-9].*$\)/\1\n#Download Speed\:\2/' | zenity --width=500 --window-icon "res/download.png" --progress --auto-close --title "Downloading NodeJs v$njent"
             echo "70";
             echo "# Installing NodeJs v$njent ..." ; sleep 3
             tar -C /usr/local --strip-components 1 -xzf /tmp/$nfn >/dev/null
@@ -571,17 +570,17 @@ nj_entr_pack(){
             echo "95"
             echo "# Installation Done ..." ; sleep 3
             rm -rvf /tmp/$nfn
-            NODE_VER=$(node -v)
-            NPM_VER=$(npm -v)
-            zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>NodeJS :</b> $NODE_VER  ✅ \n \n <b>Npm :</b> $NPM_VER  ✅"
         ) |
-            zenity --width=500 --window-icon "Hourglass.gif" --progress \
+            zenity --width=500 --window-icon "res/nodejs.png"  --progress \
             --title="Installing NodeJs" \
             --text="Please Wait ..." \
             --percentage=0 --auto-close
+            NODE_VER=$(node -v)
+            NPM_VER=$(npm -v)
+            zenity --window-icon "res/done.png" --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>NodeJS :</b> $NODE_VER  ✅ \n \n <b>Npm :</b> $NPM_VER  ✅"
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌"
                 ins_del
             fi
 }
@@ -591,27 +590,27 @@ nj_entr_ins(){
         then
         nj_entr_pack
         else
-            zenity --error --title="NodeJs" --width=200 \
+            zenity --window-icon "res/error.png" --error --title="NodeJs" --width=200 \
                 --text="Invalid Version"
             nj_entr
         fi
 }
 nj(){
-    nj_sel=`zenity --width=250 --height=170 --list --radiolist \
-            --title 'Installaion'\
+    nj_sel=`zenity --window-icon "res/nodejs.png" --width=250 --height=170 --list --radiolist \
+            --title 'Installation'\
             --text '<b>Install From:</b>' \
             --column 'Select' \
             --column 'Actions' TRUE "NodeJs Release List" FALSE "Specific Version"`
 
         if [[ $? -eq 1 ]]; then
             # they pressed Cancel or closed the dialog window
-            zenity --error --title="Declined" --width=200 \
-                --text="Installtion Canceled   ❌"
+            zenity --window-icon "res/error.png" --error --title="Declined" --width=200 \
+                --text="installation Canceled   ❌"
                 exit 1
         elif [[ $nj_sel == "NodeJs Release List" ]]; then
             # they selected the short radio button
-            Flag="--Nodejs-Latest"
-            nj_list
+                Flag="--Nodejs-Latest"
+                nj_list
         elif [[ $nj_sel == "Specific Version" ]]; then
             # they selected the short radio button
                 Flag="--NodeJs-Specific"
@@ -626,12 +625,12 @@ git_rm(){
         echo "95";
         echo "# Removed ! ..."; sleep 5;
     ) |
-         zenity --width=500 --window-icon "Hourglass.gif" --progress \
+         zenity --width=500 --window-icon "res/git.png"  --progress \
             --title="Removing Git" \
             --text="Removing Git..." \
             --percentage=0 --auto-close
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
+                zenity --window-icon "res/error.png" --width=200 --error \
                 --text="UnInstalltion Canceled   ❌ "
                 # ins_del
             fi
@@ -644,18 +643,19 @@ gitk_rm(){
         echo "95";
         echo "# Removed ! ..."; sleep 5;
     ) |
-         zenity --width=500 --window-icon "Hourglass.gif" --progress \
+         zenity --width=500 --window-icon "res/git.png"  --progress \
             --title="Removing Gitk" \
             --text="Removing Gitk..." \
             --percentage=0 --auto-close
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
+                zenity --window-icon "res/error.png" --width=200 --error \
                 --text="UnInstalltion Canceled   ❌ "
                 # ins_del
             fi
 }
 git_rm_cf(){
-    zenity --question --title="Git Installation" --width=250 --text="<b>Git is already installed   ✅</b> \n\nDo you want to remove it ?"
+    GIT_VER=$(git --version | awk '{print $3}')
+    zenity  --window-icon "res/done.png" --question --title="Git Installation" --width=250 --text="<b>Git v$GIT_VER is already installed   ✅</b> \n\nDo you want to remove it ?"
     if [ $? = 0 ]; then
         git_rm
         gt_ans="Yes"
@@ -664,7 +664,8 @@ git_rm_cf(){
     fi
 }
 gitk_rm_cf(){
-    zenity --question --title="Git Installation" --width=250 --text="<b>Gitk is already installed   ✅</b> \n\nDo you want to remove it ?"
+    GITK_VER=$(dpkg -s git | grep "Version: 1:" | awk '{print $2}' | awk -F ':' '{print $2}' | awk -F '-' '{print $1}')
+    zenity --window-icon "res/done.png"  --question --title="Git Installation" --width=260 --text="<b>Gitk v$GITK_VER is already installed   ✅</b> \n\nDo you want to remove it ?"
     if [ $? = 0 ]; then
         gitk_rm
         gtk_ans="Yes"
@@ -674,59 +675,62 @@ gitk_rm_cf(){
 }
 git_chk(){
     pkgs='git'
-    pkgs2='gitk'
 	if dpkg -s $pkgs >/dev/null 2>&1; then
 		git_rm_cf
     else
         gt_ans="Yes"
     fi
+}
+gitk_chk(){
+    pkgs='gitk'
     if dpkg -s $pkgs2 >/dev/null 2>&1; then
         gitk_rm_cf
     else
         gtk_ans="Yes"
     fi
 }
+
 git_ins(){
     (
         echo "15";
-        echo "# Getting Ready for installtion ..."; sleep 5
+        echo "# Getting Ready for installation ..."; sleep 5
         echo "50";
         echo  "# Installing Git ...";
         apt-get install git-all -y >/dev/null 2>&1
         echo "90";
         echo  "# Almost Done ...";
         GIT_VER=$(git --version)
-        zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>Installed Version !</b> \n\n$GIT_VER   ✅"
     ) |
-         zenity --width=500 --window-icon "Hourglass.gif" --progress \
+         zenity --width=500 --window-icon "res/git.png"  --progress \
             --title="Installing Git" \
             --text="Installing Git..." \
             --percentage=0 --auto-close
+            zenity --window-icon "res/done.png" --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>Installed Version !</b> \n\n $GIT_VER   ✅"
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌ "
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌ "
                 # ins_del
             fi
 }
 gitk_ins(){
     (
         echo "15";
-        echo "# Getting Ready for installtion ..."; sleep 5
+        echo "# Getting Ready for installation ..."; sleep 5
         echo "50";
         echo  "# Installing Gitk ...";
         apt-get install gitk -y >/dev/null 2>&1
         echo "90";
         echo  "# Almost Done ...";
-        GITK_VER=$(dpkg -s git | grep "Version: 1:" | awk '{print $2}' | awk -F ':' '{print $2}' | awk -F '-' '{print $1}')
-        zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>Installed Version !</b> \n\nGitk Version: $GITK_VER   ✅ "
     ) |
-         zenity --width=500 --window-icon "Hourglass.gif" --progress \
+         zenity --width=500 --window-icon "res/git.png"  --progress \
             --title="Installing Gitk" \
             --text="Installing Gitk..." \
             --percentage=0 --auto-close
+            GITK_VER=$(dpkg -s git | grep "Version: 1:" | awk '{print $2}' | awk -F ':' '{print $2}' | awk -F '-' '{print $1}')
+            zenity --window-icon "res/done.png" --info --width=180 --height=100 --timeout 15  --title="Version Details" --text "<b>Installed Version !</b> \n\nGitk Version: $GITK_VER   ✅ "
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌ "
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌ "
                 # ins_del
             fi
 }
@@ -735,6 +739,7 @@ git_main(){
     if [[ $gt_ans == "Yes" ]]; then
         git_ins
     fi
+        gitk_chk
     if [[ $gtk_ans == "Yes" ]]; then
         gitk_ins
     fi
@@ -745,7 +750,7 @@ MYS_CHK(){
         MY_INS
     else
         MYSQL_VER=$(mysql --version | awk '{print $5}')
-        zenity --info --timeout 10 --width=250 --height=100 --title="MariaDB" --text "<b>MariaDB is already installed   ✅ \n\n Version is :</b> $MYSQL_VER"
+        zenity --window-icon "res/mariadb.png" --info --timeout 10 --width=250 --height=100 --title="MariaDB" --text "<b>MariaDB is already installed   ✅ \n\n Version is :</b> $MYSQL_VER"
     fi
 }
 MY_INS(){
@@ -784,14 +789,14 @@ EOF
         $MYSQL -uroot -p$db_root_password -e "$SQL"
         echo "100";
         echo  "# MariaDb has been Installed ...";
-        zenity --info --timeout 10 --width=250 --height=100 --title="MariaDB" --text "<b>MariaDB installed   ✅ \n\n Version is :</b> $MYSQL_VER"
+        zenity --window-icon "res/mariadb.png" --info --timeout 10 --width=250 --height=100 --title="MariaDB" --text "<b>MariaDB installed   ✅ \n\n Version is :</b> $MYSQL_VER"
     ) |
-         zenity --width=500 --window-icon "Hourglass.gif" --progress \
+         zenity --width=500 --window-icon "res/mariadb.png"  --progress \
             --title="Installing MariaDB" \
             --text="Installing MariaDB..." \
             --percentage=0 --auto-close
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
+                zenity --window-icon "res/error.png" --width=200 --error \
                 --text="UnInstalltion Canceled   ❌ "
                 ins_del
             fi
@@ -800,7 +805,7 @@ MY_RMV(){
         (
         pkgs='mariadb-server'
         if ! dpkg -s $pkgs >/dev/null 2>&1; then
-            zenity --info --timeout 10 --width=250 --height=100 --title="MariaDB" --text "<b> ⚠️  No MariaDB Found  ⚠️ </b>"
+            zenity --window-icon "res/mariadb.png" --info --timeout 10 --width=250 --height=100 --title="MariaDB" --text "<b> ⚠️  No MariaDB Found  ⚠️ </b>"
         else
         echo "10" ;
         echo "Killing Process" ;
@@ -830,19 +835,19 @@ MY_RMV(){
         echo "# MariaDB Removed ... " ; sleep 5
         fi
         ) |
-         zenity --width=500 --window-icon "Hourglass.gif" --progress \
+         zenity --width=500 --window-icon "res/mariadb.png" --progress \
             --title="Removing MariaDB" \
             --text="Removing MariaDB..." \
             --percentage=0 --auto-close
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
+                zenity --window-icon "res/error.png" --width=200 --error \
                 --text="UnInstalltion Canceled   ❌ "
                 ins_del
             fi
 }
 MYS(){
-            ListType=`zenity --width=400 --height=200 --list --radiolist \
-                --title 'Installaion'\
+            ListType=`zenity --window-icon "res/mariadb.png" --width=400 --height=200 --list --radiolist \
+                --title 'Installation'\
                 --text 'Select Software to install:' \
                 --column 'Select' \
                 --column 'Actions' TRUE "Install" FALSE "Remove"`
@@ -853,8 +858,8 @@ MYS(){
                 # they selected the short radio button
                     MY_RMV
             else
-                zenity --error --title="Declined" --width=200 \
-                    --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --error --title="Declined" --width=200 \
+                    --text="installation Canceled   ❌"
                 ins_del
             fi
 }
@@ -887,7 +892,6 @@ php5_6(){
 		sudo update-rc.d php5.6-fpm defaults >/dev/null
         echo "100";
         echo "# PHP 5.6 Installed ...";
-        zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 5.6 Installed  ✅</b>"
 	else
         echo "20";
         echo "# Adding Packages ...";
@@ -899,7 +903,7 @@ php5_6(){
         echo "# Installing PHP 5.6 ...";
         apt-get install php5.6-{common,cli,fpm} -y >/dev/null
         echo "70";
-        echo "# Installing PHP 7.0 extensions ...";
+        echo "# Installing PHP 5.6 extensions ...";
         apt-get install php5.6-{curl,intl,mysql,readline,xml,gd,imap,intl,ldap,mbstring,mysql,sqlite3,pspell,soap,tidy,xml,xsl,zip,bcmath} -y >/dev/null
 		echo "75";
         echo "# Configuring ..."; sleep 3
@@ -909,16 +913,16 @@ php5_6(){
         sudo update-rc.d php5.6-fpm defaults >/dev/null
         echo "100";
         echo "# PHP 5.6 Installed ...";
-        zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 5.6 Installed  ✅</b>"
     fi
     ) |
-        zenity --width=500 --window-icon "Hourglass.gif" --progress \
+        zenity --width=500 --window-icon "res/php.png"  --progress \
             --title="PHP 5.6 Installing" \
             --text="PHP 5.6 Installing..." \
             --percentage=0 --auto-close
+            zenity --window-icon "res/done.png" --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 5.6 Installed  ✅</b>"
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌ "
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌ "
             fi
 }
 php7_0(){
@@ -950,7 +954,6 @@ php7_0(){
         sudo update-rc.d php7.0-fpm defaults >/dev/null
         echo "100";
         echo "# PHP 7.0 Installed ...";
-        zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 7.0 Installed  ✅</b>"
 	else
 		echo "20";
         echo "# Adding Packages ...";
@@ -972,16 +975,16 @@ php7_0(){
         sudo update-rc.d php7.0-fpm defaults >/dev/null
         echo "100";
         echo "# PHP 7.0 Installed ...";
-        zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 7.0 Installed  ✅</b>"
 	fi
     ) |
-        zenity --width=500 --window-icon "Hourglass.gif" --progress \
+        zenity --width=500 --window-icon "res/php.png"  --progress \
             --title="PHP 7.0 Installing" \
             --text="PHP 7.0 Installing..." \
             --percentage=0 --auto-close
+            zenity --window-icon "res/done.png" --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 7.0 Installed  ✅</b>"
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌ "
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌ "
             fi
 }
 php7_1(){
@@ -1013,7 +1016,6 @@ php7_1(){
         sudo update-rc.d php7.1-fpm defaults >/dev/null
         echo "100";
         echo "# PHP 7.1 Installed ...";
-        zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 7.1 Installed  ✅</b>"
 	else
 		echo "20";
         echo "# Adding Packages ...";
@@ -1035,16 +1037,16 @@ php7_1(){
         sudo update-rc.d php7.1-fpm defaults >/dev/null
         echo "100";
         echo "# PHP 7.1 Installed ...";
-        zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 7.1 Installed  ✅</b>"
 	fi
     ) |
-        zenity --width=500 --window-icon "Hourglass.gif" --progress \
+        zenity --width=500 --window-icon "res/php.png"  --progress \
             --title="PHP 7.1 Installing" \
             --text="PHP 7.1 Installing..." \
             --percentage=0 --auto-close
+            zenity --window-icon "res/done.png" --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 7.1 Installed  ✅</b>"
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌ "
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌ "
             fi
 }
 php7_2(){
@@ -1076,7 +1078,6 @@ php7_2(){
         sudo update-rc.d php7.2-fpm defaults >/dev/null
         echo "100";
         echo "# PHP 7.2 Installed ...";
-        zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 7.2 Installed  ✅</b>"
 	else
 		echo "20";
         echo "# Adding Packages ...";
@@ -1098,16 +1099,16 @@ php7_2(){
         sudo update-rc.d php7.2-fpm defaults >/dev/null
         echo "100";
         echo "# PHP 7.2 Installed ...";
-        zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 7.2 Installed  ✅</b>"
 	fi
     ) |
-        zenity --width=500 --window-icon "Hourglass.gif" --progress \
+        zenity --width=500 --window-icon "res/php.png"  --progress \
             --title="PHP 7.2 Installing" \
             --text="PHP 7.2 Installing..." \
             --percentage=0 --auto-close
+            zenity --window-icon "res/done.png" --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 7.2 Installed  ✅</b>"
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌ "
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌ "
             fi
 }
 php7_3(){
@@ -1139,7 +1140,6 @@ php7_3(){
         sudo update-rc.d php7.3-fpm defaults >/dev/null
         echo "100";
         echo "# PHP 7.3 Installed ...";
-        zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 7.3 Installed  ✅</b>"
 	else
 		echo "20";
         echo "# Adding Packages ...";
@@ -1161,16 +1161,16 @@ php7_3(){
         sudo update-rc.d php7.3-fpm defaults >/dev/null
         echo "100";
         echo "# PHP 7.3 Installed ...";
-        zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 7.3 Installed  ✅</b>"
 	fi
     ) |
-        zenity --width=500 --window-icon "Hourglass.gif" --progress \
+        zenity --width=500 --window-icon "res/php.png"  --progress \
             --title="PHP 7.3 Installing" \
             --text="PHP 7.3 Installing..." \
             --percentage=0 --auto-close
+            zenity --window-icon "res/done.png" --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 7.3 Installed  ✅</b>"
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌ "
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌ "
             fi
 }
 php7_4(){
@@ -1202,7 +1202,6 @@ php7_4(){
         sudo update-rc.d php7.4-fpm defaults >/dev/null
         echo "100";
         echo "# PHP 7.4 Installed ..."; sleep 3
-        zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 7.4 Installed  ✅</b>"
 	else
 		echo "20";
         echo "# Adding Packages ...";
@@ -1224,16 +1223,16 @@ php7_4(){
         sudo update-rc.d php7.4-fpm defaults >/dev/null
         echo "100";
         echo "# PHP 7.4 Installed ..."; sleep 3
-        zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 7.4 Installed  ✅</b>"
 	fi
     ) |
-        zenity --width=500 --window-icon "Hourglass.gif" --progress \
+        zenity --width=500 --window-icon "res/php.png"  --progress \
             --title="PHP 7.4 Installing" \
             --text="PHP 7.4 Installing..." \
             --percentage=0 --auto-close
+            zenity --window-icon "res/done.png" --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 7.4 Installed  ✅</b>"
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌ "
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌ "
             fi
 }
 php8_0(){
@@ -1266,7 +1265,6 @@ php8_0(){
         sudo update-rc.d php8.0-fpm defaults >/dev/null
         echo "100";
         echo "# PHP 8.0 Installed ..."; sleep 3
-        zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 8.0 Installed  ✅</b>"
 	else
 		echo "20";
         echo "# Adding Packages ...";
@@ -1288,36 +1286,36 @@ php8_0(){
         sudo update-rc.d php8.0-fpm defaults >/dev/null
         echo "100";
         echo "# PHP 8.0 Installed ..."; sleep 3
-        zenity --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 8.0 Installed  ✅</b>"
 	fi
     ) |
-        zenity --width=500 --window-icon "Hourglass.gif" --progress \
+        zenity --width=500 --window-icon "res/php.png"  --progress \
             --title="PHP 8.0 Installing" \
             --text="PHP 8.0 Installing..." \
             --percentage=0 --auto-close
+            zenity --window-icon "res/done.png" --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<b>PHP 8.0 Installed  ✅</b>"
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌ "
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌ "
                 ins_del
             fi
 }
 php_ver(){
-        ListType=$(zenity --width=150 --height=280 --checklist --list \
+        ListType=$(zenity --window-icon "res/php.png" --width=150 --height=280 --checklist --list \
                 --title='PHP'\
                 --text="<b>Select PHP Version To Install :</b>"\
                 --column="Select" --column="Version List" \
-                " " "5.6" \
-                " " "7.0" \
-                " " "7.1" \
-                " " "7.2" \
-                " " "7.3" \
+                " " "8.0" \
                 " " "7.4" \
-                " " "8.0"
+                " " "7.3" \
+                " " "7.2" \
+                " " "7.1" \
+                " " "7.0" \
+                " " "5.6"
                 )
             if [[ $? -eq 1 ]]; then
                 # they pressed Cancel or closed the dialog window
-                zenity --error --title="Declined" --width=200 \
-                    --text="Installtion Canceled   ❌ "
+                zenity --window-icon "res/error.png" --error --title="Declined" --width=200 \
+                    --text="installation Canceled   ❌ "
                 ins_del
                 exit 1
             fi
@@ -1333,7 +1331,7 @@ php_ver(){
                 if ! [ -x "$(command -v php5.6)"  ]; then
                     php5_6
                 else
-                    zenity --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 5.2  ✅"
+                    zenity --window-icon "res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed: \n\n</b> <b>Versions : </b> 5.2  ✅"
                 fi
             fi
             if [[ $ListType == *"7.0"* ]]; then
@@ -1342,7 +1340,7 @@ php_ver(){
                 if ! [ -x "$(command -v php7.0)"  ]; then
                     php7_0
                 else
-                    zenity --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.0  ✅"
+                    zenity --window-icon "res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.0  ✅"
                 fi
             fi
             if [[ $ListType == *"7.1"* ]]; then
@@ -1351,7 +1349,7 @@ php_ver(){
                 if ! [ -x "$(command -v php7.1)"  ]; then
                     php7_1
                 else
-                    zenity --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.1  ✅"
+                    zenity --window-icon "res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.1  ✅"
                 fi
             fi
             if [[ $ListType == *"7.2"* ]]; then
@@ -1360,7 +1358,7 @@ php_ver(){
                 if ! [ -x "$(command -v php7.2)"  ]; then
                     php7_2
                 else
-                    zenity --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.2  ✅"
+                    zenity --window-icon "res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.2  ✅"
                 fi
             fi
             if [[ $ListType == *"7.3"* ]]; then
@@ -1369,16 +1367,16 @@ php_ver(){
                 if ! [ -x "$(command -v php7.3)"  ]; then
                     php7_3
                 else
-                    zenity --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.3  ✅"
+                    zenity --window-icon "res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.3  ✅"
                 fi
             fi
             if [[ $ListType == *"7.4"* ]]; then
                 # they selected the short radio button
                 Flag="--Domain-Join"
                 if ! [ -x "$(command -v php7.4)"  ]; then
-                    echo "to install 7.4"
+                    php7_4
                 else
-                    zenity --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.4  ✅"
+                    zenity --window-icon "res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 7.4  ✅"
                 fi
             fi
             if [[ $ListType == *"8.0"* ]]; then
@@ -1387,7 +1385,7 @@ php_ver(){
                 if ! [ -x "$(command -v php8.0)"  ]; then
                     php8_0
                 else
-                    zenity --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b> '\u2705' PHP Already Installed:\n\n</b> <b>Versions : </b> 8.0  ✅"
+                    zenity --window-icon "res/done.png" --info --timeout 10 --width=190 --height=100 --title="Version Details" --text "<b>PHP Already Installed:\n\n</b> <b>Versions : </b> 8.0  ✅"
                 fi
             fi
 }
@@ -1413,18 +1411,16 @@ NG(){
             rm -rf /tmp/nginx*
             echo "100";
             echo "# Nginx Installed ..."; sleep 3
-            zenity --info --timeout 10 --width=200  --no-wrap --title="NginX" --text "<b>Nginx Installed Sucessfully  ✅  </b>"
-        else
-            zenity --info --timeout 10 --width=200  --no-wrap --title="NginX" --text "<b>Nginx is Already installed   ✅ </b>"
         fi
     ) |
-         zenity --width=500 --window-icon "Hourglass.gif" --progress \
+         zenity --width=500 --window-icon "res/nginx.png"  --progress \
             --title="Installing Nginx" \
             --text="Installing Nginx..." \
             --percentage=0 --auto-close
+            zenity --window-icon "res/done.png" --info --timeout 10 --width=200  --no-wrap --title="NginX" --text "<b>Nginx Installed Sucessfully  ✅  </b>"
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌"
                 ins_del
             fi
 }
@@ -1440,13 +1436,13 @@ mar(){
             echo "# Rebooting system" ; sleep 3
             echo "100" ; sleep 3
         ) |
-        zenity --width=500 --window-icon "Hourglass.gif" --progress \
+        zenity --width=500 --window-icon "res/progress.png"  --progress \
         --title="Installing NodeJs" \
         --text="NodeJs..." \
         --percentage=0
         if [[ $? -eq 1 ]]; then
-            zenity --width=200 --error \
-            --text="Installtion Canceled   ❌"
+            zenity --window-icon "res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
             ins_del
         fi
 }
@@ -1464,13 +1460,13 @@ DOCK_COMP(){
         echo "100";
         echo "# Docker-compose Installed ..."; sleep 3
     ) |
-        zenity --width=500 --window-icon "Hourglass.gif" --progress \
+        zenity --width=500 --window-icon "res/docker.png"  --progress \
             --title="Installing Docker-Compose-" \
             --text="Installing Docker-Compose..." \
             --percentage=0 --auto-close
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌"
                 ins_del
             fi
 }
@@ -1484,7 +1480,7 @@ DOCK_CHK(){
     else
         DOCOM_VER=$(docker-compose --version | awk '{print $3}' | sed 's/.$//')
         DOCK_VER=$(docker --version | awk '{print $3}' | sed 's/.$//')
-        zenity --info --timeout 15 --width=300 --height=100 --title="Installation" --text "<b>Packages installed successful   ✅  \n\n Docker Version : </b> $DOCK_VER  \n\n<b> Docker-compose Version : </b> $DOCOM_VER"
+        zenity --window-icon "res/done.png" --info --timeout 15 --width=300 --height=100 --title="Installation" --text "<b>Packages installed successful   ✅  \n\n Docker Version : </b> $DOCK_VER  \n\n<b> Docker-compose Version : </b> $DOCOM_VER"
     fi
 }
 DOCK_IN(){
@@ -1531,32 +1527,41 @@ DOCK_IN(){
             echo "100"; sleep 5
             echo "# Docker Installed ...";
         ) |
-            zenity --width=500 --window-icon "Hourglass.gif" --progress \
+            zenity --width=500 --window-icon "res/docker.png"  --progress \
             --title="Docker Installation" \
             --text="Docker Installation..." \
             --percentage=0 --auto-close
             if [[ $? -eq 1 ]]; then
-                zenity --width=200 --error \
-                --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌"
                 ins_del
             fi
     else
-        zenity --error --title="Declined" --width=200 \
+        zenity --window-icon "res/error.png" --error --title="Declined" --width=200 \
                         --text="Installtaion Canceled "
         ins_del
         exit 1 ;
     fi
 }
+RES(){
+    RES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/res"
+        # echo $RES_DIR
+       # file1="/usr/local/bin/node"
+        if [[ ! -e "$RES_DIR" ]]; then
+        	git clone -b res https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion.git res >/dev/null 2>&1
+      	fi
+}
 ins(){
     clear
     if [ `whoami` != root ]; then
-            zenity --width=350 --error \
+            zenity --window-icon "res/error.png" --width=350 --error \
             --text="Please Run This Scripts As <b>root</b> Or As <b>Sudo User</b>"
             exit
     else
             # apt-get install -y zenity >/dev/null
-            ListType=$(zenity --window-icon "res/rage.jpg" --width=400 --height=350 --checklist --list \
-                --title='Installaion'\
+            RES
+            ListType=$(zenity --window-icon "res/rage.png" --width=400 --height=350 --checklist --list \
+                --title='Installation'\
                 --text="<b>Select Software to install :</b>\n <span color=\"red\" font='10'> ⚠️ NOTE : Don't select Domain-join in multi selection. ⚠️ </span>"\                --column="Select" --column="Software List" \
                 " " "Domain-Join" \
                 " " "NodeJs" \
@@ -1570,8 +1575,8 @@ ins(){
                 )
             if [[ $? -eq 1 ]]; then
                 # they pressed Cancel or closed the dialog window
-                zenity --error --title="Declined" --width=200 \
-                    --text="Installtion Canceled   ❌"
+                zenity --window-icon "res/error.png" --error --title="Declined" --width=200 \
+                    --text="installation Canceled   ❌"
                 ins_del
                 exit 1
             fi

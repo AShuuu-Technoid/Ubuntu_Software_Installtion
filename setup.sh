@@ -76,7 +76,7 @@ vscd(){
             --title="Installing VS Code" \
             --text="Please Wait ..." \
             --percentage=0 --auto-close
-            VSC_VER=$(code --version | awk 'NR==1 {print $1}')
+            VSC_VER=$(dpkg -s code | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
             zenity --window-icon ".res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<b>VS Code Version : </b> v$VSC_VER   ✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \

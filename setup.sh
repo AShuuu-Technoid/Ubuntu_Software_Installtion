@@ -1642,7 +1642,7 @@ DOCK_IN(){
 RES(){
     RES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/.res"
         if [[ ! -e "$RES_DIR" ]]; then
-            curl -sLJo res.zip https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion/archive/refs/heads/res.zip
+            curl -sLJo res.zip https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion/archive/refs/heads/res.zip >/dev/null
             mkdir .res && unzip res.zip && mv Ubuntu_Software_Installtion-res/* .res/ && rm -rf Ubuntu_Software_Installtion-res >/dev/null
       	fi
 }

@@ -57,7 +57,7 @@ vscd_chk(){
 	if ! dpkg -s $pkgs >/dev/null 2>&1; then
 		vscd
     else
-        VSC_VER=$(code --version | awk 'NR==1 {print $1}')
+        VSC_VER=$(dpkg -s code | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
         zenity --window-icon ".res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<b>VS Code Already Installed : </b> v$VSC_VER   ✅"
     fi
 }
@@ -1643,7 +1643,10 @@ RES(){
     RES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/.res"
         if [[ ! -e "$RES_DIR" ]]; then
             curl -sLJo res.zip https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion/archive/refs/heads/res.zip >/dev/null
-            mkdir .res && unzip res.zip && mv Ubuntu_Software_Installtion-res/* .res/ && rm -rf Ubuntu_Software_Installtion-res >/dev/null
+            mkdir .res >/dev/null
+            unzip res.zip >/dev/null
+            mv Ubuntu_Software_Installtion-res/* .res/ >/dev/null
+            rm -rf Ubuntu_Software_Installtion-res >/dev/null
       	fi
 }
 ins(){
@@ -1655,7 +1658,7 @@ ins(){
             exit
     else
             # apt-get install -y zenity >/dev/null
-            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=350 --checklist --list \
+            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=380 --checklist --list \
                 --title='Installation'\
                 --text="<b>Select Software to install :</b>\n <span color=\"red\" font='10'> ⚠️ NOTE : Don't select Domain-join in multi selection. ⚠️ </span>"\                --column="Select" --column="Software List" \
                 " " "Domain-Join" \

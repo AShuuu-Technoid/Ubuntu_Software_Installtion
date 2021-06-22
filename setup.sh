@@ -37,9 +37,54 @@ rsrt(){
 cl(){
     pkgs='curl'
 	if ! dpkg -s $pkgs >/dev/null 2>&1; then
-		apt-get install curl -y >/dev/null
+		apt-get install $pkgs -y >/dev/null
     fi
 }
+depet(){
+    pkgs='apt-transport-https'
+    if ! dpkg -s $pkgs >/dev/null 2>&1; then
+		apt-get install $pkgs -y >/dev/null
+    fi
+}
+wg(){
+    pkgs='wget'
+	if ! dpkg -s $pkgs >/dev/null 2>&1; then
+		apt-get install $pkgs -y >/dev/null
+    fi
+}
+vscd_chk(){
+    pkgs='code'
+	if ! dpkg -s $pkgs >/dev/null 2>&1; then
+		vscd
+    else
+        VSC_VER=$(code --version | awk 'NR==1 {print $1}')
+        zenity --window-icon ".res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<b>VS Code Already Installed : </b> v$VSC_VER   ✅"
+    fi
+}
+vscd(){
+    (
+        echo "25" ; sleep 3
+        echo "# Downloading VS Code ... "
+        wget -O code.deb https://update.code.visualstudio.com/latest/linux-deb-x64/stable 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon ".res/download.png" --progress --width=500 --auto-close  --title="Downloading VS Code ..."
+        echo "50" ; sleep 3
+        echo "# Installing VS Code ... "
+        dpkg -i code.deb >/dev/null
+        echo "90" ; sleep 3
+        echo "# Installed VS Code ... "
+    )|
+        zenity --width=500 --window-icon ".res/code.png"  --progress \
+            --title="Installing VS Code" \
+            --text="Please Wait ..." \
+            --percentage=0 --auto-close
+            VSC_VER=$(code --version | awk 'NR==1 {print $1}')
+            zenity --window-icon ".res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<b>VS Code Version : </b> v$VSC_VER   ✅"
+            if [[ $? -eq 1 ]]; then
+                zenity --window-icon ".res/error.png" --width=200 --error \
+                --text="installation Canceled   ❌"
+                ins_del
+            fi
+}
+
 mld(){
     apt-get install meld -y >/dev/null 2>&1
 }
@@ -900,7 +945,7 @@ php7_4_stop(){
     fi
 }
 php8_0_stop(){
-    if [ -x "$(command -v php7.4)"  ]; then
+    if [ -x "$(command -v php8.0)"  ]; then
         systemctl stop php8.0-fpm.service >/dev/null
         systemctl disable php8.0-fpm.service >/dev/null
     fi
@@ -1596,10 +1641,9 @@ DOCK_IN(){
 }
 RES(){
     RES_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )/.res"
-        # echo $RES_DIR
-       # file1="/usr/local/bin/node"
         if [[ ! -e "$RES_DIR" ]]; then
-        	git clone -b res https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion.git .res >/dev/null 2>&1
+            curl -sLJo res.zip https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion/archive/refs/heads/res.zip
+            mkdir .res && unzip res.zip && mv Ubuntu_Software_Installtion-res/* .res/ && rm -rf Ubuntu_Software_Installtion-res >/dev/null
       	fi
 }
 ins(){
@@ -1622,7 +1666,8 @@ ins(){
                 " " "Nginx" \
                 " " "Docker" \
                 " " "Lando" \
-                " " "Git"
+                " " "Git"  \
+                " " "VS Code"
                 )
             if [[ $? -eq 1 ]]; then
                 # they pressed Cancel or closed the dialog window
@@ -1682,6 +1727,12 @@ ins(){
                 Flag="--Git"
                 git_main
             fi
+            if [[ $ListType == *"VS Code"* ]]; then
+                # they selected the short radio button
+                Flag="--VS Code"
+                vscd_chk
+            fi
+
             # exit 0
     fi
 }

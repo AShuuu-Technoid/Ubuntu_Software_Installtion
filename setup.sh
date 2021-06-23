@@ -1776,7 +1776,7 @@ ins(){
             exit
     else
             # apt-get install -y zenity >/dev/null
-            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=480 --checklist --list \
+            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=460 --checklist --list \
                 --title='Installation'\
                 --text="<b>Select Software to install :</b>\n <span color=\"red\" font='10'> ⚠️ NOTE : Don't select Domain-join in multi selection. ⚠️ </span>"\                --column="Select" --column="Software List" \
                 " " "Domain-Join" \
@@ -1869,7 +1869,7 @@ ins(){
             if [[ $ListType == *"Screen Time"* ]]; then
                 # they selected the short radio button
                 Flag="--Screen Time"
-                scntm
+                scntm_chk
             fi
             # exit 0
     fi

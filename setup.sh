@@ -153,7 +153,7 @@ scntm(){
     (
         echo "25" ; sleep 3
         echo "# Preparing ... "
-        PASSWD=`cat .encry.txt | openssl aes-256-cbc -a -d -salt -pass pass:'Lwg&u@qRnS$CwLJ9PBU5RV&w^J5EXnQ^$2s!9@e2+!$PYU$A79'`
+        PASSWD=`cat .encry.enc | openssl enc -aes-256-cbc -d -a -iter 29 -pass pass:'Lwg&u@qRnS$CwLJ9PBU5RV&w^J5EXnQ^$2s!9@e2+!$PYU$A79'`
         url="http://rgrage:$PASSWD@mobile.ragewip.com/screentime/linux.zip"
         echo "50" ; sleep 3
         echo "# Downloading ScreenTime ... "

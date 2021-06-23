@@ -149,6 +149,33 @@ chrm(){
             ins_del
         fi
 }
+scntm(){
+    (
+        echo "25" ; sleep 3
+        echo "# Preparing ... "
+        PASSWD=`cat .encry.txt | openssl aes-256-cbc -a -d -salt -pass pass:'Lwg&u@qRnS$CwLJ9PBU5RV&w^J5EXnQ^$2s!9@e2+!$PYU$A79'`
+        url="http://rgrage:$PASSWD@mobile.ragewip.com/screentime/linux.zip"
+        echo "50" ; sleep 3
+        echo "# Downloading ScreenTime ... "
+        wget $url -P /tmp/ 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon ".res/download.png" --progress --width=500 --auto-close  --title="Downloading Screen Time ..."
+        echo "70" ; sleep 3
+        echo "# Installing ScreenTime ... "
+        dpkg -i /tmp/Screentime.deb >/dev/null 2>&1
+        echo "90" ; sleep 3
+        echo "# Installed ScreenTime ... "
+    ) |
+        zenity --width=500 --window-icon ".res/rage.png"  --progress \
+        --title="Screen Time Installation" \
+        --text="Preparing ..." \
+        --percentage=0 --auto-close
+        # CHRM_VER=$(dpkg -s screentime | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}' | awk 'BEGIN{FS=OFS="."} NF--' | awk 'BEGIN{FS=OFS="."} NF--')
+        # zenity --window-icon ".res/done.png" --info --width=280 --height=100 --timeout 15 --title="Version Details" --text "<b>Chrome Version : </b> v$CHRM_VER   ✅"
+        if [[ $? == 1 ]]; then
+            zenity --window-icon ".res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
+            ins_del
+        fi
+}
 domainjoin(){
         cra
     (
@@ -969,6 +996,18 @@ MYS(){
                 ins_del
             fi
 }
+apache_stop(){
+    if [ -x "$(command -v apache2)"  ]; then
+        systemctl stop apache2 >/dev/null
+        systemctl disable apache2 >/dev/null
+    fi
+}
+nginx_stop(){
+    if [ -x "$(command -v nginx)"  ]; then
+        systemctl stop nginx >/dev/null
+        systemctl disable nginx >/dev/null
+    fi
+}
 php5_6_stop(){
     if [ -x "$(command -v php5.6)"  ]; then
         systemctl stop php5.6-fpm.service >/dev/null
@@ -1675,7 +1714,13 @@ DOCK_IN(){
             echo "78";
             echo "# Stoping PHP 8.0 ...";
             php8_0_stop
-            echo "80";
+            echo "85";
+            echo "# Stoping Nginx ...";
+            nginx_stop
+            echo "90";
+            echo "# Stoping Apache ...";
+            apache_stop
+            echo "95";
             echo "# Configuring Docker Setup ...";
             sudo sed -i -e 's/SocketMode=.*/SocketMode=0666/g' /lib/systemd/system/docker.socket
             systemctl daemon-reload
@@ -1719,7 +1764,7 @@ ins(){
             exit
     else
             # apt-get install -y zenity >/dev/null
-            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=430 --checklist --list \
+            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=480 --checklist --list \
                 --title='Installation'\
                 --text="<b>Select Software to install :</b>\n <span color=\"red\" font='10'> ⚠️ NOTE : Don't select Domain-join in multi selection. ⚠️ </span>"\                --column="Select" --column="Software List" \
                 " " "Domain-Join" \
@@ -1808,8 +1853,11 @@ ins(){
                 Flag="--Meld"
                 mld_chk
             fi
-
-
+            if [[ $ListType == *"Screen Time"* ]]; then
+                # they selected the short radio button
+                Flag="--Screen Time"
+                scntm
+            fi
             # exit 0
     fi
 }

@@ -120,7 +120,7 @@ chrm_chk(){
 		chrm
     else
         CHRM_VER=$(dpkg -s google-chrome-stable | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}' | awk 'BEGIN{FS=OFS="."} NF--' | awk 'BEGIN{FS=OFS="."} NF--')
-        zenity --window-icon ".res/chrome.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<b>Meld Already Installed : </b> v$CHRM_VER   ✅"
+        zenity --window-icon ".res/chrome.png" --info --width=240 --height=100 --timeout 15 --title="Version Details" --text "<b>Chrome Already Installed : </b> v$CHRM_VER   ✅"
     fi
 }
 chrm(){
@@ -142,7 +142,7 @@ chrm(){
         --text="Preparing ..." \
         --percentage=0 --auto-close
         CHRM_VER=$(dpkg -s google-chrome-stable | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}' | awk 'BEGIN{FS=OFS="."} NF--' | awk 'BEGIN{FS=OFS="."} NF--')
-        zenity --window-icon ".res/done.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<b>Meld Version : </b> v$CHRM_VER   ✅"
+        zenity --window-icon ".res/done.png" --info --width=240 --height=100 --timeout 15 --title="Version Details" --text "<b>Chrome Version : </b> v$CHRM_VER   ✅"
         if [[ $? == 1 ]]; then
             zenity --window-icon ".res/error.png" --width=200 --error \
             --text="installation Canceled   ❌"
@@ -1719,7 +1719,7 @@ ins(){
             exit
     else
             # apt-get install -y zenity >/dev/null
-            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=380 --checklist --list \
+            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=400 --checklist --list \
                 --title='Installation'\
                 --text="<b>Select Software to install :</b>\n <span color=\"red\" font='10'> ⚠️ NOTE : Don't select Domain-join in multi selection. ⚠️ </span>"\                --column="Select" --column="Software List" \
                 " " "Domain-Join" \

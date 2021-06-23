@@ -149,6 +149,15 @@ chrm(){
             ins_del
         fi
 }
+scntm_chk(){
+    pkgs='screentime'
+	if ! dpkg -s $pkgs >/dev/null 2>&1; then
+		scntm
+    else
+        SCT_VER=$(dpkg -s $pkgs | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
+        zenity --window-icon ".res/rage.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<b>Screen Time Already Installed : </b> v$SCT_VER   ✅"
+    fi
+}
 scntm(){
     (
         echo "25" ; sleep 3
@@ -171,8 +180,8 @@ scntm(){
         --title="Screen Time Installation" \
         --text="Preparing ..." \
         --percentage=0 --auto-close
-        # CHRM_VER=$(dpkg -s screentime | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}' | awk 'BEGIN{FS=OFS="."} NF--' | awk 'BEGIN{FS=OFS="."} NF--')
-        # zenity --window-icon ".res/done.png" --info --width=280 --height=100 --timeout 15 --title="Version Details" --text "<b>Chrome Version : </b> v$CHRM_VER   ✅"
+        SCT_VER=$(dpkg -s screentime | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
+        zenity --window-icon ".res/done.png" --info --width=280 --height=100 --timeout 15 --title="Version Details" --text "<b>Screen Time Version : </b> v$SCT_VER   ✅"
         if [[ $? == 1 ]]; then
             zenity --window-icon ".res/error.png" --width=200 --error \
             --text="installation Canceled   ❌"

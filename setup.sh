@@ -90,7 +90,7 @@ mld_chk(){
 		mld
     else
         MLD_VER=$(dpkg -s meld | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
-        zenity --window-icon ".res/meld.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<b>Meld Already Installed : </b> v$MLD_VER   ✅"
+        zenity --window-icon ".res/meld.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<b>Meld Already Installed : </b> v$MLD_VER   ✅"
     fi
 }
 
@@ -107,7 +107,39 @@ mld(){
         --text="Meld ..." \
         --percentage=0 --auto-close
         MLD_VER=$(dpkg -s meld | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
-        zenity --window-icon ".res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<b>Meld Version : </b> v$MLD_VER   ✅"
+        zenity --window-icon ".res/done.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<b>Meld Version : </b> v$MLD_VER   ✅"
+        if [[ $? == 1 ]]; then
+            zenity --window-icon ".res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
+            ins_del
+        fi
+}
+chrm_chk(){
+    pkgs='google-chrome-stable'
+    if ! dpkg -s $pkgs >/dev/null 2>&1; then
+		chrm
+    else
+        CHRM_VER=$(dpkg -s google-chrome-stable | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}' | awk 'BEGIN{FS=OFS="."} NF--' | awk 'BEGIN{FS=OFS="."} NF--')
+        zenity --window-icon ".res/chrome.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<b>Meld Already Installed : </b> v$CHRM_VER   ✅"
+    fi
+}
+chrm(){
+    (
+        echo "25" ; sleep 3
+        echo "# Downloading Chrome ... "
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -P /tmp 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity  --window-icon ".res/download.png" --progress --width=500 --auto-close  --title="Goole Chrome"
+        echo "60" ; sleep 3
+        echo "# Installing Chrome ... "
+        dpkg -i /tmp/google-chrome-stable_current_amd64.deb
+        echo "90" ; sleep 3
+        echo "# Installed 👍 "
+    ) |
+        zenity --width=500 --window-icon ".res/chrome.png"  --progress \
+        --title="Chrome Installation" \
+        --text="Preparing ..." \
+        --percentage=0 --auto-close
+        CHRM_VER=$(dpkg -s google-chrome-stable | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}' | awk 'BEGIN{FS=OFS="."} NF--' | awk 'BEGIN{FS=OFS="."} NF--')
+        zenity --window-icon ".res/done.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<b>Meld Version : </b> v$CHRM_VER   ✅"
         if [[ $? == 1 ]]; then
             zenity --window-icon ".res/error.png" --width=200 --error \
             --text="installation Canceled   ❌"
@@ -1688,6 +1720,7 @@ ins(){
                 --title='Installation'\
                 --text="<b>Select Software to install :</b>\n <span color=\"red\" font='10'> ⚠️ NOTE : Don't select Domain-join in multi selection. ⚠️ </span>"\                --column="Select" --column="Software List" \
                 " " "Domain-Join" \
+                " " "Chrome" \
                 " " "NodeJs" \
                 " " "MariaDB" \
                 " " "PHP" \
@@ -1716,6 +1749,11 @@ ins(){
                 # they selected the short radio button
                 Flag="--Domain-Join"
                 domain
+            fi
+            if [[ $ListType == *"Chrome"* ]]; then
+                # they selected the short radio button
+                Flag="--Chrome"
+                chrm_chk
             fi
             if [[ $ListType == *"NodeJs"* ]]; then
                 # they selected the short radio button

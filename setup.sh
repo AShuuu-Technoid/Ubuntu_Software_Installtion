@@ -130,7 +130,10 @@ chrm(){
         wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -P /tmp 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity  --window-icon ".res/download.png" --progress --width=500 --auto-close  --title="Goole Chrome"
         echo "60" ; sleep 3
         echo "# Installing Chrome ... "
-        dpkg -i /tmp/google-chrome-stable_current_amd64.deb
+        dpkg -i /tmp/google-chrome-stable_current_amd64.deb >/dev/null 2>&1
+        echo "75" ; sleep 3
+        echo "# Reoving Download file ... "
+        rm -rf /tmp/google-chrome-stable_current_amd64.deb >/dev/null 2>&1
         echo "90" ; sleep 3
         echo "# Installed 👍 "
     ) |

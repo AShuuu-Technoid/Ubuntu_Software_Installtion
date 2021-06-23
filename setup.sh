@@ -84,9 +84,35 @@ vscd(){
                 ins_del
             fi
 }
+mld_chk(){
+    pkgs='meld'
+	if ! dpkg -s $pkgs >/dev/null 2>&1; then
+		mld
+    else
+        MLD_VER=$(dpkg -s meld | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
+        zenity --window-icon ".res/meld.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<b>Meld Already Installed : </b> v$MLD_VER   ✅"
+    fi
+}
 
 mld(){
-    apt-get install meld -y >/dev/null 2>&1
+    (
+        echo "25" ; sleep 3
+        echo "# Installing Meld ... "
+        apt-get install meld -y >/dev/null 2>&1
+        echo "90" ; sleep 3
+        echo "# Installed Meld ... "
+    ) |
+        zenity --width=500 --window-icon ".res/meld.png"  --progress \
+        --title="Meld Installation" \
+        --text="Meld ..." \
+        --percentage=0 --auto-close
+        MLD_VER=$(dpkg -s meld | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
+        zenity --window-icon ".res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<b>Meld Version : </b> v$MLD_VER   ✅"
+        if [[ $? == 1 ]]; then
+            zenity --window-icon ".res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
+            ins_del
+        fi
 }
 domainjoin(){
         cra

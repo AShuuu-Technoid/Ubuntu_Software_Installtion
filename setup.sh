@@ -1778,7 +1778,8 @@ ins(){
                 " " "Lando" \
                 " " "Git"  \
                 " " "VS Code" \
-                " " "Meld"
+                " " "Meld" \
+                " " "Screen Time"
                 )
             if [[ $? -eq 1 ]]; then
                 # they pressed Cancel or closed the dialog window

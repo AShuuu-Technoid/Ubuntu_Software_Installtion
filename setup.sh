@@ -155,10 +155,13 @@ scntm(){
         echo "# Preparing ... "
         PASSWD=`cat .encry.enc | openssl enc -aes-256-cbc -d -a -iter 29 -pass pass:'Lwg&u@qRnS$CwLJ9PBU5RV&w^J5EXnQ^$2s!9@e2+!$PYU$A79'`
         url="http://rgrage:$PASSWD@mobile.ragewip.com/screentime/linux.zip"
-        echo "50" ; sleep 3
+        echo "45" ; sleep 3
         echo "# Downloading ScreenTime ... "
         wget $url -P /tmp/ 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon ".res/download.png" --progress --width=500 --auto-close  --title="Downloading Screen Time ..."
         echo "70" ; sleep 3
+        echo "# Installing ScreenTime ... "
+        unzip /tmp/linux.zip -d /tmp/ >/dev/null
+        echo "80" ; sleep 3
         echo "# Installing ScreenTime ... "
         dpkg -i /tmp/Screentime.deb >/dev/null 2>&1
         echo "90" ; sleep 3

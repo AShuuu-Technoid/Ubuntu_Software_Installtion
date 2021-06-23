@@ -1696,7 +1696,8 @@ ins(){
                 " " "Docker" \
                 " " "Lando" \
                 " " "Git"  \
-                " " "VS Code"
+                " " "VS Code" \
+                " " "Meld"
                 )
             if [[ $? -eq 1 ]]; then
                 # they pressed Cancel or closed the dialog window
@@ -1761,6 +1762,12 @@ ins(){
                 Flag="--VS Code"
                 vscd_chk
             fi
+            if [[ $ListType == *"Meld"* ]]; then
+                # they selected the short radio button
+                Flag="--Meld"
+                mld_chk
+            fi
+
 
             # exit 0
     fi

@@ -294,13 +294,8 @@ rgkiosk(){
 }
 symc_chk(){
 	    file="/usr/lib/symantec/version.sh"
-       # file1="/usr/local/bin/node"
         if [[ -f "$file" ]]; then
-            cd /usr/lib/symantec/
-            ./version.sh > /tmp/symver.txt
-            SYMCA_VER=`cat /tmp/symver.txt | grep "Symantec Agent for Linux" | awk 'NR==1 {print $6}'`
-            SYMC_VER=`cat /tmp/symver.txt | grep "version" | awk 'NR==1 {print $2}'`
-        	zenity  --window-icon ".res/done.png" --question --title="Git Installation" --width=290 --text="<span foreground='black' font='13'>Symantec Endpoint Protection Installed</span>\n\n<b><i>SEP Agent Version :  $SYMCA_VER\n\nSEP Linux Version : $SYMC_VER </i></b>✅\n\n<b><i>Do you want to remove it ?</i></b>"
+        	zenity  --window-icon ".res/done.png" --question --title="Git Installation" --width=290 --text="<span foreground='black' font='13'>Symantec Endpoint Protection Installed  ✅</span>\n\n<b><i>Do you want to remove it ?</i></b>"
             if [ $? = 0 ]; then
                 symc_rm
                 symc_ins
@@ -356,7 +351,7 @@ symc_ins(){
         --percentage=0 --auto-close
         SYMCA_VER=`cat /tmp/symver.txt | grep "Symantec Agent for Linux" | awk 'NR==1 {print $6}'`
         SYMC_VER=`cat /tmp/symver.txt | grep "version" | awk 'NR==1 {print $2}'`
-        zenity --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Symantec Endpoint Protection Installed</span>\n\n<b><i>SEP Agent Version :  $SYMCA_VER\n\nSEP Linux Version : $SYMC_VER </i></b>✅"
+        zenity --window-icon ".res/done.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Symantec Endpoint Protection Installed</span>\n\n<b><i>SEP Agent Version :  $SYMCA_VER\n\nSEP Linux Version : $SYMC_VER </i></b>✅"
         cd /tmp/
         rm -rf LinuxInstaller symver.txt > /dev/null
         if [[ $? == 1 ]]; then

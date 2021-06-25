@@ -219,6 +219,24 @@ rgk_usr_dir(){
         usr_nm="RAGE///$usr"
     fi
 }
+rgk_rm(){
+    cd "$usrpath/RageKiosk"
+    ./RageKiosk-uninstall.sh
+}
+rgk_ins_chk(){
+    rgk_usr_chk
+    rgk_fl="$usrpath/RageKiosk"
+        if [[ -d "$rgk_fl" ]]; then
+            # symc_fchk
+            zenity  --window-icon ".res/done.png" --question --title="Rage Kiosk Installation" --width=290 --text="<span foreground='black' font='13'>Rage Kiosk Already Installed  ✅</span>\n\n<b><i>Do you want to remove it ?</i></b>"
+            if [ $? = 0 ]; then
+                rgk_rm
+                rgk_ins_chk
+            fi
+        else
+            rgkiosk
+      	fi
+}
 rgk_chk_cod(){
     cod=$(zenity --entry --width=200  --title "Rage Kiosk" --text "Enter Emp Code : ")
 	if ! grep -wq $cod "/tmp/ragekiosk/support/userlist.txt"; then
@@ -269,7 +287,7 @@ rgkiosk(){
         unzip /tmp/linux.zip -d /tmp/ragekiosk/ >/dev/null
         echo "40" ; sleep 3
         echo "# Checking User ... "
-        rgk_usr_chk
+        # rgk_usr_chk
         echo "50" ; sleep 3
         echo "# Checking User ... "
         rgk_chk_cod
@@ -2052,7 +2070,7 @@ ins(){
             if [[ $ListType == *"Rage Kiosk"* ]]; then
                 # they selected the short radio button
                 Flag="--Rage Kiosk"
-                rgkiosk
+                rgk_ins_chk
             fi
             if [[ $ListType == *"Symantec Endpoint Protection"* ]]; then
                 # they selected the short radio button

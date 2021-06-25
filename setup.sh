@@ -1936,6 +1936,7 @@ RES(){
             unzip res.zip >/dev/null
             mv Ubuntu_Software_Installtion-res/* .res/ >/dev/null
             rm -rf Ubuntu_Software_Installtion-res >/dev/null
+            rm -rf res.zip >/dev/null
       	fi
 }
 ins(){

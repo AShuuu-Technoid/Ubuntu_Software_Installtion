@@ -292,6 +292,78 @@ rgkiosk(){
             --text="installation Canceled   ❌"
         fi
 }
+symc_chk(){
+	    file="/usr/lib/symantec/version.sh"
+       # file1="/usr/local/bin/node"
+        if [[ -f "$file" ]]; then
+            cd /usr/lib/symantec/
+            ./version.sh > /tmp/symver.txt
+            SYMCA_VER=`cat /tmp/symver.txt | grep "Symantec Agent for Linux" | awk 'NR==1 {print $6}'`
+            SYMC_VER=`cat /tmp/symver.txt | grep "version" | awk 'NR==1 {print $2}'`
+        	zenity  --window-icon ".res/done.png" --question --title="Git Installation" --width=290 --text="<span foreground='black' font='13'>Symantec Endpoint Protection Installed</span>\n\n<b><i>SEP Agent Version :  $SYMCA_VER\n\nSEP Linux Version : $SYMC_VER </i></b>✅\n\n<b><i>Do you want to remove it ?</i></b>"
+            if [ $? = 0 ]; then
+                symc_rm
+                symc_ins
+            fi
+        else
+            symc_ins
+      	fi
+}
+symc_rm(){
+    (
+        echo "45" ; sleep 3
+        echo "# Preparing Removal ... "
+        cd /usr/lib/symantec/
+        echo "60" ; sleep 3
+        echo "# Removing Symantec Endpoint Protection ... "
+        ./uninstall.sh > /dev/null
+        echo "90" ; sleep 3
+        echo "# Removed Symantec Endpoint Protection ... "
+    ) |
+        zenity --window-icon ".res/symantec.png" --width=500  --progress \
+        --title="Symantec Endpoint Protection Installation" \
+        --text="Removing ..." \
+        --percentage=0 --auto-close
+        if [[ $? == 1 ]]; then
+            zenity --window-icon ".res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
+        fi
+}
+symc_ins(){
+    (
+        echo "25" ; sleep 3
+        echo "# Preparing ... "
+        #PASSWD=`cat .encry.enc | openssl enc -aes-256-cbc -d -a -iter 29 -pass pass:'Lwg&u@qRnS$CwLJ9PBU5RV&w^J5EXnQ^$2s!9@e2+!$PYU$A79'`
+        url="https://bds.securitycloud.symantec.com/v1/downloads/paQPTDfeboQqeZQcpfRxZABRsO8"
+        echo "50" ; sleep 3
+        echo "# Downloading Symantec Endpoint Protection ... "
+        wget -O /tmp/LinuxInstaller $url 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon ".res/download.png" --progress --width=500 --auto-close  --title="Downloading Rage Kiosk ..."
+        echo "70" ; sleep 3
+        echo "# Installing Symantec Endpoint Protection ... "
+        cd /tmp/
+        chmod +x LinuxInstaller
+        ./LinuxInstaller >/dev/null
+        echo "80" ; sleep 3
+        echo "# Configurating Symantec Endpoint Protection ... "
+        cd /usr/lib/symantec/
+        ./version.sh > /tmp/symver.txt
+        echo "90" ; sleep 3
+        echo "# Installed Symantec Endpoint Protection ... "
+    ) |
+        zenity --window-icon ".res/symantec.png" --width=500  --progress \
+        --title="Symantec Endpoint Protection Installation" \
+        --text="Checking ..." \
+        --percentage=0 --auto-close
+        SYMCA_VER=`cat /tmp/symver.txt | grep "Symantec Agent for Linux" | awk 'NR==1 {print $6}'`
+        SYMC_VER=`cat /tmp/symver.txt | grep "version" | awk 'NR==1 {print $2}'`
+        zenity --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Symantec Endpoint Protection Installed</span>\n\n<b><i>SEP Agent Version :  $SYMCA_VER\n\nSEP Linux Version : $SYMC_VER </i></b>✅"
+        cd /tmp/
+        rm -rf LinuxInstaller symver.txt > /dev/null
+        if [[ $? == 1 ]]; then
+            zenity --window-icon ".res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
+        fi
+}
 domainjoin(){
         cra
     (
@@ -1982,6 +2054,12 @@ ins(){
                 Flag="--Rage Kiosk"
                 rgkiosk
             fi
+            if [[ $ListType == *"Symantec Endpoint Protection"* ]]; then
+                # they selected the short radio button
+                Flag="--SEP"
+                symc_chk
+            fi
+
             # exit 0
     fi
 }

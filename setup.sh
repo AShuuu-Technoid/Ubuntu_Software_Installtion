@@ -1969,7 +1969,8 @@ ins(){
                 " " "VS Code" \
                 " " "Meld" \
                 " " "Screen Time" \
-                " " "Rage Kiosk"
+                " " "Rage Kiosk" \
+                " " "Symantec Endpoint Protection"
                 )
             if [[ $? -eq 1 ]]; then
                 # they pressed Cancel or closed the dialog window

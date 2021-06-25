@@ -175,6 +175,8 @@ scntm(){
         dpkg -i /tmp/Screentime.deb >/dev/null 2>&1
         echo "90" ; sleep 3
         echo "# Installed ScreenTime ... "
+        rm -rf /tmp/Screentime.deb > /dev/null 2>&1
+        rm -rf /tmp/linux.zip > /dev/null 2>&1
     ) |
         zenity --width=500 --window-icon ".res/rage.png"  --progress \
         --title="Screen Time Installation" \
@@ -250,6 +252,7 @@ rgkiosk_set(){
 }
 rgkiosk_rm(){
     rm -rf /tmp/ragekiosk > /dev/null 2>&1
+    rm -rf /tmp/linux.zip > /dev/null 2>&1
 }
 rgkiosk(){
     (

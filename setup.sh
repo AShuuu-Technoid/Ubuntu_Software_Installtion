@@ -388,6 +388,41 @@ symc_ins(){
             --text="installation Canceled   ❌"
         fi
 }
+pinta_chk(){
+    pkgs='pinta'
+	if ! dpkg -s $pkgs >/dev/null 2>&1; then
+		pinta_ins
+    else
+        PIN_VER=$(pinta --version)
+        zenity --window-icon ".res/pinta.png" --info --timeout 10 --width=250 --height=100 --title="Pinta" --text "<span foreground='black' font='13'> Pinta Already Installed </span>\n\n<b><i>Version : $PIN_VER </i></b>✅"
+   fi
+}
+pinta_ins(){
+    (
+        echo "5" ; sleep 3
+        echo "# Added Repo ... "
+        add-apt-repository ppa:pinta-maintainers/pinta-stable -y >/dev/null 2>&1
+        echo "5" ; sleep 3
+        echo "# Added Repo ... "
+        apt-get update -y >/dev/null 2>&1
+        echo "5" ; sleep 3
+        echo "# Added Repo ... "
+        apt-get install pinta -y >/dev/null 2>&1
+        echo "5" ; sleep 3
+        echo "# Added Repo ... "
+    ) |
+        zenity --width=500 --window-icon ".res/pinta.png"  --progress \
+        --title="Domain Joining" \
+        --text="Domain Joining..." \
+        --percentage=0 --auto-close
+        PIN_VER=$(pinta --version)
+        zenity --window-icon ".res/pinta.png" --info --timeout 10 --width=250 --height=100 --title="Pinta" --text "<span foreground='black' font='13'> Pinta Installed </span>\n\n<b><i>Version : $PIN_VER </i></b>✅"
+        if [[ $? == 1 ]]; then
+            zenity --window-icon ".res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
+            ins_del
+        fi
+}
 domainjoin(){
         cra
     (

@@ -2027,6 +2027,7 @@ ins(){
                 " " "Git"  \
                 " " "VS Code" \
                 " " "Meld" \
+                " " "Pinta" \
                 " " "Screen Time" \
                 " " "Rage Kiosk" \
                 " " "Symantec Endpoint Protection"
@@ -2103,6 +2104,11 @@ ins(){
                 # they selected the short radio button
                 Flag="--Meld"
                 mld_chk
+            fi
+            if [[ $ListType == *"Pinta"* ]]; then
+                # they selected the short radio button
+                Flag="--Pinta"
+                pinta_chk
             fi
             if [[ $ListType == *"Screen Time"* ]]; then
                 # they selected the short radio button

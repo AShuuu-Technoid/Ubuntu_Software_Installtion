@@ -420,7 +420,6 @@ pinta_ins(){
         if [[ $? == 1 ]]; then
             zenity --window-icon ".res/error.png" --width=200 --error \
             --text="installation Canceled   ❌"
-            ins_del
         fi
 }
 domainjoin(){

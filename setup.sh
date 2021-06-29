@@ -204,7 +204,9 @@ rgk_usr_lst(){
     if [[ $? -eq 1 ]]; then
         zenity --width=200 --error \
         --text="installation Canceled   ❌"
-    else
+        rgk_us="no"
+    elif [[ $? -eq 0 ]]; then
+        rgk_us="yes"
         rgk_usr_dir
     fi
 }
@@ -229,7 +231,10 @@ rgk_ins_chk(){
         if [[ -d "$rgk_fl" ]]; then
             # symc_fchk
             zenity  --window-icon ".res/done.png" --question --title="Rage Kiosk Installation" --width=290 --text="<span foreground='black' font='13'>Rage Kiosk Already Installed  ✅</span>\n\n<b><i>Do you want to remove it ?</i></b>"
-            if [ $? = 0 ]; then
+            if [[ $? -eq 1 ]]; then
+                zenity --width=200 --error \
+                --text="installation Canceled   ❌"
+            elif [ $? = 0 ]; then
                 rgk_rm
                 rgk_ins_chk
             fi
@@ -274,40 +279,42 @@ rgkiosk_rm(){
 }
 rgkiosk(){
     (
-        echo "10" ; sleep 3
-        echo "# Preparing ... "
-        PASSWD=`cat .encry.enc | openssl enc -aes-256-cbc -d -a -iter 29 -pass pass:'Lwg&u@qRnS$CwLJ9PBU5RV&w^J5EXnQ^$2s!9@e2+!$PYU$A79'`
-        url="http://rgrage:$PASSWD@mobile.ragewip.com/ragekiosk/linux.zip"
-        echo "20" ; sleep 3
-        echo "# Downloading Rage Kiosk ... "
-        wget $url -P /tmp/ 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon ".res/download.png" --progress --width=500 --auto-close  --title="Downloading Rage Kiosk ..."
-        echo "30" ; sleep 3
-        echo "# Preparing Rage Kiosk ... "
-        mkdir /tmp/ragekiosk >/dev/null
-        unzip /tmp/linux.zip -d /tmp/ragekiosk/ >/dev/null
-        echo "40" ; sleep 3
-        echo "# Checking User ... "
-        # rgk_usr_chk
-        echo "50" ; sleep 3
-        echo "# Checking User ... "
-        rgk_chk_cod
-        echo "60" ; sleep 3
-        echo "# Installing Dependencies ... "
-        rgk_dep
-        echo "70" ; sleep 3
-        echo "# Installing Rage Kiosk ... "
-        rgkiosk_set
-        echo "80" ; sleep 3
-        echo "# Removing packages ... "
-        rgkiosk_rm
-        echo "90" ; sleep 3
-        echo "# Installed Rage Kiosk ... "
+        if [[ $rgk_us == "yes" ]]; then
+            echo "10" ; sleep 3
+            echo "# Preparing ... "
+            PASSWD=`cat .encry.enc | openssl enc -aes-256-cbc -d -a -iter 29 -pass pass:'Lwg&u@qRnS$CwLJ9PBU5RV&w^J5EXnQ^$2s!9@e2+!$PYU$A79'`
+            url="http://rgrage:$PASSWD@mobile.ragewip.com/ragekiosk/linux.zip"
+            echo "20" ; sleep 3
+            echo "# Downloading Rage Kiosk ... "
+            wget $url -P /tmp/ 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon ".res/download.png" --progress --width=500 --auto-close  --title="Downloading Rage Kiosk ..."
+            echo "30" ; sleep 3
+            echo "# Preparing Rage Kiosk ... "
+            mkdir /tmp/ragekiosk >/dev/null
+            unzip /tmp/linux.zip -d /tmp/ragekiosk/ >/dev/null
+            echo "40" ; sleep 3
+            echo "# Checking User ... "
+            # rgk_usr_chk
+            echo "50" ; sleep 3
+            echo "# Checking User ... "
+            rgk_chk_cod
+            echo "60" ; sleep 3
+            echo "# Installing Dependencies ... "
+            rgk_dep
+            echo "70" ; sleep 3
+            echo "# Installing Rage Kiosk ... "
+            rgkiosk_set
+            echo "80" ; sleep 3
+            echo "# Removing packages ... "
+            rgkiosk_rm
+            echo "90" ; sleep 3
+            echo "# Installed Rage Kiosk ... "
+            zenity --window-icon ".res/rage.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Rage Kiosk Installed</span>  ✅"
+        fi
     ) |
         zenity --width=500 --window-icon ".res/rage.png"  --progress \
         --title="Rage Kiosk Installation" \
         --text="Preparing ..." \
         --percentage=0 --auto-close
-        zenity --window-icon ".res/rage.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Rage Kiosk Installed</span>  ✅"
         if [[ $? == 1 ]]; then
             zenity --window-icon ".res/error.png" --width=200 --error \
             --text="installation Canceled   ❌"
@@ -365,6 +372,7 @@ symc_ins(){
         ./version.sh > /tmp/symver.txt
         echo "90" ; sleep 3
         echo "# Installed Symantec Endpoint Protection ... "
+        rm -rf /tmp/LinuxInstaller
     ) |
         zenity --window-icon ".res/symantec.png" --width=500  --progress \
         --title="Symantec Endpoint Protection Installation" \

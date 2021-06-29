@@ -399,16 +399,16 @@ pinta_chk(){
 }
 pinta_ins(){
     (
-        echo "5" ; sleep 3
-        echo "# Added Repo ... "
+        echo "10" ; sleep 3
+        echo "# Adding Repository ... "
         add-apt-repository ppa:pinta-maintainers/pinta-stable -y >/dev/null 2>&1
-        echo "5" ; sleep 3
+        echo "49" ; sleep 3
         echo "# Added Repo ... "
         apt-get update -y >/dev/null 2>&1
-        echo "5" ; sleep 3
+        echo "70" ; sleep 3
         echo "# Added Repo ... "
         apt-get install pinta -y >/dev/null 2>&1
-        echo "5" ; sleep 3
+        echo "90" ; sleep 3
         echo "# Added Repo ... "
     ) |
         zenity --width=500 --window-icon ".res/pinta.png"  --progress \

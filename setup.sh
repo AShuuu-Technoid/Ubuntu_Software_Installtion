@@ -412,8 +412,8 @@ pinta_ins(){
         echo "# Added Repo ... "
     ) |
         zenity --width=500 --window-icon ".res/pinta.png"  --progress \
-        --title="Domain Joining" \
-        --text="Domain Joining..." \
+        --title="Pinta Installation" \
+        --text="Checking ..." \
         --percentage=0 --auto-close
         PIN_VER=$(pinta --version)
         zenity --window-icon ".res/pinta.png" --info --timeout 10 --width=250 --height=100 --title="Pinta" --text "<span foreground='black' font='13'> Pinta Installed </span>\n\n<b><i>Version : $PIN_VER </i></b>✅"

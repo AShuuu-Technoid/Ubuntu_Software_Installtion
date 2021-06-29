@@ -2011,7 +2011,7 @@ ins(){
             exit
     else
             # apt-get install -y zenity >/dev/null
-            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=490 --checklist --list \
+            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=500 --checklist --list \
                 --title='Ubuntu Software Installation'\
                 --text="<b>Select Software to install :</b>\n <span foreground='red' font='10'>⚠️ NOTE : Don't select Domain-join in multi selection. ⚠️ </span>"\
                 --column="Select" --column="Software List" \

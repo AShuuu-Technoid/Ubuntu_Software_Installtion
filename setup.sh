@@ -37,7 +37,13 @@ rsrt(){
 cl(){
     pkgs='curl'
 	if ! dpkg -s $pkgs >/dev/null 2>&1; then
-		apt-get install $pkgs -y >/dev/null
+		(
+            echo "10" ; sleep 3
+            echo "# Checking ... "
+            apt-get install $pkgs -y >/dev/null 2>&1
+            echo "10" ; sleep 3
+            echo "# Installed Depo ... "
+        ) | zenity --info --width=250 --timeout=15 --title="Dependencies" --text="<span foreground='black' font='13'>Checking Dependencies\n\n</span> Please wait ..." --ok-label="Cancel"
     fi
 }
 depet(){
@@ -65,12 +71,16 @@ vscd(){
     (
         echo "25" ; sleep 3
         echo "# Downloading VS Code ... "
-        wget -O code.deb https://update.code.visualstudio.com/latest/linux-deb-x64/stable 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon ".res/download.png" --progress --width=500 --auto-close  --title="Downloading VS Code ..."
+        wget -O /tmp/code.deb https://update.code.visualstudio.com/latest/linux-deb-x64/stable 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon ".res/download.png" --progress --width=500 --auto-close  --title="Downloading VS Code ..."
         echo "50" ; sleep 3
         echo "# Installing VS Code ... "
+        cd /tmp/
         dpkg -i code.deb >/dev/null
-        echo "90" ; sleep 3
+        echo "75" ; sleep 3
         echo "# Installed VS Code ... "
+        rm -rf /tmp/code.deb
+        echo "90" ; sleep 3
+        echo "# Removing Download File ... "
     )|
         zenity --width=500 --window-icon ".res/code.png"  --progress \
             --title="Installing VS Code" \
@@ -2004,14 +2014,13 @@ RES(){
 }
 ins(){
     clear
-    cl
-    RES
     if [ `whoami` != root ]; then
-            zenity --window-icon ".res/error.png" --width=350 --error \
+            zenity --width=350 --error \
             --text="Please Run This Scripts As <b>root</b> Or As <b>Sudo User</b>"
             exit
     else
-            # apt-get install -y zenity >/dev/null
+            cl
+            RES
             ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=500 --checklist --list \
                 --title='Ubuntu Software Installation'\
                 --text="<b>Select Software to install :</b>\n <span foreground='red' font='10'>⚠️ NOTE : Don't select Domain-join in multi selection. ⚠️ </span>"\

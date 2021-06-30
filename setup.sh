@@ -2004,6 +2004,7 @@ RES(){
 }
 ins(){
     clear
+    cl
     RES
     if [ `whoami` != root ]; then
             zenity --window-icon ".res/error.png" --width=350 --error \

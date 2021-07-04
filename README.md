@@ -15,7 +15,7 @@
 - Ubuntu
 
 ## Maintainer
-This project is maintained by [Ashwin](https://ashuuu.ml/) .
+This project is maintained by [Ashwin](https://ashuuu.ml/)
 
 ## License
 

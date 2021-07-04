@@ -26,6 +26,8 @@ Run sh script to start setup.
 
 2. >` sudo ./setup.sh`
 
+Select software from installation setup.
+
 ## Support
 - Ubuntu
 

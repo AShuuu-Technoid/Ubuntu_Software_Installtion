@@ -18,6 +18,8 @@ Using **Zip :**
 - >`unzip Ubuntu_Software_Installtion-main.zip`
 
 ## Usage
+1.` cd Ubuntu_Software_Installtion-main`
+2.` sudo ./setup.sh`
 
 ## Support
 - Ubuntu

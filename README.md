@@ -15,6 +15,8 @@ Using **GIT Clone :**
 Using **Zip :**
 > Click and Download [Ubuntu Software Installation GUI](https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion/archive/refs/heads/main.zip)
 
+> `unzip Ubuntu_Software_Installtion-main.zip`
+
 ## Usage
 
 ## Support

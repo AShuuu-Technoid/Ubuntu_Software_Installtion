@@ -22,7 +22,7 @@ Using **Zip :**
 Change to download directory.
 1. >` cd Ubuntu_Software_Installtion-main`
 
-Run sh script to start setup.
+Run sh script as **Root User** to start setup.
 
 2. >` sudo ./setup.sh`
 

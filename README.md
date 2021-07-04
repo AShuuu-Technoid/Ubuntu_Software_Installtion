@@ -10,10 +10,10 @@
 
 ## Download
 Using **GIT Clone :**
-> `git clone https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion.git` .
+> `git clone https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion.git`
 
 Using **Zip :**
-> Click and Download [Ubuntu Software Installation GUI](https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion/archive/refs/heads/main.zip).
+> Click and Download [Ubuntu Software Installation GUI](https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion/archive/refs/heads/main.zip)
 
 ## Usage
 

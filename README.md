@@ -8,7 +8,7 @@
 </p>
 
 <p align="center">
-  <img alt="ubuntu" src="https://img.shields.io/badge/Ubuntu-E95420?style=flat-square&logo=ubuntu&logoColor=white" />
+  <img href="https://ubuntu.com" alt="ubuntu" src="https://img.shields.io/badge/Ubuntu-E95420?style=flat-square&logo=ubuntu&logoColor=white" />
   <img alt="license" src="https://img.shields.io/github/license/AShuuu-Technoid/Ubuntu_Software_Installtion?style=flat-square" />
   <img alt="release" src="https://img.shields.io/github/v/release/AShuuu-Technoid/Ubuntu_Software_Installtion?style=flat-square" />
   <img alt="download" src="https://img.shields.io/github/downloads/AShuuu-Technoid/Ubuntu_Software_Installtion/total?style=flat-square"/>

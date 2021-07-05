@@ -13,8 +13,13 @@
   <img alt="release" src="https://img.shields.io/github/v/release/AShuuu-Technoid/Ubuntu_Software_Installtion?style=flat-square" />
   <img alt="download" src="https://img.shields.io/github/downloads/AShuuu-Technoid/Ubuntu_Software_Installtion/total?style=flat-square"/>
   <img alt="commit" src="https://img.shields.io/github/last-commit/AShuuu-Technoid/Ubuntu_Software_Installtion?style=flat-square"/>
-  <img alt="author" scr="https://img.shields.io/badge/author-Ashwin-blue?style=flat-square" />
+  <img alt="commit" src="https://img.shields.io/badge/author-Ashwin-blue?style=flat-square"/>
 </p>
+
+![release](https://img.shields.io/github/v/release/AShuuu-Technoid/Ubuntu_Software_Installtion?style=flat-square)
+![download](https://img.shields.io/github/downloads/AShuuu-Technoid/Ubuntu_Software_Installtion/total?style=flat-square)
+![commit](https://img.shields.io/github/last-commit/AShuuu-Technoid/Ubuntu_Software_Installtion?style=flat-square)
+![author](https://img.shields.io/badge/author-Ashwin-blue?style=flat-square)
 
 ## Getting Started
 

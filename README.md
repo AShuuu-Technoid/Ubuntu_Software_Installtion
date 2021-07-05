@@ -18,7 +18,7 @@
   <img alt="download" src="https://img.shields.io/github/downloads/AShuuu-Technoid/Ubuntu_Software_Installtion/total?style=flat-square"/>
   <a href="https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion">
   <img alt="commit" src="https://img.shields.io/github/last-commit/AShuuu-Technoid/Ubuntu_Software_Installtion?style=flat-square"/>
-  <a href="https://ashwin.ml">
+  <a href="https://ashuuu.ml">
   <img alt="author" src="https://img.shields.io/badge/author-Ashwin-blue?style=flat-square"/>
   </a>
 </p>
@@ -53,6 +53,6 @@ This project is maintained by [Ashwin](https://ashuuu.ml/)
 
 ## License
 
-Copyright (C) 2021 [Ashwin](https://ashwin.ml/)
+Copyright (C) 2021 [Ashwin](https://ashuuu.ml/)
 
 Licensed under the [GNU General Public License v3.0 or later](LICENSE).

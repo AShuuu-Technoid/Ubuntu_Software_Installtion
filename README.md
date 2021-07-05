@@ -7,10 +7,20 @@
   <h1 align="center">Ubuntu Software Installation GUI <img align="top" src="https://telegra.ph/file/3898bdbce63b2dbd6bde9.gif" alt="logo" width="45" height="45"/></h1>
   <a>
     <img src=https://img.shields.io/badge/Ubuntu-E95420?style=flat-square&logo=ubuntu&logoColor=white />
+  </a>
+  <a>
     <img src=https://img.shields.io/github/license/AShuuu-Technoid/Ubuntu_Software_Installtion?style=flat-square />
+  </a>
+  <a>
     <img src=https://img.shields.io/github/v/release/AShuuu-Technoid/Ubuntu_Software_Installtion?style=flat-square />
+  </a>
+  <a>
     <img src=https://img.shields.io/github/downloads/AShuuu-Technoid/Ubuntu_Software_Installtion/total?style=flat-square />
+  </a>
+  <a>
     <img src=https://img.shields.io/github/last-commit/AShuuu-Technoid/Ubuntu_Software_Installtion?style=flat-square />
+  </a>
+  <a>
     <img src=https://img.shields.io/badge/author-Ashwin-blue?style=flat-square />
   </a>
 </p>

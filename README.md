@@ -12,11 +12,15 @@
   <img  alt="ubuntu" src="https://img.shields.io/badge/Ubuntu-E95420?style=flat-square&logo=ubuntu&logoColor=white" />
   <a href="https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion/blob/main/LICENSE">
   <img alt="license" src="https://img.shields.io/github/license/AShuuu-Technoid/Ubuntu_Software_Installtion?style=flat-square" />
-  </a>
+  <a href="https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion/releases">
   <img alt="release" src="https://img.shields.io/github/v/release/AShuuu-Technoid/Ubuntu_Software_Installtion?style=flat-square" />
+  <a href="https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion">
   <img alt="download" src="https://img.shields.io/github/downloads/AShuuu-Technoid/Ubuntu_Software_Installtion/total?style=flat-square"/>
+  <a href="https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion">
   <img alt="commit" src="https://img.shields.io/github/last-commit/AShuuu-Technoid/Ubuntu_Software_Installtion?style=flat-square"/>
-  <img alt="commit" src="https://img.shields.io/badge/author-Ashwin-blue?style=flat-square"/>
+  <a href="https://ashwin.ml">
+  <img alt="author" src="https://img.shields.io/badge/author-Ashwin-blue?style=flat-square"/>
+  </a>
 </p>
 
 ## Getting Started

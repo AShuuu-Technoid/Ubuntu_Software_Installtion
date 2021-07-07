@@ -13,7 +13,18 @@ cra(){
             exit;
     fi
 }
+reprt_add(){
+    basfile=/etc/bash.bashrc
+    word="report-exportcsv"
+    chk_wrd=$(grep -ci "$word" $basfile)
+
+    if [ "$chk_wrd" = "0" ]; then
+        printf 'alias report-exportcsv="%s" ' "$(echo "sed 's/|/,/g'")" >> $basfile
+        source $basfile
+    fi
+}
 log(){
+    reprt_add
     log_path="/var/log/ubuntusoftware/log"
     reprt_path="/var/log/ubuntusoftware/report"
     log_file="$log_path/setup.log"
@@ -110,7 +121,7 @@ vscd(){
             --percentage=0 --auto-close
             VSC_VER=$(dpkg -s code | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
             echo "VSCode $VSC_VER $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "VSCode" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "VSCode" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> VS Code Version </span>\n\n<b><i>Version : $VSC_VER   </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -142,7 +153,7 @@ mld(){
         --percentage=0 --auto-close
         MLD_VER=$(dpkg -s meld | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
         echo "Meld $MLD_VER $tmstamp" >> $log_file
-        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Meld" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Meld" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
         zenity --window-icon ".res/done.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Meld Version </span>\n\n<b><i>Version : $MLD_VER   </i></b>✅"
         if [[ $? == 1 ]]; then
             zenity --window-icon ".res/error.png" --width=200 --error \
@@ -179,7 +190,7 @@ chrm(){
         --percentage=0 --auto-close
         CHRM_VER=$(dpkg -s google-chrome-stable | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}' | awk 'BEGIN{FS=OFS="."} NF--' | awk 'BEGIN{FS=OFS="."} NF--')
         echo "Chrome $CHRM_VER $tmstamp" >> $log_file
-        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Chrome" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Chrome" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
         zenity --window-icon ".res/done.png" --info --width=280 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Chrome Version </span>\n\n<b><i>Version : $CHRM_VER   </i></b>✅"
         if [[ $? == 1 ]]; then
             zenity --window-icon ".res/error.png" --width=200 --error \
@@ -222,7 +233,7 @@ scntm(){
         --percentage=0 --auto-close
         SCT_VER=$(dpkg -s screentime | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
         echo "Screen-Time $SCT_VER $tmstamp" >> $log_file
-        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Screen-Time" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Screen-Time" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
         zenity --window-icon ".res/rage.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Screen Time Installed</span>\n\n<b><i>Version :  $SCT_VER  </i></b>✅"
         if [[ $? == 1 ]]; then
             zenity --window-icon ".res/error.png" --width=200 --error \
@@ -352,7 +363,7 @@ rgkiosk(){
             echo "# Installed Rage Kiosk ... "
             zenity --window-icon ".res/rage.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Rage Kiosk Installed</span>  ✅"
             echo "Ragekiosk NA $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Ragekiosk" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Ragekiosk" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
         fi
     ) |
         zenity --width=500 --window-icon ".res/rage.png"  --progress \
@@ -425,7 +436,7 @@ symc_ins(){
         SYMCA_VER=`cat /tmp/symver.txt | grep "Symantec Agent for Linux" | awk 'NR==1 {print $6}'`
         SYMC_VER=`cat /tmp/symver.txt | grep "version" | awk 'NR==1 {print $2}'`
         echo "Symantec $SYMC_VER $tmstamp" >> $log_file
-        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Symantec" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Symantec" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
         zenity --window-icon ".res/done.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Symantec Endpoint Protection Installed</span>\n\n<b><i>SEP Agent Version :  $SYMCA_VER\n\nSEP Linux Version : $SYMC_VER </i></b>✅"
         cd /tmp/
         rm -rf LinuxInstaller symver.txt > /dev/null
@@ -463,7 +474,7 @@ pinta_ins(){
         --percentage=0 --auto-close
         PIN_VER=$(pinta --version)
         echo "Pinta $PIN_VER $tmstamp" >> $log_file
-        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Pinta" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Pinta" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
         zenity --window-icon ".res/pinta.png" --info --timeout 10 --width=250 --height=100 --title="Pinta" --text "<span foreground='black' font='13'> Pinta Installed </span>\n\n<b><i>Version : $PIN_VER </i></b>✅"
         if [[ $? == 1 ]]; then
             zenity --window-icon ".res/error.png" --width=200 --error \
@@ -566,7 +577,7 @@ php_nl_in(){
             --text="Please wait ..." \
             --percentage=0 --auto-close
             echo "PHP-Composer $php_com_ver_ned $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-Composer" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-Composer" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=280 --height=100 --timeout 15  --title="PHP-Composer" --text "<span foreground='black' font='13'> PHP Composer Installed </span> \n\n<b><i>Version : $php_com_ver_ned  </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -599,7 +610,7 @@ php_comp_lst(){
             --text="Please wait ..." \
             --percentage=0 --auto-close
             echo "PHP-Composer $choice $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-Composer" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-Composer" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=280 --height=100 --timeout 15  --title="PHP-Composer" --text "<span foreground='black' font='13'> PHP Composer Installed  </span> \n\n<b><i>Version : $choice  </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -682,7 +693,7 @@ lan_las(){
             --percentage=0 --auto-close
             LAN_VER=$(dpkg -s lando | grep "Version:" | awk '{print $2}')
             echo "Lando $LAN_VER $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Lando" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Lando" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=200 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Lando Installed </span>\n\n<b><i>Version : $LAN_VER   </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -719,7 +730,7 @@ lan_nl_in(){
             --percentage=0 --auto-close
             LAN_VER=$(dpkg -s lando | grep "Version:" | awk '{print $2}')
             echo "Lando $LAN_VER $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Lando" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Lando" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=200 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Lando Installed </span>\n\n<b><i>Version :  $LAN_VER   </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -747,7 +758,7 @@ lan_spc_l(){
             --percentage=0 --auto-close
             LAN_VER=$(dpkg -s lando | grep "Version:" | awk '{print $2}')
             echo "Lando $LAN_VER $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Lando" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Lando" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=200 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Lando Installed </span>\n\n<b><i>Version :  $LAN_VER   </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -928,8 +939,8 @@ nj_in(){
             NPM_VER=$(npm -v)
             echo "NodeJs $NODE_VER $tmstamp" >> $log_file
             echo "NPM $NPM_VER $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "NodeJs" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "NPM" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "NodeJs" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "NPM" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'> NodeJS </span>\n\n<b><i>Version : $NODE_VER   </i></b>✅\n\n<span foreground='black' font='13'> Npm </span>\n\n<b><i>Version : $NPM_VER  </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -1020,8 +1031,8 @@ nj_entr_pack(){
             NPM_VER=$(npm -v)
             echo "NodeJs $NODE_VER $tmstamp" >> $log_file
             echo "NPM $NPM_VER $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "NodeJs" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "NPM" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "NodeJs" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "NPM" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'> NodeJS </span>\n\n<b><i>Version : $NODE_VER   </i></b>✅\n\n<span foreground='black' font='13'> Npm </span>\n\n<b><i>Version : $NPM_VER  </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -1151,7 +1162,7 @@ git_ins(){
             --percentage=0 --auto-close
             GIT_VER=$(git --version)
             echo "Git $GIT_VER $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Git" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Git" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'> Git Installed </span>\n\n<b><i>Version : $GIT_VER   </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -1175,7 +1186,7 @@ gitk_ins(){
             --percentage=0 --auto-close
             GITK_VER=$(dpkg -s git | grep "Version: 1:" | awk '{print $2}' | awk -F ':' '{print $2}' | awk -F '-' '{print $1}')
             echo "Gitk $GITK_VER $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Gitk" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Gitk" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=180 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'> GitK Installed </span>\n\n<b><i>Version :  $GITK_VER   </i></b>✅ "
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -1200,7 +1211,7 @@ MYS_CHK(){
     else
         MYSQL_VER=$(mysql --version | awk '{print $5}')
         echo "Mysql $MYSQL_VER $tmstamp" >> $log_file
-        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Mysql" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Mysql" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
         zenity --window-icon ".res/mariadb.png" --info --timeout 10 --width=250 --height=100 --title="MariaDB" --text "<span foreground='black' font='13'> MariaDB Already Installed </span>\n\n<b><i>Version : $MYSQL_VER </i></b>✅"
     fi
 }
@@ -1242,7 +1253,7 @@ EOF
         echo  "# MariaDb has been Installed ...";
         MYSQL_VER=$(mysql --version | awk '{print $5}')
         echo "Mysql $MYSQL_VER $tmstamp" >> $log_file
-        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Mysql" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Mysql" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
         zenity --window-icon ".res/mariadb.png" --info --timeout 10 --width=250 --height=100 --title="MariaDB" --text "<span foreground='black' font='13'> MariaDB Installed </span>\n\n<b><i>Version : $MYSQL_VER </i></b>✅"
     ) |
          zenity --width=500 --window-icon ".res/mariadb.png"  --progress \
@@ -1428,7 +1439,7 @@ php5_6(){
             --text="PHP 5.6 Installing..." \
             --percentage=0 --auto-close
             echo "PHP-5.6 5.6 $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-5.6" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-5.6" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=200 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'>PHP Installed !</span>\n\n<b><i>Version :   5.6   </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -1492,7 +1503,7 @@ php7_0(){
             --text="PHP 7.0 Installing..." \
             --percentage=0 --auto-close
             echo "PHP-7.0 7.0 $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-7.0" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-7.0" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=200 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'>PHP Installed !</span>\n\n<b><i>Version :   7.0   </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -1556,7 +1567,7 @@ php7_1(){
             --text="PHP 7.1 Installing..." \
             --percentage=0 --auto-close
             echo "PHP-7.1 7.1 $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-7.1" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-7.1" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=200 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'>PHP Installed !</span>\n\n<b><i>Version :   7.1   </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -1620,7 +1631,7 @@ php7_2(){
             --text="PHP 7.2 Installing..." \
             --percentage=0 --auto-close
             echo "PHP-7.2 7.2 $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-7.2" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-7.2" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=200 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'>PHP Installed !</span>\n\n<b><i>Version :   7.2   </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -1684,7 +1695,7 @@ php7_3(){
             --text="PHP 7.3 Installing..." \
             --percentage=0 --auto-close
             echo "PHP-7.3 7.3 $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-7.3" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-7.3" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=200 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'>PHP Installed !</span>\n\n<b><i>Version :   7.3   </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -1748,7 +1759,7 @@ php7_4(){
             --text="PHP 7.4 Installing..." \
             --percentage=0 --auto-close
             echo "PHP-7.4 7.4 $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-7.4" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-7.4" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=200 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'>PHP Installed !</span>\n\n<b><i>Version :   7.4   </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -1813,7 +1824,7 @@ php8_0(){
             --text="PHP 8.0 Installing..." \
             --percentage=0 --auto-close
             echo "PHP-8.0 8.0 $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-8.0" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "PHP-8.0" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --width=200 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'>PHP Installed !</span>\n\n<b><i>Version :  8.0   </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -1928,7 +1939,7 @@ NG(){
             --text="Installing Nginx..." \
             --percentage=0 --auto-close
             echo "Nginx NA $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Nginx" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Nginx" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             zenity --window-icon ".res/done.png" --info --timeout 10 --width=200  --no-wrap --title="NginX" --text "<span foreground='black' font='13'>Nginx Installed Sucessfully  ✅  </span>"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
@@ -1973,7 +1984,7 @@ DOCK_COMP(){
         echo "# Docker-compose Installed ..."; sleep 3
         DOCOM_VER=$(docker-compose --version | awk '{print $3}' | sed 's/.$//')
         echo "Docker-Comp $DOCOM_VER $tmstamp" >> $log_file
-        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Docker-Comp" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Docker-Comp" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
     ) |
         zenity --width=500 --window-icon ".res/docker.png"  --progress \
             --title="Installing Docker-Compose-" \
@@ -2070,7 +2081,7 @@ DOCK_IN(){
             echo "# Docker Installed ...";
             DOCK_VER=$(docker --version | awk '{print $3}' | sed 's/.$//')
             echo "Docker $DOCK_VER $tmstamp" >> $log_file
-            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Docker" | grep "$dstamp" >> "$reprt_path/report-$dstamp.txt"
+            awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Docker" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
         ) |
             zenity --width=500 --window-icon ".res/docker.png"  --progress \
             --title="Docker Installation" \

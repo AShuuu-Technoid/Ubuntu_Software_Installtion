@@ -44,7 +44,7 @@ Add execute permission for script.
 
 2. >` chmod +x setup.sh`
     
-Run sh script as **Root User** to start setup.
+Run a script as **Root User** to start setup.
 
 3. >` sudo ./setup.sh`
 

@@ -37,11 +37,16 @@ Using **Zip :**
 ## Usage
 
 Change to download directory.
+
 1. >` cd Ubuntu_Software_Installtion-main`
 
+Add execute permission for script.
+
+2. >` chmod +x setup.sh`
+    
 Run sh script as **Root User** to start setup.
 
-2. >` sudo ./setup.sh`
+3. >` sudo ./setup.sh`
 
 Select software from installation setup.
 

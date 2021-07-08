@@ -43,12 +43,16 @@ Change to download directory.
 Add execute permission for script.
 
 2. >` chmod +x setup.sh`
-    
+
 Run a script as **Root User** to start setup.
 
 3. >` sudo ./setup.sh`
 
 Select software from installation setup.
+
+## Example
+
+<img src="https://telegra.ph/file/5293d917c68d544385768.gif" alt="example" width="515" height="364"/>
 
 ## Support
 - Ubuntu

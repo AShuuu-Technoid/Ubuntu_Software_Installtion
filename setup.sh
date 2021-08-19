@@ -192,7 +192,7 @@ vpn_iitm(){
             --title="Installing Forticlient" \
             --text="Installing Forticlient..." \
             --percentage=0 --auto-close
-            zenity --window-icon ".res/done.png" --info --timeout 10 --width=200  --no-wrap --title="Forticlient" --text "<span foreground='black' font='13'>Forticlient Installed Sucessfully  ✅  </span>"
+            zenity --window-icon ".res/done.png" --info --timeout 10 --width=200  --no-wrap --title="Forticlient" --text "<span foreground='black' font='13'><b>Forticlient (IITM)</b>\nInstalled Sucessfully  ✅  </span>"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
                 --text="Installtion Canceled   ❌ "

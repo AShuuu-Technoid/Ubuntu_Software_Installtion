@@ -43,9 +43,8 @@
 12 | Forticlient (IITM)
 13 | Meld
 14 | Pinta
-15 | Screen Tim
+15 | Screen Time
 16 | Rage Kiosk
-17 | Symantec Endpoint Protection
 
 
 ## Download

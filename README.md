@@ -26,6 +26,12 @@
 ## Getting Started
 
   - ### List Of Softwares
+
+  No.s  | Softwares
+------------- | -------------
+1  | Domain-Join
+2 | Chrome
+
     1. Domain-Join
     2. Chrome
     3. NodeJs

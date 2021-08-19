@@ -129,6 +129,75 @@ vscd(){
                 ins_del
             fi
 }
+vpn_rm(){
+    (
+        echo "50" ;
+        echo "Removing Files ..." ;
+        rm -rf /usr/bin/forticlientsslvpn
+        echo "100" ;
+        echo "Almost Done ..." ;
+    ) |
+         zenity --width=500 --window-icon ".res/forticlient.png" --progress \
+            --title="Removing Forticlient" \
+            --text="Removing Forticlient..." \
+            --percentage=0 --auto-close
+            if [[ $? -eq 1 ]]; then
+                zenity --window-icon ".res/error.png" --width=200 --error \
+                --text="Installtion Canceled   ❌ "
+            fi
+}
+vpn_chk(){
+    vpn_path="/usr/bin/forticlientsslvpn"
+    if [[ -d "$vpn_path" ]]; then
+            # symc_fchk
+        zenity  --window-icon ".res/done.png" --question --title="Forticlient Installation" --width=290 --text="<span foreground='black' font='13'>Forticlient Already Installed  ✅</span>\n\n<b><i>Do you want to remove it ?</i></b>"
+        if [[ $? -eq 0 ]]; then
+            vpn_rm
+            vpn_iitm
+        elif [ $? -eq 1 ]; then
+            zenity --width=200 --error \
+            --text="installation Canceled   ❌"
+        fi
+    else
+        vpn_iitm
+    fi
+}
+vpn_iitm(){
+    (
+        echo "10" ;
+        echo "Preparing Download ..." ;
+        wget https://cc.iitm.ac.in/sites/default/files/forticlientsslvpn_linux_4.4.2329.tar.gz -P /tmp 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity  --window-icon ".res/download.png" --progress --width=500 --auto-close  --title="VPN"
+        echo "40" ;
+        echo "Extracting Files ..." ;
+        gzip -dc /tmp/forticlientsslvpn_linux_4.4.2329.tar.gz | tar -xvzf - >/dev/null 2>&1
+        echo "60" ;
+        echo "Copying Files ..." ;
+        cp -rf /tmp/forticlientsslvpn /usr/bin/ >/dev/null 2>&1
+        cp -rf .res/forticlient.png /usr/bin/forticlientsslvpn/ >/dev/null 2>&1
+        echo "75" ;
+        echo "Configuring Files ..." ;
+        sed -i -e 's+cd 64bit+cd /usr/bin/forticlientsslvpn/64bit+g' /usr/bin/forticlientsslvpn/fortisslvpn.sh
+        printf "[Desktop Entry]
+    Version=1.0
+    Type=Application
+    Terminal=false
+    Icon=/usr/bin/forticlientsslvpn/forticlient.png
+    Exec=/usr/bin/forticlientsslvpn/64bit/forticlientsslvpn
+    Name=Forticlientsslvpn" > /usr/share/applications/forticlientsslvpn.desktop
+        echo "100" ;
+        echo "Almost Done ..." ;
+        /usr/bin/forticlientsslvpn/fortisslvpn.sh
+    ) |
+         zenity --width=500 --window-icon ".res/forticlient.png" --progress \
+            --title="Installing Forticlient" \
+            --text="Installing Forticlient..." \
+            --percentage=0 --auto-close
+            zenity --window-icon ".res/done.png" --info --timeout 10 --width=200  --no-wrap --title="Forticlient" --text "<span foreground='black' font='13'>Forticlient Installed Sucessfully  ✅  </span>"
+            if [[ $? -eq 1 ]]; then
+                zenity --window-icon ".res/error.png" --width=200 --error \
+                --text="Installtion Canceled   ❌ "
+            fi
+}
 mld_chk(){
     pkgs='meld'
 	if ! dpkg -s $pkgs >/dev/null 2>&1; then
@@ -174,7 +243,7 @@ chrm(){
     (
         echo "25" ; sleep 3
         echo "# Downloading Chrome ... "
-        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -P /tmp 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity  --window-icon ".res/download.png" --progress --width=500 --auto-close  --title="Goole Chrome"
+        wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb -P /tmp 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity  --window-icon ".res/download.png" --progress --width=500 --auto-close  --title="Google Chrome"
         echo "60" ; sleep 3
         echo "# Installing Chrome ... "
         dpkg -i /tmp/google-chrome-stable_current_amd64.deb >/dev/null 2>&1
@@ -625,7 +694,7 @@ php_comp_nl(){
         if curl --output /dev/null --silent --head --fail "$php_comp_nl_url"; then
             php_nl_in
         else
-            zenity --window-icon ".res/error.png" --error --width=150  --title="Error" --text "<span foreground='black' font='13'> Incorrect Version !</span>"
+            zenity --window-icon ".res/error.png" --error --width=250  --title="PHP-Composer Error" --text "<span foreground='black' font='13'> Incorrect Version !</span>"
         fi
 }
 php_comp(){
@@ -657,7 +726,7 @@ php_comp(){
         elif [[ $choice == *"$choice"* ]]; then
             php_comp_lst
         else
-            zenity --window-icon ".res/error.png" --error --width=150  --title="Error" --text "<span foreground='black' font='13'>Incorrect Selections !</span>"
+            zenity --window-icon ".res/error.png" --error --width=250  --title="PHP-Composer Error" --text "<span foreground='black' font='13'>Incorrect Selections !</span>"
         fi
 }
 php_comp_chk(){
@@ -709,7 +778,7 @@ lan_nl(){
         if curl --output /dev/null --silent --head --fail "$lan_nl_url"; then
             lan_nl_in
         else
-            zenity --window-icon ".res/error.png" --error --width=150  --title="Error" --text "<span foreground='black' font='13'> Incorrect Version !</span>"
+            zenity --window-icon ".res/error.png" --error --width=250  --title="Lando Error" --text "<span foreground='black' font='13'> Incorrect Version !</span>"
         fi
 }
 lan_nl_in(){
@@ -941,7 +1010,7 @@ nj_in(){
             echo "NPM $NPM_VER $tmstamp" >> $log_file
             awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "NodeJs" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "NPM" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
-            zenity --window-icon ".res/done.png" --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'> NodeJS </span>\n\n<b><i>Version : $NODE_VER   </i></b>✅\n\n<span foreground='black' font='13'> Npm </span>\n\n<b><i>Version : $NPM_VER  </i></b>✅"
+            zenity --window-icon ".res/done.png" --info --width=250 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'> NodeJS </span>\n\n<b><i>Version : $NODE_VER   </i></b>✅\n\n<span foreground='black' font='13'> Npm </span>\n\n<b><i>Version : $NPM_VER  </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
                 --text="installation Canceled   ❌"
@@ -977,7 +1046,7 @@ nj_list(){
         elif [[ $choice == *"$choice"* ]]; then
             nj_in
         else
-            zenity --window-icon ".res/error.png" --error --width=150  --title="Error" --text "<b>Incorrect Selections !</b>"
+            zenity --window-icon ".res/error.png" --error --width=250  --title="NodeJS Error" --text "<b>Incorrect Selections !</b>"
         fi
 }
 nj_entr(){
@@ -1033,7 +1102,7 @@ nj_entr_pack(){
             echo "NPM $NPM_VER $tmstamp" >> $log_file
             awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "NodeJs" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
             awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "NPM" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
-            zenity --window-icon ".res/done.png" --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'> NodeJS </span>\n\n<b><i>Version : $NODE_VER   </i></b>✅\n\n<span foreground='black' font='13'> Npm </span>\n\n<b><i>Version : $NPM_VER  </i></b>✅"
+            zenity --window-icon ".res/done.png" --info --width=250 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'> NodeJS </span>\n\n<b><i>Version : $NODE_VER   </i></b>✅\n\n<span foreground='black' font='13'> Npm </span>\n\n<b><i>Version : $NPM_VER  </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
                 --text="installation Canceled   ❌"
@@ -1163,7 +1232,7 @@ git_ins(){
             GIT_VER=$(git --version)
             echo "Git $GIT_VER $tmstamp" >> $log_file
             awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Git" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
-            zenity --window-icon ".res/done.png" --info --width=150 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'> Git Installed </span>\n\n<b><i>Version : $GIT_VER   </i></b>✅"
+            zenity --window-icon ".res/done.png" --info --width=250 --height=100 --timeout 15  --title="Version Details" --text "<span foreground='black' font='13'> Git Installed </span>\n\n<b><i>Version : $GIT_VER   </i></b>✅"
             if [[ $? -eq 1 ]]; then
                 zenity --window-icon ".res/error.png" --width=200 --error \
                 --text="installation Canceled   ❌ "
@@ -2120,7 +2189,7 @@ ins(){
             cl
             RES
             log
-            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=500 --checklist --list \
+            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=530 --checklist --list \
                 --title='Ubuntu Software Installation'\
                 --text="<b>Select Software to install :</b>\n <span foreground='red' font='10'>⚠️ NOTE : Don't select Domain-join in multi selection. ⚠️ </span>"\
                 --column="Select" --column="Software List" \
@@ -2135,6 +2204,7 @@ ins(){
                 " " "Lando" \
                 " " "Git"  \
                 " " "VS Code" \
+                " " "Forticlient (IITM)" \
                 " " "Meld" \
                 " " "Pinta" \
                 " " "Screen Time" \
@@ -2208,6 +2278,11 @@ ins(){
                 # they selected the short radio button
                 Flag="--VS Code"
                 vscd_chk
+            fi
+            if [[ $ListType == *"Forticlient"* ]]; then
+                # they selected the short radio button
+                Flag="--Forticlient"
+                vpn_chk
             fi
             if [[ $ListType == *"Meld"* ]]; then
                 # they selected the short radio button

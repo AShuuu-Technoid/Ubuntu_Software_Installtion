@@ -378,7 +378,7 @@ rgkiosk(){
 symc_chk(){
 	    file="/usr/lib/symantec/version.sh"
         if [[ -f "$file" ]]; then
-        	zenity  --window-icon ".res/done.png" --question --title="Git Installation" --width=290 --text="<span foreground='black' font='13'>Symantec Endpoint Protection Installed  ✅</span>\n\n<b><i>Do you want to remove it ?</i></b>"
+        	zenity  --window-icon ".res/done.png" --question --title="Symantec Installation" --width=290 --text="<span foreground='black' font='13'>Symantec Endpoint Protection Installed  ✅</span>\n\n<b><i>Do you want to remove it ?</i></b>"
             if [ $? = 0 ]; then
                 symc_rm
                 symc_ins

@@ -29,26 +29,24 @@
 
   No.s  | Softwares
 ------------- | -------------
-1  | Domain-Join
+1 | Domain-Join
 2 | Chrome
+3 | NodeJs
+4 | MariaDB
+5 | PHP
+6 | Composer (php)
+7 | Nginx
+8 | Docker
+9 | Lando
+10 | Git
+11 | VS Code
+12 | Forticlient (IITM)
+13 | Meld
+14 | Pinta
+15 | Screen Tim
+16 | Rage Kiosk
+17 | Symantec Endpoint Protection
 
-    1. Domain-Join
-    2. Chrome
-    3. NodeJs
-    4. MariaDB
-    5. PHP
-    6. Composer (php)
-    7. Nginx
-    8. Docker
-    9. Lando
-    10. Git
-    11. VS Code
-    12. Forticlient (IITM)
-    13. Meld
-    14. Pinta
-    15. Screen Tim
-    16. Rage Kiosk
-    17. Symantec Endpoint Protection
 
 ## Download
 Using **GIT Clone :**

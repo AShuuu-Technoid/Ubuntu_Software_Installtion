@@ -198,6 +198,39 @@ vpn_iitm(){
                 --text="Installtion Canceled   ❌ "
             fi
 }
+rsrt_ser(){
+    timeout=10
+    for (( i=0 ; i <= $timeout ; i++ )) do
+        echo "# Network Is Restarting  : $[ $timeout - $i ] ..."
+        echo $[ 100 * $i / $timeout ]
+        sleep 1
+    done | zenity  --window-icon ".res/progress.png" --progress --title="Restarting ..." --width=500 --auto-close
+    if [ $? = 0 ] ; then
+        service network-manager restart
+    else
+        zenity --window-icon ".res/openvpn.png" --info --width=280 --height=100 --timeout 15  --title="Network Restart" --text "<span foreground='black' font='13'>Restart manually ...</span>"
+    fi
+}
+opn_vpn(){
+    (
+        echo "50" ; sleep 3
+        echo "# Installing Packages ..."
+        apt-get install network-manager-openvpn-gnome -y >/dev/null 2>&1
+        echo "90" ; sleep 3
+        echo "# Restarting Services ..."
+        rsrt_ser
+        echo "100" ; sleep 3
+        echo "# Almost Done ..."
+    ) |
+         zenity --width=500 --window-icon ".res/openvpn.png" --progress \
+            --title="Rage VPN" \
+            --text="Installing Rage VPN..." \
+            --percentage=0 --auto-close
+            if [[ $? -eq 1 ]]; then
+                zenity --window-icon ".res/error.png" --width=200 --error \
+                --text="Installtion Canceled   ❌ "
+            fi
+}
 mld_chk(){
     pkgs='meld'
 	if ! dpkg -s $pkgs >/dev/null 2>&1; then
@@ -2189,7 +2222,7 @@ ins(){
             cl
             RES
             log
-            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=530 --checklist --list \
+            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=550 --checklist --list \
                 --title='Ubuntu Software Installation'\
                 --text="<b>Select Software to install :</b>\n <span foreground='red' font='10'>⚠️ NOTE : Don't select Domain-join in multi selection. ⚠️ </span>"\
                 --column="Select" --column="Software List" \
@@ -2205,6 +2238,7 @@ ins(){
                 " " "Git"  \
                 " " "VS Code" \
                 " " "Forticlient (IITM)" \
+                " " "OpenVPN (Rage VPN)" \
                 " " "Meld" \
                 " " "Pinta" \
                 " " "Screen Time" \
@@ -2283,6 +2317,11 @@ ins(){
                 # they selected the short radio button
                 Flag="--Forticlient"
                 vpn_chk
+            fi
+            if [[ $ListType == *"OpenVPN"* ]]; then
+                # they selected the short radio button
+                Flag="--OpenVPN"
+                opn_vpn
             fi
             if [[ $ListType == *"Meld"* ]]; then
                 # they selected the short radio button

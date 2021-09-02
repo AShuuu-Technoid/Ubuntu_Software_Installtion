@@ -172,8 +172,9 @@ vpn_iitm(){
         gzip -dc /tmp/forticlientsslvpn_linux_4.4.2329.tar.gz | tar -xvzf - >/dev/null 2>&1
         echo "60" ;
         echo "Copying Files ..." ;
-        cp -rf /tmp/forticlientsslvpn /usr/bin/ >/dev/null 2>&1
+        cp -rf forticlientsslvpn /usr/bin/ >/dev/null 2>&1
         cp -rf .res/forticlient.png /usr/bin/forticlientsslvpn/ >/dev/null 2>&1
+        rm -rf forticlientsslvpn
         echo "75" ;
         echo "Configuring Files ..." ;
         sed -i -e 's+cd 64bit+cd /usr/bin/forticlientsslvpn/64bit+g' /usr/bin/forticlientsslvpn/fortisslvpn.sh
@@ -777,7 +778,7 @@ lan_las(){
         echo "25";
         echo "# Getting Data from lando ..." ; sleep 3
         lan_lat=$(curl -s https://github.com/lando/lando/tags | grep "/lando/lando/releases/tag/v" | grep "<a href=" | sed 's|.*/||' | sed 's/.$//' | sed 's/.$//' | awk 'NR==1 {print $1}')
-        selver=`echo "lando-$lan_lat.deb"`
+        selver=`echo "lando-x64-$lan_lat.deb"`
         url="https://github.com/lando/lando/releases/download/$lan_lat/$selver"
         echo "50";
         echo "# Downloading Lando ..." ; sleep 3

@@ -232,6 +232,355 @@ opn_vpn(){
                 --text="Installtion Canceled   ❌ "
             fi
 }
+filezilla_chk(){
+    pkgs='filezilla'
+	if ! dpkg -s $pkgs >/dev/null 2>&1; then
+		filezilla_ins
+    else
+        FLZ_VER=$(dpkg -s filezilla | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
+        zenity --window-icon ".res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Filezilla Already Installed </span>\n\n<b><i>Version : $FLZ_VER   </i></b>✅"
+    fi
+}
+
+filezilla_ins(){
+    (
+        echo "25" ; sleep 3
+        echo "# Installing Filezilla ... "
+        apt-get install filezilla -y >/dev/null 2>&1
+        echo "90" ; sleep 3
+        echo "# Installed Filezilla ... "
+    ) |
+        zenity --width=500 --window-icon ".res/filezilla.png"  --progress \
+        --title="Filezilla Installation" \
+        --text="Filezilla ..." \
+        --percentage=0 --auto-close
+        FLZ_VER=$(dpkg -s Filezilla | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
+        echo "Filezilla $FLZ_VER $tmstamp" >> $log_file
+        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Filezilla" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
+        zenity --window-icon ".res/done.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> FileZilla Version </span>\n\n<b><i>Version : $FLZ_VER   </i></b>✅"
+        if [[ $? == 1 ]]; then
+            zenity --window-icon ".res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
+            ins_del
+        fi
+}
+
+snapd_chk(){
+    pkgs='snapd'
+	if ! dpkg -s $pkgs >/dev/null 2>&1; then
+        apt-get install $pkgs -y >/dev/null 2>&1
+    fi
+}
+
+postman_chk(){
+    snapd_chk
+    pkgs='postman'
+	if ! snap list | grep $pkgs >/dev/null 2>&1; then
+        postman_in
+    else
+        PSM_VER=$(snap list | grep postman | awk '{print $2}')
+        zenity --window-icon ".res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Postman Already Installed </span>\n\n<b><i>Version : $PSM_VER   </i></b>✅"
+    fi
+}
+
+postman_in(){
+    (
+        echo "25" ; sleep 3
+        echo "# Installing Postman ... "
+        snap install postman >/dev/null 2>&1
+        echo "90" ; sleep 3
+        echo "# Installed Postman ... "
+    ) |
+        zenity --width=500 --window-icon ".res/postman.png"  --progress \
+        --title="Postman Installation" \
+        --text="Postman ..." \
+        --percentage=0 --auto-close
+        PSM_VER=$(snap list | grep postman | awk '{print $2}')
+        echo "Postman $PSM_VER $tmstamp" >> $log_file
+        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Postman" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
+        zenity --window-icon ".res/done.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Postman Version </span>\n\n<b><i>Version : $PSM_VER   </i></b>✅"
+        if [[ $? == 1 ]]; then
+            zenity --window-icon ".res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
+            ins_del
+        fi
+
+}
+
+mysql_clt_chk(){
+    pkgs='mysql-client'
+	if ! dpkg -s $pkgs >/dev/null 2>&1; then
+		mysql_clt_ins
+    else
+        MSQC_VER=$(dpkg -s mysql-client | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
+        zenity --window-icon ".res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Mysql-Client Already Installed </span>\n\n<b><i>Version : $MSQC_VER   </i></b>✅"
+    fi
+}
+
+mysql_clt_ins(){
+    (
+        echo "25" ; sleep 3
+        echo "# Installing Mysql-Client ... "
+        apt-get install mysql-client -y >/dev/null 2>&1
+        echo "90" ; sleep 3
+        echo "# Installed Mysql-Client ... "
+    ) |
+        zenity --width=500 --window-icon ".res/mysql.png"  --progress \
+        --title="Mysql-Client Installation" \
+        --text="Mysql ..." \
+        --percentage=0 --auto-close
+        MSQC_VER=$(dpkg -s mysql-client | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
+        echo "Mysql-client $MSQC_VER $tmstamp" >> $log_file
+        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Mysql-client" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
+        zenity --window-icon ".res/done.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Mysql-client Version </span>\n\n<b><i>Version : $MSQC_VER   </i></b>✅"
+        if [[ $? == 1 ]]; then
+            zenity --window-icon ".res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
+            ins_del
+        fi
+}
+
+redis_chk(){
+    pkgs='redis-tools'
+	if ! dpkg -s $pkgs >/dev/null 2>&1; then
+		redis_ins
+    else
+        RED_VER=$(dpkg -s redis-tools | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
+        zenity --window-icon ".res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Redis-tools Already Installed </span>\n\n<b><i>Version : $RED_VER   </i></b>✅"
+    fi
+}
+
+redis_ins(){
+    (
+        echo "25" ; sleep 3
+        echo "# Installing Redis-tools ... "
+        apt-get install redis-tools -y >/dev/null 2>&1
+        echo "90" ; sleep 3
+        echo "# Installed Redis-tools ... "
+    ) |
+        zenity --width=500 --window-icon ".res/redis.png"  --progress \
+        --title="Redis-tools Installation" \
+        --text="Redis-tools ..." \
+        --percentage=0 --auto-close
+        RED_VER=$(dpkg -s redis-tools | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
+        echo "Redis-tools $RED_VER $tmstamp" >> $log_file
+        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Redis-tools" | grep "$tmstamp" >> "$reprt_path/report-$dstamp.txt"
+        zenity --window-icon ".res/done.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Redis-tools Version </span>\n\n<b><i>Version : $RED_VER   </i></b>✅"
+        if [[ $? == 1 ]]; then
+            zenity --window-icon ".res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
+            ins_del
+        fi
+}
+
+tools_chk(){
+    (
+    # pkgs='zip'
+            echo "15" ; sleep 3
+            echo "# Checking Zip ... "
+        if ! dpkg -s zip >/dev/null 2>&1; then
+            echo "20" ; sleep 3
+            echo "# Installing Zip ... "
+            apt-get install zip -y >/dev/null 2>&1
+            echo "30" ; sleep 3
+            echo "# Checking Unzip ... "
+        elif ! dpkg -s unzip >/dev/null 2>&1; then
+            echo "35" ; sleep 3
+            echo "# Installing Unzip ... "
+            apt-get install unzip -y >/dev/null 2>&1
+            echo "40" ; sleep 3
+            echo "# Checking Htop ... "
+        elif ! dpkg -s htop >/dev/null 2>&1; then
+            echo "45" ; sleep 3
+            echo "# Installing Htop ... "
+            apt-get install htop -y >/dev/null 2>&1
+            echo "50" ; sleep 3
+            echo "# Checking Telnet ... "
+        elif ! dpkg -s telnet >/dev/null 2>&1; then
+            echo "55" ; sleep 3
+            echo "# Installing Telnet ... "
+            apt-get install telnet -y >/dev/null 2>&1
+            echo "60" ; sleep 3
+            echo "# Checking Tar ... "
+        elif ! dpkg -s tar >/dev/null 2>&1; then
+            echo "65" ; sleep 3
+            echo "# Installing Tar ... "
+            apt-get install tar -y >/dev/null 2>&1
+            echo "70" ; sleep 3
+            echo "# Checking curl ... "
+        elif ! dpkg -s curl >/dev/null 2>&1; then
+            echo "75" ; sleep 3
+            echo "# Installing curl ... "
+            apt-get install curl -y >/dev/null 2>&1
+            echo "80" ; sleep 3
+            echo "# Checking rsync ... "
+        elif ! dpkg -s rsync >/dev/null 2>&1; then
+            echo "85" ; sleep 3
+            echo "# Installing rsync ... "
+            apt-get install rsync -y >/dev/null 2>&1
+            echo "90" ; sleep 3
+            echo "# Checking nano ... "
+        elif ! dpkg -s nano >/dev/null 2>&1; then
+            echo "95" ; sleep 3
+            echo "# Installing nano ... "
+            apt-get install nano -y >/dev/null 2>&1
+            echo "100" ; sleep 3
+            echo "# Almost Done ... "
+        fi
+    ) |
+         zenity --width=500 --window-icon ".res/rage.png"  --progress \
+            --title="Utilities Tools" \
+            --text="Checking Tools Installed ..." \
+            --percentage=0 --auto-close
+            if [[ $? -eq 1 ]]; then
+                zenity --window-icon ".res/error.png" --width=200 --error \
+                --text="UnInstalltion Canceled   ❌ "
+                # ins_del
+            fi
+}
+
+SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" &> /dev/null && pwd )"
+usr_chk(){
+    usr=$(users)
+    zenity  --question --title="Users" --width=290 --text="<span foreground='black' font='13'>User <b>$usr</b> was detected !</span>\n\n<b><i>Do you want to install it ?</i></b>"
+    if [ $? = 0 ]; then
+            usr_dir
+    else
+            usr_lst
+    fi
+}
+usr_lst(){
+    usr=`zenity --list --radiolist --width 200 --height 250 --text "Select playlist from the list below" --title "Please User :" --column "Playlists" --column "Select" --separator="/ " $(ls -d -1 /home/* /home/local/RAGE/* | sed 's|.*/||' | xargs -L1 echo FALSE)`
+    if [[ $? -eq 1 ]]; then
+        zenity --width=200 --error \
+        --text="installation Canceled   ❌"
+        pj_us="no"
+    else
+        pj_us="yes"
+        usr_dir
+    fi
+}
+usr_dir(){
+    usr_path="/home/$usr"
+    usr_path1="/home/local/RAGE/$usr"
+    if [[ -d "$usr_path" ]]; then
+        usrpath=$usr_path
+        usr_nm=$usr
+        rgk_us="yes"
+    elif [[ -d "$usr_path1" ]]; then
+        usrpath=$usr_path1
+        usr_nm="RAGE///$usr"
+        rgk_us="yes"
+    fi
+}
+chk_fl(){
+    FILE=$usrpath/.bashrc
+    FILE1="/etc/sysctl.conf"
+    STRING="alias php71_bash='~/projects/php/docker/bin/php71_bash'"
+    STRING1="alias php72_bash='~/projects/php/docker/bin/php72_bash'"
+    STRING2="alias php73_bash='~/projects/php/docker/bin/php73_bash'"
+    STRING3="alias php74_bash='~/projects/php/docker/bin/php74_bash'"
+    STRING4="alias php56_bash='~/projects/php/docker/bin/php56_bash'"
+    STRING5="alias nginx_bash='~/projects/php/docker/bin/nginx_bash'"
+    STRING6="alias redis_bash='~/projects/php/docker/bin/redis_bash'"
+    STRING7="alias node_bash='~/projects/php/docker/bin/node_bash'"
+    STRING8="alias maria_bash='~/projects/php/docker/bin/mariadb'"
+    STRING9="alias docker_php='cd ~/projects/php/docker/; ./bin/start'"
+    STRING10="alias docker_home='cd ~/projects/php/docker/'"
+    # add in /etc/sysctl.conf
+    STRING11="fs.inotify.max_user_watches=524288"
+    STRING12="vm.max_map_count = 262144"
+    STRING13="fs.file-max = 65536"
+
+    if ! grep -q "$STRING" "$FILE" ; then
+        echo $STRING >> $FILE
+    fi
+    if ! grep -q "$STRING1" "$FILE" ; then
+        echo $STRING1 >> $FILE
+    fi
+    if ! grep -q "$STRING2" "$FILE" ; then
+        echo $STRING2 >> $FILE
+    fi
+    if ! grep -q "$STRING3" "$FILE" ; then
+        echo $STRING3 >> $FILE
+    fi
+    if ! grep -q "$STRING4" "$FILE" ; then
+        echo $STRING4 >> $FILE
+    fi
+    if ! grep -q "$STRING5" "$FILE" ; then
+        echo $STRING5 >> $FILE
+    fi
+    if ! grep -q "$STRING6" "$FILE" ; then
+        echo $STRING6 >> $FILE
+    fi
+    if ! grep -q "$STRING7" "$FILE" ; then
+        echo $STRING7 >> $FILE
+    fi
+    if ! grep -q "$STRING8" "$FILE" ; then
+        echo $STRING8 >> $FILE
+    fi
+    if ! grep -q "$STRING9" "$FILE" ; then
+        echo $STRING9 >> $FILE
+    fi
+    if ! grep -q "$STRING10" "$FILE" ; then
+        echo $STRING10 >> $FILE
+    fi
+    if ! grep -q "$STRING11" "$FILE1" ; then
+        echo $STRING11 >> $FILE1
+    fi
+    if ! grep -q "$STRING12" "$FILE1" ; then
+        echo $STRING12 >> $FILE1
+    fi
+    if ! grep -q "$STRING13" "$FILE1" ; then
+        echo $STRING13 >> $FILE1
+    fi
+
+}
+
+prj_crt(){
+    (
+        echo "25" ; sleep 3
+        echo "# Preparing ... "
+        wrk_pth=$usrpath'/projects/'
+        echo "35" ; sleep 3
+        echo "# Creating Folders ... "
+        mkdir -p $wrk_pth/{drupal,magento,php}
+        # cd $wrk_pth
+        PJ_PASSWD=`cat $SCRIPT_DIR/.pjenc.enc | openssl enc -aes-256-cbc -d -a -iter 29 -pass pass:'[jb,9ULWSs]^TP%n'`
+        url="https://ashwin.m2:$PJ_PASSWD@gitlab.com/ragecom/rage2/docker-php.git"
+        echo "40" ; sleep 3
+        echo "# Cloning Files ... "
+        git clone $url $wrk_pth'php' >/dev/null 2>&1
+        echo "50" ; sleep 3
+        echo "# Configuring Files ... "
+        rm -rf $wrk_pth'php'/.git
+        chmod -R 777 $wrk_pth'php'/data/ $wrk_pth'php'/logs/
+        echo "60" ; sleep 3
+        echo "# Configuring Files ... "
+        chown -R $usr_nm:$usr_nm $wrk_pth
+        echo "75" ; sleep 3
+        echo "# Setting Up Some Files ... "
+        chk_fl
+        echo "95" ; sleep 3
+        echo "# Almost Done ... "
+
+    ) |
+         zenity --width=500 --window-icon ".res/rage.png"  --progress \
+            --title="Project Setup" \
+            --text="Processing ..." \
+            --percentage=0 --auto-close
+            if [[ $? -eq 1 ]]; then
+                zenity --window-icon ".res/error.png" --width=200 --error \
+                --text="UnInstalltion Canceled   ❌ "
+                # ins_del
+            fi
+}
+proj_finl(){
+    usr_chk
+    prj_crt
+    chk_fl
+}
+
 mld_chk(){
     pkgs='meld'
 	if ! dpkg -s $pkgs >/dev/null 2>&1; then
@@ -917,14 +1266,23 @@ lan_rm(){
                 ins_del
             fi
 }
+lan_rm_chk(){
+    GIT_VER=$(dpkg -s lando | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
+    zenity  --window-icon ".res/done.png" --question --title="Lando Installation" --width=290 --text="<span foreground='black' font='13'> Lando v$GIT_VER is already installed   ✅</span>\n\n<b><i>Do you want to remove it ?</i></b>"
+    if [ $? = 0 ]; then
+        lan_rm
+        lan
+    fi
+}
 lan_chk(){
     pkgs='lando'
 	if  dpkg -s $pkgs >/dev/null 2>&1; then
-		lan_rm
+		lan_rm_chk
+    else
+        lan
     fi
 }
 lan(){
-    lan_chk
     lan_sel=`zenity --window-icon ".res/lando.png" --width=170 --height=170 --list --radiolist \
                     --title 'Lando Installation'\
                     --text 'Select Version to install:' \
@@ -2214,30 +2572,28 @@ RES(){
       	fi
 }
 ins(){
-    clear
-    if [ `whoami` != root ]; then
-            zenity --width=350 --error \
-            --text="Please Run This Scripts As <b>root</b> Or As <b>Sudo User</b>"
-            exit
-    else
-            cl
-            RES
-            log
-            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=550 --checklist --list \
+
+            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=650 --checklist --list \
                 --title='Ubuntu Software Installation'\
+                --ok-label="Install" \
                 --text="<b>Select Software to install :</b>\n <span foreground='red' font='10'>⚠️ NOTE : Don't select Domain-join in multi selection. ⚠️ </span>"\
                 --column="Select" --column="Software List" \
                 " " "Domain-Join" \
                 " " "Chrome" \
                 " " "NodeJs" \
                 " " "MariaDB" \
+                " " "Redis-tools" \
+                " " "Mysql-Client" \
                 " " "PHP" \
                 " " "Composer (php)" \
                 " " "Nginx" \
                 " " "Docker" \
+                " " "Project Setup" \
                 " " "Lando" \
                 " " "Git"  \
                 " " "VS Code" \
+                " " "FileZilla" \
+                " " "Postman" \
                 " " "Forticlient (IITM)" \
                 " " "OpenVPN (Rage VPN)" \
                 " " "Meld" \
@@ -2279,6 +2635,16 @@ ins(){
                 Flag="--MariaDB"
                 MYS
             fi
+            if [[ $ListType == *"Redis-tools"* ]]; then
+                # they selected the short radio button
+                Flag="--Redis-tools"
+                redis_chk
+            fi
+            if [[ $ListType == *"Mysql-Client"* ]]; then
+                # they selected the short radio button
+                Flag="--Mysql-Client"
+                mysql_clt_chk
+            fi
             if [[ $ListType == *"PHP"* ]]; then
                 # they selected the short radio button
                 Flag="--PHP"
@@ -2299,10 +2665,15 @@ ins(){
                 Flag="--Docker"
                 DOCK_CHK
             fi
+            if [[ $ListType == *"Project Setup"* ]]; then
+                # they selected the short radio button
+                Flag="--Project Setup"
+                proj_finl
+            fi
             if [[ $ListType == *"Lando"* ]]; then
                 # they selected the short radio button
                 Flag="--Lando"
-                lan
+                lan_chk
             fi
             if [[ $ListType == *"Git"* ]]; then
                 # they selected the short radio button
@@ -2313,6 +2684,16 @@ ins(){
                 # they selected the short radio button
                 Flag="--VS Code"
                 vscd_chk
+            fi
+            if [[ $ListType == *"FileZilla"* ]]; then
+                # they selected the short radio button
+                Flag="--FLZ"
+                filezilla_chk
+            fi
+            if [[ $ListType == *"Postman"* ]]; then
+                # they selected the short radio button
+                Flag="--PSM"
+                postman_chk
             fi
             if [[ $ListType == *"Forticlient"* ]]; then
                 # they selected the short radio button
@@ -2350,7 +2731,66 @@ ins(){
                 symc_chk
             fi
 
+
             # exit 0
-    fi
 }
-ins
+
+php_tm_custom(){
+    # Chrome installtion
+    chrm_chk
+    # Vscode
+    vscd_chk
+    # Git
+    git_main
+    # Meld
+    mld_chk
+    # Filezilla
+    filezilla_chk
+    # Postman
+    postman_chk
+    # Docker
+    DOCK_CHK
+    # Lando
+    lan_chk
+    # lan
+    # Mysql-client
+    mysql_clt_chk
+    # Redis
+    redis_chk
+    # Utilities tools
+    tools_chk
+    # Project Setup
+    proj_finl
+}
+
+main(){
+    clear
+    if [ `whoami` != root ]; then
+        zenity --width=350 --error \
+            --text="Please Run This Scripts As <b>root</b> Or As <b>Sudo User</b>"
+            exit
+    else
+        cl
+        RES
+        log
+        ListType=`zenity --width=300 --height=200 --list --radiolist \
+        --title 'Rage Software' \
+        --text 'Ubuntu Installation' \
+        --column 'Select' \
+        --ok-label="Next" \
+        --column 'Actions' TRUE "PHP Team Custom" FALSE "Manual Installtion"`
+        if [[ $? -eq 1 ]]; then
+            zenity --window-icon ".res/error.png" --error --title="Declined" --width=200 \
+                --text="installation Canceled   ❌"
+                ins_del
+                exit 1
+        elif [[ $ListType == "PHP Team Custom" ]]; then
+            php_tm_custom
+        elif [[ $ListType == "Manual Installtion" ]]; then
+            ins
+
+        fi
+    fi
+
+}
+main

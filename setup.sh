@@ -2572,14 +2572,35 @@ RES(){
       	fi
 }
 ins(){
-
-            ListType=$(zenity --window-icon ".res/rage.png" --width=400 --height=650 --checklist --list \
+    ListType_1=$(zenity --window-icon ".res/rage.png" --width=350 --height=370 --checklist --list \
                 --title='Ubuntu Software Installation'\
-                --ok-label="Install" \
-                --text="<b>Select Software to install :</b>\n <span foreground='red' font='10'>⚠️ NOTE : Don't select Domain-join in multi selection. ⚠️ </span>"\
+                --ok-label="Next" \
+                --text="<b>Select <span foreground='red'> Utilities Software </span>To Install :</b>\n <span foreground='red' font='10'>⚠️ NOTE : Don't select Domain-join in multi selection. ⚠️ </span>"\
                 --column="Select" --column="Software List" \
                 " " "Domain-Join" \
                 " " "Chrome" \
+                " " "VS Code" \
+                " " "FileZilla" \
+                " " "Meld" \
+                " " "Pinta" \
+                " " "Screen Time" \
+                " " "Rage Kiosk" \
+                " " "Symantec Endpoint Protection" \
+                " " "Forticlient (IITM)" \
+                " " "OpenVPN (Rage VPN)"
+            )
+            if [[ $? -eq 1 ]]; then
+                # they pressed Cancel or closed the dialog window
+                zenity --window-icon ".res/error.png" --error --title="Declined" --width=200 \
+                    --text="installation Canceled   ❌"
+                ins_del
+                exit 1
+            fi
+    ListType_2=$(zenity --window-icon ".res/rage.png" --width=350 --height=370 --checklist --list \
+                --title='Ubuntu Software Installation'\
+                --ok-label="Install" \
+                --text="<b>Select <span foreground='red'>Developer Software </span>To Install :</b>"\
+                --column="Select" --column="Software List" \
                 " " "NodeJs" \
                 " " "MariaDB" \
                 " " "Redis-tools" \
@@ -2591,17 +2612,8 @@ ins(){
                 " " "Project Setup" \
                 " " "Lando" \
                 " " "Git"  \
-                " " "VS Code" \
-                " " "FileZilla" \
                 " " "Postman" \
-                " " "Forticlient (IITM)" \
-                " " "OpenVPN (Rage VPN)" \
-                " " "Meld" \
-                " " "Pinta" \
-                " " "Screen Time" \
-                " " "Rage Kiosk" \
-                " " "Symantec Endpoint Protection"
-                )
+            )
             if [[ $? -eq 1 ]]; then
                 # they pressed Cancel or closed the dialog window
                 zenity --window-icon ".res/error.png" --error --title="Declined" --width=200 \
@@ -2609,31 +2621,78 @@ ins(){
                 ins_del
                 exit 1
             fi
-            if [[ -z "$ListType" ]]; then
+            if [[ -z "$ListType_1" ]] && [[ -z "$ListType_2" ]]; then
                 # they selected the short radio button
                 zenity --width=200 --height=25 --timeout 15 --error \
                 --text="Select Any One To Install ⚠️"
                 ins
             fi
-            if [[ $ListType == *"Domain-Join"* ]]; then
+            if [[ $ListType_1 == *"Domain-Join"* ]]; then
                 # they selected the short radio button
                 Flag="--Domain-Join"
                 domain
             fi
-            if [[ $ListType == *"Chrome"* ]]; then
+            if [[ $ListType_1 == *"Chrome"* ]]; then
                 # they selected the short radio button
                 Flag="--Chrome"
                 chrm_chk
             fi
+            if [[ $ListType_1 == *"VS Code"* ]]; then
+                # they selected the short radio button
+                Flag="--VS Code"
+                vscd_chk
+            fi
+            if [[ $ListType_1 == *"FileZilla"* ]]; then
+                # they selected the short radio button
+                Flag="--FLZ"
+                filezilla_chk
+            fi
+            if [[ $ListType_1 == *"Meld"* ]]; then
+                # they selected the short radio button
+                Flag="--Meld"
+                mld_chk
+            fi
+            if [[ $ListType_1 == *"Pinta"* ]]; then
+                # they selected the short radio button
+                Flag="--Pinta"
+                pinta_chk
+            fi
+            if [[ $ListType_1 == *"Screen Time"* ]]; then
+                # they selected the short radio button
+                Flag="--Screen Time"
+                scntm_chk
+            fi
+            if [[ $ListType_1 == *"Rage Kiosk"* ]]; then
+                # they selected the short radio button
+                Flag="--Rage Kiosk"
+                rgk_ins_chk
+            fi
+            if [[ $ListType_1 == *"Symantec Endpoint Protection"* ]]; then
+                # they selected the short radio button
+                Flag="--SEP"
+                symc_chk
+            fi
+            if [[ $ListType_1 == *"Forticlient"* ]]; then
+                # they selected the short radio button
+                Flag="--Forticlient"
+                vpn_chk
+            fi
+            if [[ $ListType_1 == *"OpenVPN"* ]]; then
+                # they selected the short radio button
+                Flag="--OpenVPN"
+                opn_vpn
+            fi
+
+          ################## Phase - 2 #####################
             if [[ $ListType == *"NodeJs"* ]]; then
                 # they selected the short radio button
                 Flag="--NodeJs"
                 nj
             fi
-            if [[ $ListType == *"MariaDB"* ]]; then
+            if [[ $ListType_2 == *"MariaDB"* ]]; then
                 # they selected the short radio button
                 Flag="--MariaDB"
-                MYS
+                Mariadb
             fi
             if [[ $ListType == *"Redis-tools"* ]]; then
                 # they selected the short radio button
@@ -2680,59 +2739,13 @@ ins(){
                 Flag="--Git"
                 git_main
             fi
-            if [[ $ListType == *"VS Code"* ]]; then
-                # they selected the short radio button
-                Flag="--VS Code"
-                vscd_chk
-            fi
-            if [[ $ListType == *"FileZilla"* ]]; then
-                # they selected the short radio button
-                Flag="--FLZ"
-                filezilla_chk
-            fi
+
             if [[ $ListType == *"Postman"* ]]; then
                 # they selected the short radio button
                 Flag="--PSM"
                 postman_chk
             fi
-            if [[ $ListType == *"Forticlient"* ]]; then
-                # they selected the short radio button
-                Flag="--Forticlient"
-                vpn_chk
-            fi
-            if [[ $ListType == *"OpenVPN"* ]]; then
-                # they selected the short radio button
-                Flag="--OpenVPN"
-                opn_vpn
-            fi
-            if [[ $ListType == *"Meld"* ]]; then
-                # they selected the short radio button
-                Flag="--Meld"
-                mld_chk
-            fi
-            if [[ $ListType == *"Pinta"* ]]; then
-                # they selected the short radio button
-                Flag="--Pinta"
-                pinta_chk
-            fi
-            if [[ $ListType == *"Screen Time"* ]]; then
-                # they selected the short radio button
-                Flag="--Screen Time"
-                scntm_chk
-            fi
-            if [[ $ListType == *"Rage Kiosk"* ]]; then
-                # they selected the short radio button
-                Flag="--Rage Kiosk"
-                rgk_ins_chk
-            fi
-            if [[ $ListType == *"Symantec Endpoint Protection"* ]]; then
-                # they selected the short radio button
-                Flag="--SEP"
-                symc_chk
-            fi
 
-
-            # exit 0
 }
 
 php_tm_custom(){

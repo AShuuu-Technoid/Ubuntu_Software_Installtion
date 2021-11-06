@@ -2572,7 +2572,7 @@ RES(){
       	fi
 }
 ins(){
-    ListType_1=$(zenity --window-icon ".res/rage.png" --width=350 --height=370 --checklist --list \
+    ListType_1=$(zenity --window-icon ".res/rage.png" --width=350 --height=380 --checklist --list \
                 --title='Ubuntu Software Installation'\
                 --ok-label="Next" \
                 --text="<b>Select <span foreground='red'> Utilities Software </span>To Install :</b>\n <span foreground='red' font='10'>⚠️ NOTE : Don't select Domain-join in multi selection. ⚠️ </span>"\
@@ -2596,7 +2596,7 @@ ins(){
                 ins_del
                 exit 1
             fi
-    ListType_2=$(zenity --window-icon ".res/rage.png" --width=350 --height=370 --checklist --list \
+    ListType_2=$(zenity --window-icon ".res/rage.png" --width=350 --height=400 --checklist --list \
                 --title='Ubuntu Software Installation'\
                 --ok-label="Install" \
                 --text="<b>Select <span foreground='red'>Developer Software </span>To Install :</b>"\

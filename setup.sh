@@ -2684,7 +2684,7 @@ ins(){
             fi
 
           ################## Phase - 2 #####################
-            if [[ $ListType == *"NodeJs"* ]]; then
+            if [[ $ListType_2 == *"NodeJs"* ]]; then
                 # they selected the short radio button
                 Flag="--NodeJs"
                 nj
@@ -2694,53 +2694,53 @@ ins(){
                 Flag="--MariaDB"
                 Mariadb
             fi
-            if [[ $ListType == *"Redis-tools"* ]]; then
+            if [[ $ListType_2 == *"Redis-tools"* ]]; then
                 # they selected the short radio button
                 Flag="--Redis-tools"
                 redis_chk
             fi
-            if [[ $ListType == *"Mysql-Client"* ]]; then
+            if [[ $ListType_2 == *"Mysql-Client"* ]]; then
                 # they selected the short radio button
                 Flag="--Mysql-Client"
                 mysql_clt_chk
             fi
-            if [[ $ListType == *"PHP"* ]]; then
+            if [[ $ListType_2 == *"PHP"* ]]; then
                 # they selected the short radio button
                 Flag="--PHP"
                 php_ver
             fi
-            if [[ $ListType == *"Composer"* ]]; then
+            if [[ $ListType_2 == *"Composer"* ]]; then
                 # they selected the short radio button
                 Flag="--Composer"
                 php_comp_chk
             fi
-            if [[ $ListType == *"Nginx"* ]]; then
+            if [[ $ListType_2 == *"Nginx"* ]]; then
                 # they selected the short radio button
                 Flag="--Nginx"
                 NG
             fi
-            if [[ $ListType == *"Docker"* ]]; then
+            if [[ $ListType_2 == *"Docker"* ]]; then
                 # they selected the short radio button
                 Flag="--Docker"
                 DOCK_CHK
             fi
-            if [[ $ListType == *"Project Setup"* ]]; then
+            if [[ $ListType_2 == *"Project Setup"* ]]; then
                 # they selected the short radio button
                 Flag="--Project Setup"
                 proj_finl
             fi
-            if [[ $ListType == *"Lando"* ]]; then
+            if [[ $ListType_2 == *"Lando"* ]]; then
                 # they selected the short radio button
                 Flag="--Lando"
                 lan_chk
             fi
-            if [[ $ListType == *"Git"* ]]; then
+            if [[ $ListType_2 == *"Git"* ]]; then
                 # they selected the short radio button
                 Flag="--Git"
                 git_main
             fi
 
-            if [[ $ListType == *"Postman"* ]]; then
+            if [[ $ListType_2 == *"Postman"* ]]; then
                 # they selected the short radio button
                 Flag="--PSM"
                 postman_chk

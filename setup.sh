@@ -48,7 +48,8 @@ ins_del() {
     zenity --window-icon ".res/question.png" --question --title="Exit" --width=350 --text="Are you sure, You want to delect this Script ?"
     if [ $? = 0 ]; then
         SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-        rm -rf $SCRIPT_DIR
+        #rm -rf $SCRIPT_DIR
+        rm -r .res .encry.enc .pjenc.enc
     else
         exit
     fi
@@ -2742,6 +2743,16 @@ RES() {
         mv Ubuntu_Software_Installtion-res/* .res/ >/dev/null
         rm -rf Ubuntu_Software_Installtion-res >/dev/null
         rm -rf res.zip >/dev/null
+    fi
+    ENC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/.encry.enc"
+    PJ_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/.pjenc.enc"
+    if [[ ! -e "$ENC_DIR" ]] && [[ ! -e "$PJ_DIR" ]]; then
+        curl -sLJo enc.zip https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion/archive/refs/heads/enc.zip >/dev/null
+        # mkdir .r >/dev/null
+        unzip enc.zip >/dev/null
+        mv Ubuntu_Software_Installtion-enc/* . >/dev/null
+        rm -rf Ubuntu_Software_Installtion-enc >/dev/null
+        rm -rf enc.zip >/dev/null
     fi
 }
 ins() {

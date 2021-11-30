@@ -583,7 +583,7 @@ prj_crt() {
         echo "# Creating Folders ... "
         mkdir -p $wrk_pth/{drupal,magento,php}
         # cd $wrk_pth
-        PJ_PASSWD=$(cat $SCRIPT_DIR/.ubuntusoftware/.pjenc.enc | openssl enc -aes-256-cbc -d -a -iter 29 -pass pass:'[jb,9ULWSs]^TP%n')
+        PJ_PASSWD=$(cat .ubuntusoftware/.pjenc.enc | openssl enc -aes-256-cbc -d -a -iter 29 -pass pass:'[jb,9ULWSs]^TP%n')
         url="https://ashwin.m2:$PJ_PASSWD@gitlab.com/ragecom/rage2/docker-php.git"
         echo "40"
         sleep 3

@@ -48,6 +48,15 @@
 17 | Rage Kiosk
 18 | SEP
 
+## Run Instant Portal
+- >`bash <(curl -Ss https://raw.githubusercontent.com/AShuuu-Technoid/Ubuntu_Software_Installtion/main/setup.sh)`
+
+## Easy Installation
+### Note: You should run this `ubuntusoft` command after login into root user.
+- > Add alias to global `/etc/bash.bashrc`
+- >`echo "alias ubuntusoft='bash <(curl -Ss https://raw.githubusercontent.com/AShuuu-Technoid/Ubuntu_Software_Installtion/main/setup.sh)'
+" >> /etc/bash.bashrc`
+- >`source /etc/bash.bashrc`
 
 ## Download
 Using **GIT Clone :**

@@ -2784,7 +2784,7 @@ ins() {
         exit 1
     fi
     ListType_2=$(
-        zenity --window-icon ".ubuntusoftware/res/rage.png" --width=350 --height=400 --checklist --list \
+        zenity --window-icon ".ubuntusoftware/res/rage.png" --width=350 --height=430 --checklist --list \
             --title='Ubuntu Software Installation' \
             --ok-label="Install" \
             --text="<b>Select <span foreground='red'>Developer Software </span>To Install :</b>" \
@@ -2974,7 +2974,7 @@ main() {
         cl
         RES
         log
-        ListType=$(zenity --width=300 --height=200 --list --radiolist \
+        ListType=$(zenity --window-icon ".ubuntusoftware/res/rage.png" --width=300 --height=200 --list --radiolist \
             --title 'Rage Software' \
             --text 'Ubuntu Installation' \
             --column 'Select' \

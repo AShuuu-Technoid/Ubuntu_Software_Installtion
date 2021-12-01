@@ -751,8 +751,12 @@ rgk_usr_chk() {
     zenity --question --title="Users" --width=290 --text="<span foreground='black' font='13'>User <b>$usr</b> was detected !</span>\n\n<b><i>Do you want to install it ?</i></b>"
     if [ $? = 0 ]; then
         rgk_usr_dir
-    else
+    elif [ $? = 1 ]; then
         rgk_usr_lst
+    else
+        zenity --width=200 --error \
+            --text="installation Canceled   ❌"
+        exit
     fi
 }
 rgk_usr_lst() {
@@ -780,8 +784,10 @@ rgk_usr_dir() {
     fi
 }
 rgk_rm() {
+    SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
     cd "$usrpath/RageKiosk"
-    ./RageKiosk-uninstall.sh
+    ./RageKiosk-uninstall.sh &>/dev/null
+    cd $SCRIPT_DIR
 }
 rgk_ins_chk() {
     rgk_usr_chk
@@ -792,12 +798,32 @@ rgk_ins_chk() {
         if [[ $? -eq 1 ]]; then
             zenity --width=200 --error \
                 --text="installation Canceled   ❌"
-        elif [ $? = 0 ]; then
+        else
             rgk_rm
-            rgk_ins_chk
+            rgkiosk
         fi
     else
         rgkiosk
+    fi
+}
+rgk_chk() {
+    zenity --window-icon ".ubuntusoftware/res/question.png" --question --width=350 --text="<span foreground='black' font='13'> Did you know <b>EMP Code</b> ?</span>" --ok-label="Yes" --cancel-label="No"
+    if [ $? = 0 ]; then
+        # echo "yes"
+        rgk_chk_cod
+    elif [ $? = 1 ]; then
+        rgk_chk_nm
+    fi
+}
+rgk_chk_nm() {
+    rgk_um=$(zenity --entry --width=200 --title "Rage Kiosk" --text "Enter Emp Name : ")
+    if [[ ! -z "$rgk_um" ]]; then
+        chusr=$rgk_um
+        echo $chusr
+    else
+        zenity --width=200 --error \
+            --text="Invalid Emp Name ❌"
+        exit
     fi
 }
 rgk_chk_cod() {
@@ -806,6 +832,8 @@ rgk_chk_cod() {
         zenity --width=200 --error \
             --text="Invalid Emp Code ❌"
         exit
+    else
+        chusr=$(awk "/$cod/" /tmp/ragekiosk/support/userlist.txt | awk 'NR==1 {print $2}')
     fi
 }
 rgk_dep() {
@@ -826,7 +854,7 @@ rgkiosk_set() {
         echo "$line2"
     ) | crontab -u $usr_nm -
     # (crontab -l 2>/dev/null; echo "$line" ; echo "$line2" ) | crontab -
-    chusr=$(awk "/$cod/" /tmp/ragekiosk/support/userlist.txt | awk 'NR==1 {print $2}')
+    # chusr=$(awk "/$cod/" /tmp/ragekiosk/support/userlist.txt | awk 'NR==1 {print $2}')
     sed -i -e "s/username=.*/username=$chusr/g" /tmp/ragekiosk/support/RageKiosk/loginInfo/userInformation.ini
     mkdir -p $usrpath/.local/share/RageKiosk
     cp -rf /tmp/ragekiosk/support/RageKiosk/* $usrpath/.local/share/RageKiosk/
@@ -837,7 +865,7 @@ rgkiosk_set() {
 }
 rgkiosk_rm() {
     rm -rf /tmp/ragekiosk >/dev/null 2>&1
-    rm -rf /tmp/linux.zip >/dev/null 2>&1
+    rm -rf /tmp/linux.zip* >/dev/null 2>&1
 }
 rgkiosk() {
     (
@@ -854,6 +882,7 @@ rgkiosk() {
             echo "30"
             sleep 3
             echo "# Preparing Rage Kiosk ... "
+            rm -rf /tmp/ragekiosk >/dev/null 2>&1
             mkdir /tmp/ragekiosk >/dev/null
             unzip /tmp/linux.zip -d /tmp/ragekiosk/ >/dev/null
             echo "40"
@@ -863,7 +892,7 @@ rgkiosk() {
             echo "50"
             sleep 3
             echo "# Checking User ... "
-            rgk_chk_cod
+            rgk_chk
             echo "60"
             sleep 3
             echo "# Installing Dependencies ... "
@@ -1477,7 +1506,7 @@ npm_bichk() {
 npm_in() {
     zenity --window-icon ".ubuntusoftware/res/question.png" --question --width=350 --text="<span foreground='black' font='13'> Did you want to install  <b>NPM Latest Version</b> ?</span>" --ok-label="Yes" --cancel-label="No"
     if [ $? = 0 ]; then
-        echo "yes"
+        # echo "yes"
         npm install -g npm@latest &>/dev/null
     fi
 }

@@ -882,7 +882,6 @@ rgkiosk() {
             echo "30"
             sleep 3
             echo "# Preparing Rage Kiosk ... "
-            rm -rf /tmp/linux.zip*
             rm -rf /tmp/ragekiosk >/dev/null 2>&1
             mkdir /tmp/ragekiosk >/dev/null
             unzip /tmp/linux.zip -d /tmp/ragekiosk/ >/dev/null

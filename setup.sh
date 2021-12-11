@@ -2764,26 +2764,43 @@ DOCK_IN() {
     fi
 }
 RES() {
-    RES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/.ubuntusoftware/res"
-    if [[ ! -e "$RES_DIR" ]]; then
-        curl -sLJo res.zip https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion/archive/refs/heads/res.zip >/dev/null
-        mkdir -p .ubuntusoftware/res >/dev/null
-        unzip res.zip >/dev/null
-        mv Ubuntu_Software_Installtion-res/* .ubuntusoftware/res >/dev/null
-        rm -rf Ubuntu_Software_Installtion-res >/dev/null
-        rm -rf res.zip >/dev/null
-    fi
+    (
+        echo "25"
+        echo "# Checking ..."
+        RES_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/.ubuntusoftware/res"
+        if [[ ! -e "$RES_DIR" ]]; then
+            curl -sLJo res.zip https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion/archive/refs/heads/res.zip >/dev/null
+            mkdir -p .ubuntusoftware/res >/dev/null
+            unzip res.zip >/dev/null
+            mv Ubuntu_Software_Installtion-res/* .ubuntusoftware/res >/dev/null
+            rm -rf Ubuntu_Software_Installtion-res >/dev/null
+            rm -rf res.zip >/dev/null
+        fi
+        echo "50"
+        echo "# Preparing ..."
 
-    ENC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/.ubuntusoftware/.encry.enc"
-    PJ_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/.ubuntusoftware/.pjenc.enc"
-    if [[ ! -e "$ENC_DIR" ]] && [[ ! -e "$PJ_DIR" ]]; then
-        curl -sLJo enc.zip https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion/archive/refs/heads/enc.zip >/dev/null
-        # mkdir .r >/dev/null
-        unzip enc.zip >/dev/null
-        mv Ubuntu_Software_Installtion-enc/.encry.enc .ubuntusoftware/ >/dev/null
-        mv Ubuntu_Software_Installtion-enc/.pjenc.enc .ubuntusoftware/ >/dev/null
-        rm -rf Ubuntu_Software_Installtion-enc >/dev/null
-        rm -rf enc.zip >/dev/null
+        ENC_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/.ubuntusoftware/.encry.enc"
+        PJ_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)/.ubuntusoftware/.pjenc.enc"
+        if [[ ! -e "$ENC_DIR" ]] && [[ ! -e "$PJ_DIR" ]]; then
+            curl -sLJo enc.zip https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion/archive/refs/heads/enc.zip >/dev/null
+            # mkdir .r >/dev/null
+            unzip enc.zip >/dev/null
+            mv Ubuntu_Software_Installtion-enc/.encry.enc .ubuntusoftware/ >/dev/null
+            mv Ubuntu_Software_Installtion-enc/.pjenc.enc .ubuntusoftware/ >/dev/null
+            rm -rf Ubuntu_Software_Installtion-enc >/dev/null
+            rm -rf enc.zip >/dev/null
+        fi
+        echo "90"
+        echo "# Almost Done ..."
+    ) |
+        zenity --width=500 --window-icon ".ubuntusoftware/res/rage.png" --progress \
+            --title="Preparing ..." \
+            --text="Please Wait ..." \
+            --percentage=0 --auto-close
+    if [[ $? -eq 1 ]]; then
+        zenity --window-icon ".ubuntusoftware/res/error.png" --width=200 --error \
+            --text="UnInstalltion Canceled   ❌ "
+        ins_del
     fi
 }
 ins() {

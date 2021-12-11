@@ -1,7 +1,13 @@
 #!/bin/bash
 #!/bin/sh
+
 tmstamp=$(date "+%Y%m%d-%H:%M:%S")
 dstamp=$(date "+%Y%m%d")
+
+LOG_DIR="/var/log/ubuntusoftware/"
+mkdir -p $LOG_DIR >/dev/null 2>&1
+readonly LOG_FILE="/var/log/ubuntusoftware/error-$dstamp.log"
+
 cra() {
     IFS='|' read user pw domi < <(zenity --window-icon ".ubuntusoftware/res/rage.png" --width=300 --height=190 --forms --title="Credentials" --text="Login Details" --add-entry="Username" --add-password="Password" --add-entry="Domain")
     dom=$(echo $domi | awk '{print toupper($0)}')
@@ -3040,4 +3046,4 @@ main() {
     fi
 
 }
-main
+main exec 2>>$LOG_FILE

@@ -49,8 +49,10 @@
 18 | SEP
 
 ## Run Instant Portal
-- >`bash <(curl -Ss https://raw.githubusercontent.com/AShuuu-Technoid/Ubuntu_Software_Installtion/main/setup.sh)`
-
+```
+bash <(curl -Ss https://raw.githubusercontent.com/AShuuu-Technoid/Ubuntu_Software_Installtion/main/setup.sh)
+```
+    
 ## Easy Installation
 ### Note: You should run this `ubuntusoft` command after login into root user.
 Need to add alias for global `/etc/bash.bashrc`

@@ -49,41 +49,55 @@
 18 | SEP
 
 ## Run Instant Portal
+
 ```
-bash <(curl -Ss https://raw.githubusercontent.com/AShuuu-Technoid/Ubuntu_Software_Installtion/main/setup.sh)
+bash <(curl -Ss https://raw.githubusercontent.com/AShuuu-Technoid/Ubuntu_Software_Installtion/main/setup.sh)`
 ```
-    
+
 ## Easy Installation
 ### Note: You should run this `ubuntusoft` command after login into root user.
 Need to add alias for global `/etc/bash.bashrc`
-- >```
+
+```
 printf "\nalias ubuntusoft='bash <(curl -Ss https://raw.githubusercontent.com/AShuuu-Technoid/Ubuntu_Software_Installtion/main/setup.sh)'
-  ```
-" >> /etc/bash.bashrc`
-- >`source /etc/bash.bashrc`
+" >> /etc/bash.bashrc
+```
+```
+source /etc/bash.bashrc
+```
 
 ## Download
 Using **GIT Clone :**
-- >`git clone https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion.git`
+```
+git clone https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion.git
+```
 
 Using **Zip :**
 - >Click and Download [Ubuntu Software Installation GUI](https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion/archive/refs/heads/main.zip)
 
-- >`unzip Ubuntu_Software_Installtion-main.zip`
+```
+unzip Ubuntu_Software_Installtion-main.zip
+```
 
 ## Usage
 
 Change to download directory.
 
-1. >` cd Ubuntu_Software_Installtion-main`
+```
+cd Ubuntu_Software_Installtion-main
+```
 
 Add execute permission for script.
 
-2. >` chmod +x setup.sh`
+```
+chmod +x setup.sh
+```
 
 Run a script as **Root User** to start setup.
 
-3. >` sudo ./setup.sh`
+```
+sudo ./setup.sh
+```
 
 Select software from installation setup.
 

@@ -52,7 +52,7 @@
 - Easy Run
 
 ```
-    bash <(curl -Ss https://raw.githubusercontent.com/AShuuu-Technoid/Ubuntu_Software_Installtion/main/setup.sh)`
+bash <(curl -Ss https://raw.githubusercontent.com/AShuuu-Technoid/Ubuntu_Software_Installtion/main/setup.sh)`
 ```
 
 ## Easy Installation
@@ -60,7 +60,7 @@
 - Need to add alias for global `/etc/bash.bashrc`
 
 ```
-    printf "\nalias ubuntusoft='bash <(curl -Ss https://raw.githubusercontent.com/AShuuu-Technoid/Ubuntu_Software_Installtion/main/setup.sh)'
+printf "\nalias ubuntusoft='bash <(curl -Ss https://raw.githubusercontent.com/AShuuu-Technoid/Ubuntu_Software_Installtion/main/setup.sh)'
 " >> /etc/bash.bashrc
 ```
 ```
@@ -68,7 +68,7 @@ source /etc/bash.bashrc
 ```
 
 ## Download
-Using **GIT Clone :**
+- Using **GIT Clone :**
 ```
 git clone https://github.com/AShuuu-Technoid/Ubuntu_Software_Installtion.git
 ```
@@ -82,19 +82,19 @@ unzip Ubuntu_Software_Installtion-main.zip
 
 ## Usage
 
-Change to download directory.
+- Change to download directory.
 
 ```
 cd Ubuntu_Software_Installtion-main
 ```
 
-Add execute permission for script.
+- Add execute permission for script.
 
 ```
 chmod +x setup.sh
 ```
 
-Run a script as **Root User** to start setup.
+- Run a script as **Root User** to start setup.
 
 ```
 sudo ./setup.sh

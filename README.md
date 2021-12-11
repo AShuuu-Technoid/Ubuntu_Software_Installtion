@@ -49,6 +49,7 @@
 18 | SEP
 
 ## Run Instant Portal
+- Easy Run
 
 ```
 bash <(curl -Ss https://raw.githubusercontent.com/AShuuu-Technoid/Ubuntu_Software_Installtion/main/setup.sh)`

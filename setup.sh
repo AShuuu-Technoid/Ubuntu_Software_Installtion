@@ -3046,4 +3046,4 @@ main() {
     fi
 
 }
-main exec 2>>$LOG_FILE
+main exec 2>> >(awk '{ print strftime("[%Y-%m-%d %H:%M:%S]"), $0 }' >>"$LOG_FILE")

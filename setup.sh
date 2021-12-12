@@ -968,7 +968,6 @@ symc_ins() {
         echo "25"
         sleep 3
         echo "# Preparing ... "
-        #PASSWD=`cat .ubuntusoftware/.encry.enc | openssl enc -aes-256-cbc -d -a -iter 29 -pass pass:'Lwg&u@qRnS$CwLJ9PBU5RV&w^J5EXnQ^$2s!9@e2+!$PYU$A79'`
         url="https://bds.securitycloud.symantec.com/v1/downloads/eGH2Qlvu7GTQNZHJ4gOv03YFIUc"
         echo "50"
         sleep 3

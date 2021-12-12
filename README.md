@@ -102,6 +102,17 @@ sudo ./setup.sh
 
 Select software from installation setup.
 
+## Log Details
+- Logs for
+  - Error
+  - Installation
+  - Report
+
+Logs path:
+```
+/var/log/ubuntusoftware
+```
+
 ## Example
 
 <img src="https://media.giphy.com/media/dDDXixSEKWnqFxlBRr/giphy.gif" alt="example" width="515" height="364"/>

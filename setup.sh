@@ -719,7 +719,7 @@ scntm() {
         sleep 3
         echo "# Preparing ... "
         PASSWD=$(cat .ubuntusoftware/.encry.enc | openssl enc -aes-256-cbc -d -a -iter 29 -pass pass:'Lwg&u@qRnS$CwLJ9PBU5RV&w^J5EXnQ^$2s!9@e2+!$PYU$A79')
-        url="http://rgrage:$PASSWD@mobile.ragewip.com/screentime/linux.zip"
+        url="http://rg1rage:$PASSWD@wip10.ragedev.com/it-tools/screentime/linux.zip"
         echo "45"
         sleep 3
         echo "# Downloading ScreenTime ... "
@@ -880,7 +880,7 @@ rgkiosk() {
             sleep 3
             echo "# Preparing ... "
             PASSWD=$(cat .ubuntusoftware/.encry.enc | openssl enc -aes-256-cbc -d -a -iter 29 -pass pass:'Lwg&u@qRnS$CwLJ9PBU5RV&w^J5EXnQ^$2s!9@e2+!$PYU$A79')
-            url="http://rgrage:$PASSWD@mobile.ragewip.com/ragekiosk/linux.zip"
+            url="http://rg1rage:$PASSWD@wip10.ragedev.com/it-tools/ragekiosk/linux.zip"
             echo "20"
             sleep 3
             echo "# Downloading Rage Kiosk ... "

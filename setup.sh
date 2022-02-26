@@ -776,8 +776,8 @@ firefx_chk() {
     if ! dpkg -s $pkgs >/dev/null 2>&1; then
         firefx
     else
-        FIRFX_VER=$(dpkg -s firefox | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}' | awk 'BEGIN{FS=OFS="."} NF--')
-        zenity --window-icon ".ubuntusoftware/res/firefox.png" --info --width=280 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Firefox Already Installed </span>\n\n<b><i>Version : $FIRFX_VER   </i></b>✅"
+        FIREFX_VER=$(dpkg -s firefox | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}' | awk 'BEGIN{FS=OFS="."} NF--')
+        zenity --window-icon ".ubuntusoftware/res/firefox.png" --info --width=280 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Firefox Already Installed </span>\n\n<b><i>Version : $FIREFX_VER   </i></b>✅"
     fi
 }
 
@@ -794,7 +794,7 @@ firefx() {
         echo "# Installing Firefox ... "
         apt install firefox -y >/dev/null 2>&1
         echo "95"
-        echo "# Installed 👍 "
+        echo "# Installed Firefox "
         sleep 3
     ) |
         zenity --width=500 --window-icon ".ubuntusoftware/res/firefox.png" --progress \

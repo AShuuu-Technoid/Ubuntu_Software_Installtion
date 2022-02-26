@@ -1,13 +1,16 @@
 #!/bin/bash
 #!/bin/sh
 
+## Date And Time Variables
 tmstamp=$(date "+%Y%m%d-%H:%M:%S")
 dstamp=$(date "+%Y%m%d")
 
+## Logs File Variables
 LOG_DIR="/var/log/ubuntusoftware/"
 mkdir -p $LOG_DIR >/dev/null 2>&1
 readonly LOG_FILE="/var/log/ubuntusoftware/error-$dstamp.log"
 
+## Credentials Pop-up For Domain Join
 cra() {
     IFS='|' read user pw domi < <(zenity --window-icon ".ubuntusoftware/res/rage.png" --width=300 --height=190 --forms --title="Credentials" --text="Login Details" --add-entry="Username" --add-password="Password" --add-entry="Domain")
     dom=$(echo $domi | awk '{print toupper($0)}')
@@ -19,6 +22,8 @@ cra() {
         exit
     fi
 }
+
+## Report Generator For Auditing
 reprt_add() {
     basfile=/etc/bash.bashrc
     word="report-exportcsv"
@@ -29,6 +34,8 @@ reprt_add() {
         source $basfile
     fi
 }
+
+## Logs Generator To Monitor Activities
 log() {
     reprt_add
     log_path="/var/log/ubuntusoftware/log"
@@ -50,16 +57,20 @@ log() {
         awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Version" >"$reprt_path/report-$dstamp.txt"
     fi
 }
+
+## Delete Script Once Completed
 ins_del() {
     zenity --window-icon ".ubuntusoftware/res/question.png" --question --title="Exit" --width=350 --text="Are you sure, You want to delect this Script ?"
     if [ $? = 0 ]; then
         SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
-        #rm -rf $SCRIPT_DIR
+        rm -rf $SCRIPT_DIR
         rm -r .ubuntusoftware
     else
         exit
     fi
 }
+
+## Software Icons Download
 rsrt() {
     timeout=30
     for ((i = 0; i <= $timeout; i++)); do
@@ -74,6 +85,14 @@ rsrt() {
         zenity --window-icon ".ubuntusoftware/res/info.png" --info --width=280 --height=100 --timeout 15 --title="Restart" --text "<span foreground='black' font='13'>Restart manually ...</span>"
     fi
 }
+
+## Fix Apt Issue
+
+apt_fix() {
+    apt-get install --fix-broken -y >/dev/null 2>&1
+}
+
+## Checking Dependencies Is Installed
 cl() {
     pkgs='curl'
     if ! dpkg -s $pkgs >/dev/null 2>&1; then
@@ -84,22 +103,28 @@ cl() {
             apt-get install $pkgs -y >/dev/null 2>&1
             echo "10"
             sleep 3
-            echo "# Installed Depo ... "
+            echo "# Installed Repo ... "
         ) | zenity --info --width=250 --timeout=15 --title="Dependencies" --text="<span foreground='black' font='13'>Checking Dependencies\n\n</span> Please wait ..." --ok-label="Cancel"
     fi
 }
+
+## Checking Dependencies Is Installed
 depet() {
     pkgs='apt-transport-https'
     if ! dpkg -s $pkgs >/dev/null 2>&1; then
         apt-get install $pkgs -y >/dev/null
     fi
 }
+
+## Checking Wget Is Installed
 wg() {
     pkgs='wget'
     if ! dpkg -s $pkgs >/dev/null 2>&1; then
         apt-get install $pkgs -y >/dev/null
     fi
 }
+
+## Checking VS Code Is Installed
 vscd_chk() {
     pkgs='code'
     if ! dpkg -s $pkgs >/dev/null 2>&1; then
@@ -109,6 +134,8 @@ vscd_chk() {
         zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>VS Code Already Installed </span>\n\n<b><i>Version : $VSC_VER   </i></b>✅"
     fi
 }
+
+## VS Code Installation
 vscd() {
     (
         echo "25"
@@ -142,6 +169,8 @@ vscd() {
         ins_del
     fi
 }
+
+## Forticlient VPN Remove
 vpn_rm() {
     (
         echo "50"
@@ -159,6 +188,8 @@ vpn_rm() {
             --text="Installtion Canceled   ❌ "
     fi
 }
+
+## Checking Forticlient Is Installed
 vpn_chk() {
     vpn_path="/usr/bin/forticlientsslvpn"
     if [[ -d "$vpn_path" ]]; then
@@ -175,6 +206,8 @@ vpn_chk() {
         vpn_iitm
     fi
 }
+
+## Forticlient Installation
 vpn_iitm() {
     (
         echo "10"
@@ -212,6 +245,8 @@ vpn_iitm() {
             --text="Installtion Canceled   ❌ "
     fi
 }
+
+## Network Restarting
 rsrt_ser() {
     timeout=10
     for ((i = 0; i <= $timeout; i++)); do
@@ -225,6 +260,8 @@ rsrt_ser() {
         zenity --window-icon ".ubuntusoftware/res/openvpn.png" --info --width=280 --height=100 --timeout 15 --title="Network Restart" --text "<span foreground='black' font='13'>Restart manually ...</span>"
     fi
 }
+
+## OpenVPN Installtion
 opn_vpn() {
     (
         echo "50"
@@ -248,6 +285,8 @@ opn_vpn() {
             --text="Installtion Canceled   ❌ "
     fi
 }
+
+## Checking FileZilla Is Installed
 filezilla_chk() {
     pkgs='filezilla'
     if ! dpkg -s $pkgs >/dev/null 2>&1; then
@@ -258,11 +297,13 @@ filezilla_chk() {
     fi
 }
 
+## FileZilla Installation
 filezilla_ins() {
     (
         echo "25"
         sleep 3
         echo "# Installing Filezilla ... "
+        apt_fix
         apt-get install filezilla -y >/dev/null 2>&1
         echo "90"
         sleep 3
@@ -283,6 +324,7 @@ filezilla_ins() {
     fi
 }
 
+## Checking Snap Is Installed
 snapd_chk() {
     pkgs='snapd'
     if ! dpkg -s $pkgs >/dev/null 2>&1; then
@@ -290,6 +332,7 @@ snapd_chk() {
     fi
 }
 
+## Checking Postman Is Installed
 postman_chk() {
     snapd_chk
     pkgs='postman'
@@ -301,6 +344,7 @@ postman_chk() {
     fi
 }
 
+## Postman Installation
 postman_in() {
     (
         echo "25"
@@ -327,6 +371,7 @@ postman_in() {
 
 }
 
+## Checking MYSQL Client Is Installed
 mysql_clt_chk() {
     pkgs='mysql-client'
     if ! dpkg -s $pkgs >/dev/null 2>&1; then
@@ -337,6 +382,7 @@ mysql_clt_chk() {
     fi
 }
 
+## MYSQL Installation
 mysql_clt_ins() {
     (
         echo "25"
@@ -362,6 +408,7 @@ mysql_clt_ins() {
     fi
 }
 
+## Checking Redis Is Installed
 redis_chk() {
     pkgs='redis-tools'
     if ! dpkg -s $pkgs >/dev/null 2>&1; then
@@ -372,6 +419,7 @@ redis_chk() {
     fi
 }
 
+## Redis Installation
 redis_ins() {
     (
         echo "25"
@@ -397,6 +445,7 @@ redis_ins() {
     fi
 }
 
+## Checking Utilities Tools Is Installed
 tools_chk() {
     (
         # pkgs='zip'
@@ -480,9 +529,10 @@ tools_chk() {
     fi
 }
 
+## User Detection
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
 usr_chk() {
-    usr=$(users)
+    usr=$(users | awk '{print $1}')
     zenity --question --title="Users" --width=290 --text="<span foreground='black' font='13'>User <b>$usr</b> was detected !</span>\n\n<b><i>Do you want to install it ?</i></b>"
     if [ $? = 0 ]; then
         usr_dir
@@ -490,6 +540,8 @@ usr_chk() {
         usr_lst
     fi
 }
+
+## User List
 usr_lst() {
     usr=$(zenity --list --radiolist --width 200 --height 250 --text "Select playlist from the list below" --title "Please User :" --column "Playlists" --column "Select" --separator="/ " $(ls -d -1 /home/* /home/local/RAGE/* | sed 's|.*/||' | xargs -L1 echo FALSE))
     if [[ $? -eq 1 ]]; then
@@ -501,6 +553,8 @@ usr_lst() {
         usr_dir
     fi
 }
+
+## User Directory
 usr_dir() {
     usr_path="/home/$usr"
     usr_path1="/home/local/RAGE/$usr"
@@ -514,6 +568,8 @@ usr_dir() {
         rgk_us="yes"
     fi
 }
+
+## Checking Entry Is Exist
 chk_fl() {
     FILE=$usrpath/.bashrc
     FILE1="/etc/sysctl.conf"
@@ -578,6 +634,7 @@ chk_fl() {
 
 }
 
+## Docker Project Setup
 prj_crt() {
     (
         echo "25"
@@ -627,8 +684,11 @@ proj_finl() {
     usr_chk
     prj_crt
     chk_fl
+    apache_stop
+
 }
 
+## Checkinf Meld Is Installed
 mld_chk() {
     pkgs='meld'
     if ! dpkg -s $pkgs >/dev/null 2>&1; then
@@ -639,6 +699,7 @@ mld_chk() {
     fi
 }
 
+## Meld Installation
 mld() {
     (
         echo "25"
@@ -663,6 +724,8 @@ mld() {
         ins_del
     fi
 }
+
+## Checking Chrome Is Installed
 chrm_chk() {
     pkgs='google-chrome-stable'
     if ! dpkg -s $pkgs >/dev/null 2>&1; then
@@ -672,6 +735,8 @@ chrm_chk() {
         zenity --window-icon ".ubuntusoftware/res/chrome.png" --info --width=280 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Chrome Already Installed </span>\n\n<b><i>Version : $CHRM_VER   </i></b>✅"
     fi
 }
+
+## Chrome Installtion
 chrm() {
     (
         echo "25"
@@ -704,6 +769,8 @@ chrm() {
         ins_del
     fi
 }
+
+## Checking ScreenTime Is Installed
 scntm_chk() {
     pkgs='screentime'
     if ! dpkg -s $pkgs >/dev/null 2>&1; then
@@ -713,6 +780,8 @@ scntm_chk() {
         zenity --window-icon ".ubuntusoftware/res/rage.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Screen Time Already Installed</span>\n\n<b><i>Version :  $SCT_VER  </i></b>✅"
     fi
 }
+
+## ScreenTime Installation
 scntm() {
     (
         echo "25"
@@ -752,8 +821,10 @@ scntm() {
         ins_del
     fi
 }
+
+## Checking Users For RageKiosk
 rgk_usr_chk() {
-    usr=$(users)
+    usr=$(users | awk '{print $1}')
     zenity --question --title="Users" --width=290 --text="<span foreground='black' font='13'>User <b>$usr</b> was detected !</span>\n\n<b><i>Do you want to install it ?</i></b>"
     if [ $? = 0 ]; then
         rgk_usr_dir
@@ -765,6 +836,8 @@ rgk_usr_chk() {
         exit
     fi
 }
+
+## Users List For RageKiosk
 rgk_usr_lst() {
     usr=$(zenity --list --radiolist --width 200 --height 250 --text "Select playlist from the list below" --title "Please User :" --column "Playlists" --column "Select" --separator="/ " $(ls -d -1 /home/* /home/local/RAGE/* | sed 's|.*/||' | xargs -L1 echo FALSE))
     if [[ $? -eq 1 ]]; then
@@ -776,6 +849,8 @@ rgk_usr_lst() {
         rgk_usr_dir
     fi
 }
+
+## Users Directory For RageKiosk
 rgk_usr_dir() {
     usr_path="/home/$usr"
     usr_path1="/home/local/RAGE/$usr"
@@ -789,12 +864,16 @@ rgk_usr_dir() {
         rgk_us="yes"
     fi
 }
+
+## RageKiosk Remove
 rgk_rm() {
     SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
     cd "$usrpath/RageKiosk"
     ./RageKiosk-uninstall.sh &>/dev/null
     cd $SCRIPT_DIR
 }
+
+## RageKiosk Installtion
 rgk_ins_chk() {
     rgk_usr_chk
     rgk_fl="$usrpath/RageKiosk"
@@ -812,6 +891,8 @@ rgk_ins_chk() {
         rgkiosk
     fi
 }
+
+## Check Ragekiosk Is Installed
 rgk_chk() {
     zenity --window-icon ".ubuntusoftware/res/question.png" --question --width=350 --text="<span foreground='black' font='13'> Did you know <b>EMP Code</b> ?</span>" --ok-label="Yes" --cancel-label="No"
     if [ $? = 0 ]; then
@@ -821,6 +902,8 @@ rgk_chk() {
         rgk_chk_nm
     fi
 }
+
+## RageKiosk EMP Code
 rgk_chk_nm() {
     rgk_um=$(zenity --entry --width=200 --title "Rage Kiosk" --text "Enter Emp Name : ")
     if [[ ! -z "$rgk_um" ]]; then
@@ -832,6 +915,8 @@ rgk_chk_nm() {
         exit
     fi
 }
+
+## Checking EMP Code Is Exist
 rgk_chk_cod() {
     cod=$(zenity --entry --width=200 --title "Rage Kiosk" --text "Enter Emp Code : ")
     if ! grep -wq $cod "/tmp/ragekiosk/support/userlist.txt"; then
@@ -842,12 +927,16 @@ rgk_chk_cod() {
         chusr=$(awk "/$cod/" /tmp/ragekiosk/support/userlist.txt | awk 'NR==1 {print $2}')
     fi
 }
+
+## RageKiosk Tools Install
 rgk_dep() {
     pkgs='libxcb-xinerama0'
     if ! dpkg -s $pkgs >/dev/null 2>&1; then
         pkexec --disable-internal-agent apt install libxcb-xinerama0 -y >/dev/null 2>&1
     fi
 }
+
+## RageKiosk Configuration
 rgkiosk_set() {
     chmod +x /tmp/ragekiosk/InstallerRageKiosk.run
     sudo -u $usr_nm /tmp/ragekiosk/InstallerRageKiosk.run >/dev/null 2>&1
@@ -869,10 +958,14 @@ rgkiosk_set() {
     chmod 777 $usrpath/.local/share/RageKiosk/log
     sudo -u $usr_nm sh $usrpath/RageKiosk/RageKiosk/RageKiosk.sh >/dev/null 2>&1
 }
+
+## RageKiosk Remove
 rgkiosk_rm() {
     rm -rf /tmp/ragekiosk >/dev/null 2>&1
     rm -rf /tmp/linux.zip* >/dev/null 2>&1
 }
+
+## RageKiosk Installation
 rgkiosk() {
     (
         if [[ $rgk_us == "yes" ]]; then
@@ -928,6 +1021,8 @@ rgkiosk() {
             --text="installation Canceled   ❌"
     fi
 }
+
+## Checking Symantec Is Installed
 symc_chk() {
     file="/usr/lib/symantec/version.sh"
     if [[ -f "$file" ]]; then
@@ -940,6 +1035,8 @@ symc_chk() {
         symc_ins
     fi
 }
+
+## Symantec Remove
 symc_rm() {
     (
         echo "45"
@@ -963,6 +1060,8 @@ symc_rm() {
             --text="installation Canceled   ❌"
     fi
 }
+
+## Symantec Installation
 symc_ins() {
     (
         echo "25"
@@ -1005,6 +1104,8 @@ symc_ins() {
             --text="installation Canceled   ❌"
     fi
 }
+
+## Checking Pinta Is Installed
 pinta_chk() {
     pkgs='pinta'
     if ! dpkg -s $pkgs >/dev/null 2>&1; then
@@ -1014,6 +1115,8 @@ pinta_chk() {
         zenity --window-icon ".ubuntusoftware/res/pinta.png" --info --timeout 10 --width=250 --height=100 --title="Pinta" --text "<span foreground='black' font='13'> Pinta Already Installed </span>\n\n<b><i>Version : $PIN_VER </i></b>✅"
     fi
 }
+
+## Painta Installtion
 pinta_ins() {
     (
         echo "10"
@@ -1045,6 +1148,8 @@ pinta_ins() {
             --text="installation Canceled   ❌"
     fi
 }
+
+## Domain Package Installation
 domainjoin() {
     cra
     (
@@ -1107,6 +1212,8 @@ domainjoin() {
         ins_del
     fi
 }
+
+## Domain Join
 domain() {
     ListType=$(zenity --window-icon ".ubuntusoftware/res/rage.png" --width=200 --height=170 --list --radiolist \
         --title 'Installation' \
@@ -1130,6 +1237,8 @@ domain() {
         Flag=""
     fi
 }
+
+## PHP Composer Installation
 php_nl_in() {
     (
         echo "25"
@@ -1163,6 +1272,8 @@ php_nl_in() {
         ins_del
     fi
 }
+
+## PHP Composer Version List
 php_comp_lst() {
     (
         url="https://github.com/composer/composer/releases/download/$choice/composer.phar"
@@ -1198,6 +1309,8 @@ php_comp_lst() {
         ins_del
     fi
 }
+
+## PHP Composer Installation Version Entry
 php_comp_nl() {
     php_com_ver_ned=$(zenity --window-icon ".ubuntusoftware/res/php-com.png" --entry --width=200 --title "PHP-Composer" --text "PHP-Composer" --text="Enter Correct Version : ")
     php_comp_nl_url="https://github.com/composer/composer/releases/download/$php_com_ver_ned/composer.phar"
@@ -1208,6 +1321,8 @@ php_comp_nl() {
         zenity --window-icon ".ubuntusoftware/res/error.png" --error --width=250 --title="PHP-Composer Error" --text "<span foreground='black' font='13'> Incorrect Version !</span>"
     fi
 }
+
+## PHP Composer Installation Latest
 php_comp() {
     lst_ph=$(curl -s https://github.com/composer/composer/tags | grep "/composer/composer/releases/tag/" | grep "<a href=" | sed 's|.*/||' | sed 's/.$//' | sed 's/.$//' | sort -Vr)
     choices=()
@@ -1240,6 +1355,8 @@ php_comp() {
         zenity --window-icon ".ubuntusoftware/res/error.png" --error --width=250 --title="PHP-Composer Error" --text "<span foreground='black' font='13'>Incorrect Selections !</span>"
     fi
 }
+
+## Checking PHP Composer Is Installed
 php_comp_chk() {
     file="/usr/bin/php"
     # file1="/usr/local/bin/node"
@@ -1250,6 +1367,8 @@ php_comp_chk() {
         php_comp
     fi
 }
+
+## Lando INstallation Latest
 lan_las() {
     (
         echo "25"
@@ -1285,6 +1404,8 @@ lan_las() {
         ins_del
     fi
 }
+
+## Lando Version Entry Installation
 lan_nl() {
     ver_ned=$(zenity --window-icon ".ubuntusoftware/res/lando.png" --entry --width=200 --title "Lando" --text "Lando" --text="Enter Correct Version : ")
     selver=$(echo "lando-v$ver_ned.deb")
@@ -1296,6 +1417,8 @@ lan_nl() {
         zenity --window-icon ".ubuntusoftware/res/error.png" --error --width=250 --title="Lando Error" --text "<span foreground='black' font='13'> Incorrect Version !</span>"
     fi
 }
+
+## Lando Download And Installation
 lan_nl_in() {
     (
         echo "50"
@@ -1325,6 +1448,8 @@ lan_nl_in() {
         ins_del
     fi
 }
+
+## Lando Specific Version Installation
 lan_spc_l() {
     (
         selver=$(echo "lando-$choice.deb")
@@ -1356,6 +1481,8 @@ lan_spc_l() {
         ins_del
     fi
 }
+
+## Lando Version List
 lan_spc() {
     lst_l=$(curl -s https://github.com/lando/lando/tags | grep "/lando/lando/releases/tag/v" | grep "<a href=" | sed 's|.*/||' | sed 's/.$//' | sed 's/.$//')
     choices=()
@@ -1386,6 +1513,8 @@ lan_spc() {
         lan_spc_l
     fi
 }
+
+## Lando Remove
 lan_rm() {
     (
         echo "30"
@@ -1406,6 +1535,8 @@ lan_rm() {
         ins_del
     fi
 }
+
+## Checking Lando Want To Remove
 lan_rm_chk() {
     GIT_VER=$(dpkg -s lando | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}')
     zenity --window-icon ".ubuntusoftware/res/done.png" --question --title="Lando Installation" --width=290 --text="<span foreground='black' font='13'> Lando v$GIT_VER is already installed   ✅</span>\n\n<b><i>Do you want to remove it ?</i></b>"
@@ -1414,6 +1545,8 @@ lan_rm_chk() {
         lan
     fi
 }
+
+## Checking Lando Is Exist
 lan_chk() {
     pkgs='lando'
     if dpkg -s $pkgs >/dev/null 2>&1; then
@@ -1422,6 +1555,8 @@ lan_chk() {
         lan
     fi
 }
+
+## Lando Installation
 lan() {
     lan_sel=$(zenity --window-icon ".ubuntusoftware/res/lando.png" --width=170 --height=170 --list --radiolist \
         --title 'Lando Installation' \
@@ -1444,6 +1579,8 @@ lan() {
         lan_spc
     fi
 }
+
+## NodeJS Remove
 nj_rm() {
     (
         echo "30"
@@ -1468,6 +1605,8 @@ nj_rm() {
         ins_del
     fi
 }
+
+## NPM Remove Files
 npm_bichk() {
     (
         file="/usr/local/bin/npm"
@@ -1508,6 +1647,8 @@ npm_bichk() {
         ins_del
     fi
 }
+
+## NPM Installation
 npm_in() {
     zenity --window-icon ".ubuntusoftware/res/question.png" --question --width=350 --text="<span foreground='black' font='13'> Did you want to install  <b>NPM Latest Version</b> ?</span>" --ok-label="Yes" --cancel-label="No"
     if [ $? = 0 ]; then
@@ -1515,12 +1656,16 @@ npm_in() {
         npm install -g npm@latest &>/dev/null
     fi
 }
+
+## Checking NodeJS Is Installed
 nj_chk() {
     pkgs='nodejs'
     if dpkg -s $pkgs >/dev/null 2>&1; then
         nj_rm
     fi
 }
+
+## NodeJS Installation
 nj_in() {
     (
         echo "25"
@@ -1560,6 +1705,8 @@ nj_in() {
         ins_del
     fi
 }
+
+## NodeJS Version List
 nj_list() {
     cl
     nj_chk
@@ -1592,6 +1739,8 @@ nj_list() {
         zenity --window-icon ".ubuntusoftware/res/error.png" --error --width=250 --title="NodeJS Error" --text "<b>Incorrect Selections !</b>"
     fi
 }
+
+## NodeJS Version Entry
 nj_entr() {
     njent=$(zenity --entry \
         --title="NodeJs Version" \
@@ -1609,6 +1758,8 @@ nj_entr() {
         nj_entr_ins
     fi
 }
+
+## NodeJS Installation
 nj_entr_pack() {
     (
         echo "10"
@@ -1659,6 +1810,8 @@ nj_entr_pack() {
         ins_del
     fi
 }
+
+## NodeJS Entry Installation
 nj_entr_ins() {
     nj_url="https://nodejs.org/download/release/v$njent"
     if curl --head --silent --fail "$nj_url" >/dev/null 2>&1; then
@@ -1669,6 +1822,8 @@ nj_entr_ins() {
         nj_entr
     fi
 }
+
+## NodeJS Main
 nj() {
     nj_sel=$(zenity --window-icon ".ubuntusoftware/res/nodejs.png" --width=250 --height=170 --list --radiolist \
         --title 'NodeJs Installation' \
@@ -1691,6 +1846,8 @@ nj() {
         nj_entr
     fi
 }
+
+## Git Remove
 git_rm() {
     (
         echo "50"
@@ -1710,6 +1867,8 @@ git_rm() {
         # ins_del
     fi
 }
+
+## GitK Remove
 gitk_rm() {
     (
         echo "50"
@@ -1729,6 +1888,8 @@ gitk_rm() {
         # ins_del
     fi
 }
+
+## Git Want To Remove ?
 git_rm_cf() {
     GIT_VER=$(git --version | awk '{print $3}')
     zenity --window-icon ".ubuntusoftware/res/done.png" --question --title="Git Installation" --width=290 --text="<span foreground='black' font='13'> Git v$GIT_VER is already installed   ✅</span>\n\n<b><i>Do you want to remove it ?</i></b>"
@@ -1739,6 +1900,8 @@ git_rm_cf() {
         gt_ans="No"
     fi
 }
+
+## GitK Want To Remove ?
 gitk_rm_cf() {
     GITK_VER=$(dpkg -s git | grep "Version: 1:" | awk '{print $2}' | awk -F ':' '{print $2}' | awk -F '-' '{print $1}')
     zenity --window-icon ".ubuntusoftware/res/done.png" --question --title="Git Installation" --width=290 --text="<span foreground='black' font='13'> Gitk v$GITK_VER is already installed   ✅</span>\n\n<b><i>Do you want to remove it ?</i></b>"
@@ -1749,6 +1912,8 @@ gitk_rm_cf() {
         gtk_ans="No"
     fi
 }
+
+## Checking Git Is Installed
 git_chk() {
     pkgs='git'
     if dpkg -s $pkgs >/dev/null 2>&1; then
@@ -1757,6 +1922,8 @@ git_chk() {
         gt_ans="Yes"
     fi
 }
+
+## Checking GitK Is Installed
 gitk_chk() {
     pkgs='gitk'
     if dpkg -s $pkgs2 >/dev/null 2>&1; then
@@ -1766,6 +1933,7 @@ gitk_chk() {
     fi
 }
 
+## Git Installation
 git_ins() {
     (
         echo "15"
@@ -1791,6 +1959,8 @@ git_ins() {
         # ins_del
     fi
 }
+
+## GitK Installation
 gitk_ins() {
     (
         echo "15"
@@ -1816,6 +1986,8 @@ gitk_ins() {
         # ins_del
     fi
 }
+
+## Git Main
 git_main() {
     git_chk
     if [[ $gt_ans == "Yes" ]]; then
@@ -1826,6 +1998,8 @@ git_main() {
         gitk_ins
     fi
 }
+
+## Checking MYSQL Is Installed
 MYS_CHK() {
     pkgs='mariadb-server'
     if ! dpkg -s $pkgs >/dev/null 2>&1; then
@@ -1837,6 +2011,8 @@ MYS_CHK() {
         zenity --window-icon ".ubuntusoftware/res/mariadb.png" --info --timeout 10 --width=250 --height=100 --title="MariaDB" --text "<span foreground='black' font='13'> MariaDB Already Installed </span>\n\n<b><i>Version : $MYSQL_VER </i></b>✅"
     fi
 }
+
+## MYSQL Installation
 MY_INS() {
     (
         echo "25"
@@ -1889,6 +2065,8 @@ EOF
         ins_del
     fi
 }
+
+## MYSQL Remove
 MY_RMV() {
     (
         pkgs='mariadb-server'
@@ -1936,6 +2114,8 @@ MY_RMV() {
         ins_del
     fi
 }
+
+## MYSQL Main
 MYS() {
     ListType=$(zenity --window-icon ".ubuntusoftware/res/mariadb.png" --width=400 --height=200 --list --radiolist \
         --title 'Installation' \
@@ -1954,60 +2134,80 @@ MYS() {
         ins_del
     fi
 }
+
+## Stopping Apache Services
 apache_stop() {
     if [ -x "$(command -v apache2)" ]; then
         systemctl stop apache2.service >/dev/null
         systemctl disable apache2.service >/dev/null
     fi
 }
+
+## Stopping Nginx Services
 nginx_stop() {
     if [ -x "$(command -v nginx)" ]; then
         systemctl stop nginx.service >/dev/null
         systemctl disable nginx.service >/dev/null
     fi
 }
+
+## Stopping PHP-56 Services
 php5_6_stop() {
     if [ -x "$(command -v php5.6)" ]; then
         systemctl stop php5.6-fpm.service >/dev/null
         systemctl disable php5.6-fpm.service >/dev/null
     fi
 }
+
+## Stopping PHP-70 Services
 php7_0_stop() {
     if [ -x "$(command -v php7.0)" ]; then
         systemctl stop php7.0-fpm.service >/dev/null
         systemctl disable php7.0-fpm.service >/dev/null
     fi
 }
+
+## Stopping PHP-71 Services
 php7_1_stop() {
     if [ -x "$(command -v php7.1)" ]; then
         systemctl stop php7.1-fpm.service >/dev/null
         systemctl disable php7.1-fpm.service >/dev/null
     fi
 }
+
+## Stopping PHP-72 Services
 php7_2_stop() {
     if [ -x "$(command -v php7.2)" ]; then
         systemctl stop php7.2-fpm.service >/dev/null
         systemctl disable php7.2-fpm.service >/dev/null
     fi
 }
+
+## Stopping PHP-73 Services
 php7_3_stop() {
     if [ -x "$(command -v php7.3)" ]; then
         systemctl stop php7.3-fpm.service >/dev/null
         systemctl disable php7.3-fpm.service >/dev/null
     fi
 }
+
+## Stopping PHP-74 Services
 php7_4_stop() {
     if [ -x "$(command -v php7.4)" ]; then
         systemctl stop php7.4-fpm.service >/dev/null
         systemctl disable php7.4-fpm.service >/dev/null
     fi
 }
+
+## Stopping PHP-80 Services
 php8_0_stop() {
     if [ -x "$(command -v php8.0)" ]; then
         systemctl stop php8.0-fpm.service >/dev/null
         systemctl disable php8.0-fpm.service >/dev/null
     fi
 }
+
+## PHP-56 Installation
 php5_6() {
     (
         echo "5"
@@ -2075,6 +2275,8 @@ php5_6() {
             --text="installation Canceled   ❌ "
     fi
 }
+
+## PHP-70 Installation
 php7_0() {
     (
         echo "5"
@@ -2143,6 +2345,8 @@ php7_0() {
             --text="installation Canceled   ❌ "
     fi
 }
+
+## PHP-71 Installation
 php7_1() {
     (
         echo "5"
@@ -2210,6 +2414,8 @@ php7_1() {
             --text="installation Canceled   ❌ "
     fi
 }
+
+## PHP-72 Installation
 php7_2() {
     (
         echo "5"
@@ -2277,6 +2483,8 @@ php7_2() {
             --text="installation Canceled   ❌ "
     fi
 }
+
+## PHP-73 Installation
 php7_3() {
     (
         echo "5"
@@ -2344,6 +2552,8 @@ php7_3() {
             --text="installation Canceled   ❌ "
     fi
 }
+
+## PHP-74 Installation
 php7_4() {
     (
         echo "5"
@@ -2413,6 +2623,8 @@ php7_4() {
             --text="installation Canceled   ❌ "
     fi
 }
+
+## PHP-80 Installation
 php8_0() {
     (
         echo "5"
@@ -2484,6 +2696,8 @@ php8_0() {
         ins_del
     fi
 }
+
+## PHP Versions
 php_ver() {
 
     php_sel=$(
@@ -2563,6 +2777,8 @@ php_ver() {
         fi
     fi
 }
+
+## Nginx Installation
 NG() {
     (
         echo "10"
@@ -2603,37 +2819,8 @@ NG() {
         ins_del
     fi
 }
-mar() {
-    (
-        echo "10"
-        sleep 3
-        echo "# Updating mail logs"
-        sleep 3
-        echo "20"
-        sleep 3
-        echo "# Resetting cron jobs"
-        sleep 3
-        echo "50"
-        sleep 3
-        echo "This line will just be ignored"
-        sleep 3
-        echo "75"
-        sleep 3
-        echo "# Rebooting system"
-        sleep 3
-        echo "100"
-        sleep 3
-    ) |
-        zenity --width=500 --window-icon ".ubuntusoftware/res/progress.png" --progress \
-            --title="Installing NodeJs" \
-            --text="NodeJs..." \
-            --percentage=0
-    if [[ $? -eq 1 ]]; then
-        zenity --window-icon ".ubuntusoftware/res/error.png" --width=200 --error \
-            --text="installation Canceled   ❌"
-        ins_del
-    fi
-}
+
+## Docker-Compose Installation
 DOCK_COMP() {
     (
         echo "10"
@@ -2662,6 +2849,8 @@ DOCK_COMP() {
         ins_del
     fi
 }
+
+## Checking Docker-Compose
 DOCK_CHK() {
     if [ ! -x "$(command -v docker)" ]; then
         DOCK_IN
@@ -2675,6 +2864,8 @@ DOCK_CHK() {
         zenity --window-icon ".ubuntusoftware/res/done.png" --info --timeout 15 --width=300 --height=100 --title="Docker Installation" --text "<span foreground='black' font='13'>Docker Already Installed</span>\n\n<b><i>Docker Version : $DOCK_VER  ✅\n\nDocker-compose Version : $DOCOM_VER  ✅</i></b>"
     fi
 }
+
+## Docker Installation
 DOCK_IN() {
     # optr=`zenity --list --radiolist --column="Select" --column="Actions" $(ls  /home/local/RAGE/  | awk -F'\n' '{print NR, $1}')`
     if [[ $? -eq 0 ]]; then
@@ -2768,6 +2959,8 @@ DOCK_IN() {
         exit 1
     fi
 }
+
+## Resource Icon
 RES() {
     (
         echo "25"
@@ -2808,6 +3001,8 @@ RES() {
         ins_del
     fi
 }
+
+## Sub Menu
 ins() {
     ListType_1=$(
         zenity --window-icon ".ubuntusoftware/res/rage.png" --width=350 --height=400 --checklist --list \
@@ -2987,6 +3182,7 @@ ins() {
 
 }
 
+## PHP Team Custom Menu
 php_tm_custom() {
     # Chrome installtion
     chrm_chk
@@ -3015,6 +3211,7 @@ php_tm_custom() {
     proj_finl
 }
 
+## Main Menu
 main() {
     clear
     if [ $(whoami) != root ]; then
@@ -3025,6 +3222,7 @@ main() {
         cl
         RES
         log
+        apt_fix
         ListType=$(zenity --window-icon ".ubuntusoftware/res/rage.png" --width=300 --height=200 --list --radiolist \
             --title 'Rage Software' \
             --text 'Ubuntu Installation' \
@@ -3045,4 +3243,6 @@ main() {
     fi
 
 }
+
+## Run With Log Executing
 main exec 2>> >(awk '{ print strftime("[%Y-%m-%d %H:%M:%S]"), $0 }' >>"$LOG_FILE")

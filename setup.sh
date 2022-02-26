@@ -785,19 +785,17 @@ firefx_chk() {
 firefx() {
     (
         echo "25"
-        sleep 1
         echo "# Adding Repo... "
         add-apt-repository ppa:mozillateam/firefox-next -y >/dev/null 2>&1
         echo "50"
-        sleep 3
         echo "# Updating Repo ... "
         apt update -y >/dev/null 2>&1
         echo "70"
         echo "# Installing Firefox ... "
         apt install firefox -y >/dev/null 2>&1
         echo "95"
-        sleep 3
         echo "# Installed 👍 "
+        sleep 3
     ) |
         zenity --width=500 --window-icon ".ubuntusoftware/res/firefox.png" --progress \
             --title="Firefox Installation" \

@@ -803,8 +803,8 @@ firefx() {
             --percentage=0 --auto-close
     FIREFX_VER=$(dpkg -s firefox | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}' | awk 'BEGIN{FS=OFS="."} NF--')
     echo "Firefox $FIREFX_VER $tmstamp" >>$log_file
-    awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Chrome" | grep "$tmstamp" >>"$reprt_path/report-$dstamp.txt"
-    zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=280 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Firefox Version </span>\n\n<b><i>Version : $CHRM_VER   </i></b>✅"
+    awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Firefox" | grep "$tmstamp" >>"$reprt_path/report-$dstamp.txt"
+    zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=280 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Firefox Version </span>\n\n<b><i>Version : $FIREFX_VER   </i></b>✅"
     if [[ $? == 1 ]]; then
         zenity --window-icon ".ubuntusoftware/res/error.png" --width=200 --error \
             --text="installation Canceled   ❌"

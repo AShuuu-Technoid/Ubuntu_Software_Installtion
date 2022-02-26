@@ -631,7 +631,7 @@ chk_fl() {
     if ! grep -q "$STRING13" "$FILE1"; then
         echo $STRING13 >>$FILE1
     fi
-
+    source $FILE
 }
 
 ## Docker Project Setup
@@ -763,6 +763,50 @@ chrm() {
     echo "Chrome $CHRM_VER $tmstamp" >>$log_file
     awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Chrome" | grep "$tmstamp" >>"$reprt_path/report-$dstamp.txt"
     zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=280 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Chrome Version </span>\n\n<b><i>Version : $CHRM_VER   </i></b>✅"
+    if [[ $? == 1 ]]; then
+        zenity --window-icon ".ubuntusoftware/res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
+        ins_del
+    fi
+}
+
+## Checking Firefox Is Installed
+firefx_chk() {
+    pkgs='firefox'
+    if ! dpkg -s $pkgs >/dev/null 2>&1; then
+        firefx
+    else
+        FIRFX_VER=$(dpkg -s firefox | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}' | awk 'BEGIN{FS=OFS="."} NF--')
+        zenity --window-icon ".ubuntusoftware/res/firefox.png" --info --width=280 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Firefox Already Installed </span>\n\n<b><i>Version : $FIRFX_VER   </i></b>✅"
+    fi
+}
+
+## Firefox Installtion
+firefx() {
+    (
+        echo "25"
+        sleep 1
+        echo "# Adding Repo... "
+        add-apt-repository ppa:mozillateam/firefox-next -y >/dev/null 2>&1
+        echo "50"
+        sleep 3
+        echo "# Updating Repo ... "
+        apt update -y >/dev/null 2>&1
+        echo "70"
+        echo "# Installing Firefox ... "
+        apt install firefox -y >/dev/null 2>&1
+        echo "95"
+        sleep 3
+        echo "# Installed 👍 "
+    ) |
+        zenity --width=500 --window-icon ".ubuntusoftware/res/firefox.png" --progress \
+            --title="Firefox Installation" \
+            --text="Preparing ..." \
+            --percentage=0 --auto-close
+    FIREFX_VER=$(dpkg -s firefox | grep Version: | awk -F '-' '{print $1}' | awk '{print $2}' | awk 'BEGIN{FS=OFS="."} NF--')
+    echo "Firefox $FIREFX_VER $tmstamp" >>$log_file
+    awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Chrome" | grep "$tmstamp" >>"$reprt_path/report-$dstamp.txt"
+    zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=280 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Firefox Version </span>\n\n<b><i>Version : $CHRM_VER   </i></b>✅"
     if [[ $? == 1 ]]; then
         zenity --window-icon ".ubuntusoftware/res/error.png" --width=200 --error \
             --text="installation Canceled   ❌"
@@ -3005,13 +3049,14 @@ RES() {
 ## Sub Menu
 ins() {
     ListType_1=$(
-        zenity --window-icon ".ubuntusoftware/res/rage.png" --width=350 --height=400 --checklist --list \
+        zenity --window-icon ".ubuntusoftware/res/rage.png" --width=350 --height=420 --checklist --list \
             --title='Ubuntu Software Installation' \
             --ok-label="Next" \
             --text="<b>Select <span foreground='red'> Utilities Software </span>To Install :</b>\n <span foreground='red' font='10'>⚠️ NOTE : Don't select Domain-join in multi selection. ⚠️ </span>" \
             --column="Select" --column="Software List" \
             " " "Domain-Join" \
             " " "Chrome" \
+            " " "Firefox" \
             " " "VS Code" \
             " " "FileZilla" \
             " " "Meld" \
@@ -3070,6 +3115,11 @@ ins() {
         # they selected the short radio button
         Flag="--Chrome"
         chrm_chk
+    fi
+    if [[ $ListType_1 == *"Firefox"* ]]; then
+        # they selected the short radio button
+        Flag="--Firefox"
+        firefx_chk
     fi
     if [[ $ListType_1 == *"VS Code"* ]]; then
         # they selected the short radio button
@@ -3186,6 +3236,8 @@ ins() {
 php_tm_custom() {
     # Chrome installtion
     chrm_chk
+    # Firefox Installation
+    firefx_chk
     # Vscode
     vscd_chk
     # Git

@@ -2609,12 +2609,18 @@ php7_4() {
             echo "20"
             echo "# Adding Packages ..."
             add-apt-repository ppa:ondrej/php -y >/dev/null
+            echo "35"
+            echo "# Downloading Modules ..."
+            wget -O /tmp/libonig4_6.7.0-1_amd64.deb http://archive.ubuntu.com/ubuntu/pool/universe/libo/libonig/libonig4_6.7.0-1_amd64.deb 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon ".ubuntusoftware/res/download.png" --progress --width=500 --auto-close --title="Downloading Modules ..."
+            echo "45"
+            echo "# Installing Modules ..."
+            dpkg -i /tmp/libonig4_6.7.0-1_amd64.deb >/dev/null 2>&1
             echo "50"
             echo "# Updating ..."
             apt-get update -y >/dev/null
             echo "60"
             echo "# Installing PHP 7.4 ..."
-            apt-get install php7.4-{common,cli,fpm} -y >/dev/null
+            apt-get install php7.4 php7.4-{common,cli,fpm} -y >/dev/null
             echo "70"
             echo "# Installing PHP 7.4 extensions ..."
             apt-get install php7.4-{curl,intl,mysql,readline,xml,gd,imap,intl,ldap,mbstring,mysql,sqlite3,pspell,soap,tidy,xml,xsl,zip,bcmath} -y >/dev/null
@@ -2626,18 +2632,25 @@ php7_4() {
             sleep 3
             sudo update-rc.d php7.4-fpm defaults >/dev/null
             echo "100"
+            rm -rf /tmp/libonig4_6.7.0-1_amd64.deb
             echo "# PHP 7.4 Installed ..."
             sleep 3
         else
             echo "20"
             echo "# Adding Packages ..."
             add-apt-repository ppa:ondrej/php -y >/dev/null
+            echo "35"
+            echo "# Downloading Modules ..."
+            wget -O /tmp/libonig4_6.7.0-1_amd64.deb http://archive.ubuntu.com/ubuntu/pool/universe/libo/libonig/libonig4_6.7.0-1_amd64.deb 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon ".ubuntusoftware/res/download.png" --progress --width=500 --auto-close --title="Downloading Modules ..."
+            echo "45"
+            echo "# Installing Modules ..."
+            dpkg -i /tmp/libonig4_6.7.0-1_amd64.deb >/dev/null 2>&1
             echo "50"
             echo "# Updating ..."
             apt-get update -y >/dev/null
             echo "60"
             echo "# Installing PHP 7.4 ..."
-            apt-get install php7.4-{common,cli,fpm} -y >/dev/null
+            apt-get install php7.4 php7.4-{common,cli,fpm} -y >/dev/null
             echo "68"
             echo "# Installing PHP 7.4 extensions ..."
             apt-get install php7.4-{curl,intl,mysql,readline,xml,gd,imap,intl,ldap,mbstring,mysql,sqlite3,pspell,soap,tidy,xml,xsl,zip,bcmath} -y >/dev/null
@@ -2649,6 +2662,7 @@ php7_4() {
             sleep 3
             sudo update-rc.d php7.4-fpm defaults >/dev/null
             echo "100"
+            rm -rf /tmp/libonig4_6.7.0-1_amd64.deb
             echo "# PHP 7.4 Installed ..."
             sleep 3
         fi

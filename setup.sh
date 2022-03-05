@@ -403,7 +403,7 @@ gulp_ver() {
     if [[ ! -z "$gulp_vers" ]]; then
         echo "Gulp $gulp_vers $tmstamp" >>$log_file
         awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Gulp" | grep "$tmstamp" >>"$reprt_path/report-$dstamp.txt"
-        zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Gulp </span>\n\n<b><i>Version : $gulp_vers   </i></b>✅"
+        zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Gulp Is Installed ! </span>\n\n<b><i>Version : $gulp_vers   </i></b>✅"
     else
         zenity --width=300 --error \
             --title="Gulp Error" \

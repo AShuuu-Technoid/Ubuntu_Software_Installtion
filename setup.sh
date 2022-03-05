@@ -3466,7 +3466,7 @@ main() {
         RES
         log
         apt_fix
-        ListType=$(zenity --window-icon ".ubuntusoftware/res/rage.png" --width=300 --height=200 --list --radiolist \
+        ListType=$(zenity --window-icon ".ubuntusoftware/res/rage.png" --width=250 --height=200 --list --radiolist \
             --title 'Rage Software' \
             --text 'Ubuntu Installation' \
             --column 'Select' \

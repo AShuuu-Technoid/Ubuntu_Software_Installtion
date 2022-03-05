@@ -408,7 +408,6 @@ gulp_ver() {
         zenity --width=300 --error \
             --title="Gulp Error" \
             --text="<span foreground='black' font='13'>Gulp not installed, Please check log file !</span>\n\n<b>'/var/log/ubuntusoftware/error-xxx.log'</b>"
-        exit
     fi
 }
 ## Gulp Check Version
@@ -3322,8 +3321,6 @@ ins() {
         nj
     fi
     if [[ $ListType_2 == *"Gulp"* ]]; then
-        # they selected the short radio button
-        Flag="--Gulp"
         gulp_chk
     fi
     if [[ $ListType_2 == *"MariaDB"* ]]; then

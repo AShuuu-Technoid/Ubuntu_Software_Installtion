@@ -285,139 +285,7 @@ opn_vpn() {
             --text="Installtion Canceled   ❌ "
     fi
 }
-## Gulp Check Version
-gulp_chk() {
-    gulp_vers=$(gulp -v | grep -o "version.*" | awk 'NR==1{print $2}')
-    if [[ -z "$gulp_vers" ]]; then
-        gulp_dep_chk
-    else
-        zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Gulp Is Already Installed ! </span>\n\n<b><i>Version : $gulp_vers   </i></b>✅"
-    fi
-}
-## Gulp Dependency Checking
-gulp_dep_chk() {
-    pkgs='npm'
-    if ! $pkgs -v >/dev/null 2>&1; then
-        zenity --question --title="Installation" --width=290 --text="<span foreground='black' font='13'>Gulp Dependency !</span>\n\n<b><i>Do you want to install it ?</i></b>"
-        if [ $? = 0 ]; then
-            nj
-            gulp_versel
-        elif [ $? = 1 ]; then
-            exit
-        else
-            zenity --width=200 --error \
-                --text="installation Canceled   ❌"
-            exit
-        fi
-    else
-        gulp_versel
-    fi
-}
-## Gulp Version Select
-gulp_versel() {
-    gulp_sel=$(zenity --window-icon ".ubuntusoftware/res/gulp.png" --width=170 --height=170 --list --radiolist \
-        --title 'Gulp Installation' \
-        --text 'Select Version to install:' \
-        --column 'Select' \
-        --column 'Actions' TRUE "Latest" FALSE "Specific")
 
-    if [[ $? -eq 1 ]]; then
-        # they pressed Cancel or closed the dialog window
-        zenity --window-icon ".ubuntusoftware/res/error.png" --error --title="Declined" --width=200 \
-            --text="installation Canceled   ❌"
-        exit 1
-    elif [[ $gulp_sel == "Latest" ]]; then
-        # they selected the short radio button
-        Flag="--Gulp-Latest"
-        gulp_las
-    elif [[ $gulp_sel == "Specific" ]]; then
-        # they selected the short radio button
-        Flag="--Gulp-Specific"
-        gulp_entr
-    fi
-}
-## Gulp Latest Version
-gulp_las() {
-    (
-        echo "15"
-        echo "# Preparing ... "
-        sleep 3
-        echo "35"
-        echo "# Installing Gulp ... "
-        npm install -g gulp-cli >/dev/null 2>&1
-        echo "55"
-        echo "# All Most Done ... "
-        sleep 3
-        echo "90"
-        echo "# Installed ... "
-    ) |
-        zenity --width=500 --window-icon ".ubuntusoftware/res/gulp.png" --progress \
-            --title="Installing Gulp" \
-            --text="Gulp ..." \
-            --percentage=0 --auto-close
-    gulp_ver
-    if [[ $? -eq 1 ]]; then
-        zenity --window-icon ".ubuntusoftware/res/error.png" --width=200 --error \
-            --text="installation Canceled   ❌"
-        ins_del
-    fi
-}
-## Gulp Version Entery
-gulp_entr() {
-    gulp_ent=$(zenity --entry \
-        --title="Gulp Version" \
-        --text="Enter Specific Version:")
-    if [[ $? -eq 1 ]]; then
-        # they pressed Cancel or closed the dialog window
-        zenity --window-icon ".ubuntusoftware/res/error.png" --error --title="Declined" --width=200 --timeout 15 \
-            --text="installation Canceled   ❌"
-        exit 1
-    elif [[ -z "$gulp_ent" ]]; then
-        zenity --window-icon ".ubuntusoftware/res/error.png" --error --title="Error" --width=200 \
-            --text="Invalid Version"
-    else
-        gulp_spc
-    fi
-}
-## Gulp Specific Version
-gulp_spc() {
-    (
-        echo "15"
-        echo "# Preparing ... "
-        sleep 3
-        echo "35"
-        echo "# Installing Gulp ... "
-        npm install -g gulp-cli@$gulp_ent >/dev/null 2>&1
-        echo "55"
-        echo "# All Most Done ... "
-        sleep 3
-        echo "90"
-        echo "# Installed ... "
-    ) |
-        zenity --width=500 --window-icon ".ubuntusoftware/res/gulp.png" --progress \
-            --title="Installing Gulp" \
-            --text="Gulp ..." \
-            --percentage=0 --auto-close
-    gulp_ver
-    if [[ $? -eq 1 ]]; then
-        zenity --window-icon ".ubuntusoftware/res/error.png" --width=200 --error \
-            --text="installation Canceled   ❌"
-        ins_del
-    fi
-}
-## Gulp Version
-gulp_ver() {
-    gulp_vers=$(gulp -v | grep -o "version.*" | awk 'NR==1{print $2}')
-    if [[ ! -z "$gulp_vers" ]]; then
-        echo "Gulp $gulp_vers $tmstamp" >>$log_file
-        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Gulp" | grep "$tmstamp" >>"$reprt_path/report-$dstamp.txt"
-        zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Gulp Is Installed ! </span>\n\n<b><i>Version : $gulp_vers   </i></b>✅"
-    else
-        zenity --width=300 --error \
-            --title="Gulp Error" \
-            --text="<span foreground='black' font='13'>Gulp not installed, Please check log file !</span>\n\n<b>'/var/log/ubuntusoftware/error-xxx.log'</b>"
-    fi
-}
 ## Checking FileZilla Is Installed
 filezilla_chk() {
     pkgs='filezilla'
@@ -2170,6 +2038,145 @@ git_main() {
     gitk_chk
     if [[ $gtk_ans == "Yes" ]]; then
         gitk_ins
+    fi
+}
+
+## Gulp Dependency Checking
+gulp_dep_chk() {
+    pkgs='npm'
+    if ! $pkgs -v >/dev/null 2>&1; then
+        zenity --question --title="Installation" --width=290 --text="<span foreground='black' font='13'>Gulp Dependency !</span>\n\n<b><i>Do you want to install it ?</i></b>"
+        if [ $? = 0 ]; then
+            nj
+            gulp_versel
+        elif [ $? = 1 ]; then
+            exit
+        else
+            zenity --width=200 --error \
+                --text="installation Canceled   ❌"
+            exit
+        fi
+    else
+        gulp_versel
+    fi
+}
+
+## Gulp Version Select
+gulp_versel() {
+    gulp_sel=$(zenity --window-icon ".ubuntusoftware/res/gulp.png" --width=170 --height=170 --list --radiolist \
+        --title 'Gulp Installation' \
+        --text 'Select Version to install:' \
+        --column 'Select' \
+        --column 'Actions' TRUE "Latest" FALSE "Specific")
+
+    if [[ $? -eq 1 ]]; then
+        # they pressed Cancel or closed the dialog window
+        zenity --window-icon ".ubuntusoftware/res/error.png" --error --title="Declined" --width=200 \
+            --text="installation Canceled   ❌"
+        exit 1
+    elif [[ $gulp_sel == "Latest" ]]; then
+        # they selected the short radio button
+        Flag="--Gulp-Latest"
+        gulp_las
+    elif [[ $gulp_sel == "Specific" ]]; then
+        # they selected the short radio button
+        Flag="--Gulp-Specific"
+        gulp_entr
+    fi
+}
+
+## Gulp Latest Version
+gulp_las() {
+    (
+        echo "15"
+        echo "# Preparing ... "
+        sleep 3
+        echo "35"
+        echo "# Installing Gulp ... "
+        npm install -g gulp-cli >/dev/null 2>&1
+        echo "55"
+        echo "# All Most Done ... "
+        sleep 3
+        echo "90"
+        echo "# Installed ... "
+    ) |
+        zenity --width=500 --window-icon ".ubuntusoftware/res/gulp.png" --progress \
+            --title="Installing Gulp" \
+            --text="Gulp ..." \
+            --percentage=0 --auto-close
+    gulp_ver
+    if [[ $? -eq 1 ]]; then
+        zenity --window-icon ".ubuntusoftware/res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
+        ins_del
+    fi
+}
+
+## Gulp Version Entery
+gulp_entr() {
+    gulp_ent=$(zenity --entry \
+        --title="Gulp Version" \
+        --text="Enter Specific Version:")
+    if [[ $? -eq 1 ]]; then
+        # they pressed Cancel or closed the dialog window
+        zenity --window-icon ".ubuntusoftware/res/error.png" --error --title="Declined" --width=200 --timeout 15 \
+            --text="installation Canceled   ❌"
+        exit 1
+    elif [[ -z "$gulp_ent" ]]; then
+        zenity --window-icon ".ubuntusoftware/res/error.png" --error --title="Error" --width=200 \
+            --text="Invalid Version"
+    else
+        gulp_spc
+    fi
+}
+## Gulp Specific Version
+gulp_spc() {
+    (
+        echo "15"
+        echo "# Preparing ... "
+        sleep 3
+        echo "35"
+        echo "# Installing Gulp ... "
+        npm install -g gulp-cli@$gulp_ent >/dev/null 2>&1
+        echo "55"
+        echo "# All Most Done ... "
+        sleep 3
+        echo "90"
+        echo "# Installed ... "
+    ) |
+        zenity --width=500 --window-icon ".ubuntusoftware/res/gulp.png" --progress \
+            --title="Installing Gulp" \
+            --text="Gulp ..." \
+            --percentage=0 --auto-close
+    gulp_ver
+    if [[ $? -eq 1 ]]; then
+        zenity --window-icon ".ubuntusoftware/res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
+        ins_del
+    fi
+}
+
+## Gulp Version
+gulp_ver() {
+    gulp_vers=$(gulp -v | grep -o "version.*" | awk 'NR==1{print $2}')
+    if [[ ! -z "$gulp_vers" ]]; then
+        echo "Gulp $gulp_vers $tmstamp" >>$log_file
+        awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Gulp" | grep "$tmstamp" >>"$reprt_path/report-$dstamp.txt"
+        zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Gulp Is Installed ! </span>\n\n<b><i>Version : $gulp_vers   </i></b>✅"
+    else
+        zenity --width=300 --error \
+            --title="Gulp Error" \
+            --text="<span foreground='black' font='13'>Gulp not installed, Please check log file !</span>\n\n<b>'/var/log/ubuntusoftware/error-xxx.log'</b>"
+    fi
+}
+
+## Gulp Check Version
+gulp_chk() {
+    gulp_vers=$(gulp -v | grep -o "version.*" | awk 'NR==1{print $2}')
+    if [[ -z "$gulp_vers" ]]; then
+        gulp_dep_chk
+    else
+        zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Gulp Is Already Installed ! </span>\n\n<b><i>Version : $gulp_vers   </i></b>✅"
     fi
 }
 

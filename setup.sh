@@ -285,7 +285,15 @@ opn_vpn() {
             --text="Installtion Canceled   ❌ "
     fi
 }
-
+## Gulp Check Version
+gulp_chk() {
+    gulp_vers=$(gulp -v | grep -o "version.*" | awk 'NR==1{print $2}')
+    if [[ -z "$gulp_vers" ]]; then
+        gulp_dep_chk
+    else
+        zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Gulp Is Already Installed ! </span>\n\n<b><i>Version : $gulp_vers   </i></b>✅"
+    fi
+}
 ## Gulp Dependency Checking
 gulp_dep_chk() {
     pkgs='npm'
@@ -410,16 +418,6 @@ gulp_ver() {
             --text="<span foreground='black' font='13'>Gulp not installed, Please check log file !</span>\n\n<b>'/var/log/ubuntusoftware/error-xxx.log'</b>"
     fi
 }
-## Gulp Check Version
-gulp_chk() {
-    gulp_vers=$(gulp -v | grep -o "version.*" | awk 'NR==1{print $2}')
-    if [[ -z "$gulp_vers" ]]; then
-        gulp_dep_chk
-    else
-        zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Gulp Is Already Installed ! </span>\n\n<b><i>Version : $gulp_vers   </i></b>✅"
-    fi
-}
-
 ## Checking FileZilla Is Installed
 filezilla_chk() {
     pkgs='filezilla'

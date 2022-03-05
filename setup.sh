@@ -2101,8 +2101,8 @@ gulp_las() {
         echo "# Installed ... "
     ) |
         zenity --width=500 --window-icon ".ubuntusoftware/res/gulp.png" --progress \
-            --title="Installing Gulp" \
-            --text="Gulp ..." \
+            --title="Gulp" \
+            --text="Installing Gulp ..." \
             --percentage=0 --auto-close
     gulp_ver
     if [[ $? -eq 1 ]]; then
@@ -2145,8 +2145,8 @@ gulp_spc() {
         echo "# Installed ... "
     ) |
         zenity --width=500 --window-icon ".ubuntusoftware/res/gulp.png" --progress \
-            --title="Installing Gulp" \
-            --text="Gulp ..." \
+            --title="Gulp" \
+            --text="Installing Gulp ..." \
             --percentage=0 --auto-close
     gulp_ver
     if [[ $? -eq 1 ]]; then
@@ -2167,6 +2167,31 @@ gulp_ver() {
         zenity --width=300 --error \
             --title="Gulp Error" \
             --text="<span foreground='black' font='13'>Gulp not installed, Please check log file !</span>\n\n<b>'/var/log/ubuntusoftware/error-xxx.log'</b>"
+    fi
+}
+## Gulp Remove
+gulp_rm() {
+    (
+        echo "15"
+        echo "# Preparing ... "
+        sleep 3
+        echo "35"
+        echo "# Removing Gulp ... "
+        npm uninstall -g gulp-cli >/dev/null 2>&1
+        echo "55"
+        echo "# All Most Done ... "
+        sleep 3
+        echo "90"
+        echo "# Removed Gulp ... "
+    ) |
+        zenity --width=500 --window-icon ".ubuntusoftware/res/gulp.png" --progress \
+            --title="Removing Gulp" \
+            --text="Gulp ..." \
+            --percentage=0 --auto-close
+    if [[ $? -eq 1 ]]; then
+        zenity --window-icon ".ubuntusoftware/res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
+        ins_del
     fi
 }
 

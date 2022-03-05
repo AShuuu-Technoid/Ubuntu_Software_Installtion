@@ -2176,7 +2176,18 @@ gulp_chk() {
     if [[ -z "$gulp_vers" ]]; then
         gulp_dep_chk
     else
-        zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Gulp Is Already Installed ! </span>\n\n<b><i>Version : $gulp_vers   </i></b>✅"
+        gulp_rm_cf
+    fi
+}
+# Gulp Remove Version
+gulp_rm_cf() {
+    zenity --window-icon ".ubuntusoftware/res/done.png" --question --title="Git Installation" --width=350 --text "<span foreground='black' font='13'> Gulp Is Already Installed ! </span>\n\n<b>Did you need to change this version : $gulp_vers </b>❓ "
+    if [ $? = 0 ]; then
+        gulp_rm
+        gulp_dep_chk
+        gulp_ans="Yes"
+    else
+        gulp_ans="No"
     fi
 }
 

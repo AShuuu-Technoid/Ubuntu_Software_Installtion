@@ -2170,7 +2170,7 @@ gulp_ver() {
     fi
 }
 
-## Gulp Check Version
+# Gulp Check Version
 gulp_chk() {
     gulp_vers=$(gulp -v | grep -o "version.*" | awk 'NR==1{print $2}')
     if [[ -z "$gulp_vers" ]]; then
@@ -3231,8 +3231,8 @@ ins() {
             --ok-label="Install" \
             --text="<b>Select <span foreground='red'>Developer Software </span>To Install :</b>" \
             --column="Select" --column="Software List" \
-            " " "NodeJs" \
             " " "Gulp" \
+            " " "NodeJs" \
             " " "MariaDB" \
             " " "Redis-tools" \
             " " "Mysql-Client" \
@@ -3326,6 +3326,8 @@ ins() {
         nj
     fi
     if [[ $ListType_2 == *"Gulp"* ]]; then
+        # they selected the short radio button
+        Flag="--Gulp"
         gulp_chk
     fi
     if [[ $ListType_2 == *"MariaDB"* ]]; then
@@ -3378,13 +3380,11 @@ ins() {
         Flag="--Git"
         git_main
     fi
-
     if [[ $ListType_2 == *"Postman"* ]]; then
         # they selected the short radio button
         Flag="--PSM"
         postman_chk
     fi
-
 }
 
 ## PHP Team Custom Menu

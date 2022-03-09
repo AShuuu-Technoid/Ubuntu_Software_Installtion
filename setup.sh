@@ -1109,7 +1109,7 @@ symc_ins() {
         echo "25"
         sleep 3
         echo "# Preparing ... "
-        url="https://bds.securitycloud.symantec.com/v1/downloads/eGH2Qlvu7GTQNZHJ4gOv03YFIUc"
+        url="https://bds.securitycloud.symantec.com/v1/downloads/YJQDmz-e8IVi7rgx8JohjSJ8RDc"
         echo "50"
         sleep 3
         echo "# Downloading Symantec Endpoint Protection ... "

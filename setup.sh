@@ -1113,7 +1113,7 @@ symc_ins() {
         echo "50"
         sleep 3
         echo "# Downloading Symantec Endpoint Protection ... "
-        wget -O /tmp/LinuxInstaller $url 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon ".ubuntusoftware/res/download.png" --progress --width=500 --auto-close --title="Downloading Rage Kiosk ..."
+        wget -O /tmp/LinuxInstaller $url 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon ".ubuntusoftware/res/download.png" --progress --width=500 --auto-close --title="Downloading SEP ..."
         echo "70"
         sleep 3
         echo "# Installing Symantec Endpoint Protection ... "

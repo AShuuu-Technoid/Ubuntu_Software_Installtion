@@ -114,6 +114,11 @@ Logs path:
 /var/log/ubuntusoftware
 ```
 
+Report Genrate Export
+```
+report-exportcsv /var/log/ubuntusoftware/report/report-xxxx.txt > report.csv
+```
+
 ## Example
 
 <img src="https://media.giphy.com/media/dDDXixSEKWnqFxlBRr/giphy.gif" alt="example" width="515" height="364"/>

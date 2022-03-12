@@ -114,7 +114,7 @@ Logs path:
 /var/log/ubuntusoftware
 ```
 
-Report Export
+Report Export:
 ```
 report-exportcsv /var/log/ubuntusoftware/report/report-xxxx.txt > report.csv
 ```

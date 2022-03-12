@@ -1134,7 +1134,8 @@ symc_ins_1() {
             --text="Checking ..." \
             --percentage=0 --auto-close
     SYMC_VER=$(cat /tmp/symver.txt | grep "Symantec Endpoint Protection (Cloud)" | awk 'NR==1 {print $5}' | awk -F '.' '{print $1 "." $2}')
-    echo "Symantec $SYMC_VER $tmstamp" >>$log_file
+    SER="(SERVER-1)"
+    echo "Symantec $SYMC_VER-$SER $tmstamp" >>$log_file
     awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Symantec" | grep "$tmstamp" >>"$reprt_path/report-$dstamp.txt"
     zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Symantec Endpoint Protection Installed</span>\n\n<b><i>SEP Linux Version : $SYMC_VER </i></b>✅"
     cd /tmp/
@@ -1177,7 +1178,8 @@ symc_ins_2() {
             --text="Checking ..." \
             --percentage=0 --auto-close
     SYMC_VER=$(cat /tmp/symver.txt | grep "Symantec Endpoint Protection (Cloud)" | awk 'NR==1 {print $5}' | awk -F '.' '{print $1 "." $2}')
-    echo "Symantec $SYMC_VER $tmstamp" >>$log_file
+    SER="(SERVER-2)"
+    echo "Symantec $SYMC_VER-$SER $tmstamp" >>$log_file
     awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Symantec" | grep "$tmstamp" >>"$reprt_path/report-$dstamp.txt"
     zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Symantec Endpoint Protection Installed</span>\n\n<b><i>SEP Linux Version : $SYMC_VER </i></b>✅"
     cd /tmp/

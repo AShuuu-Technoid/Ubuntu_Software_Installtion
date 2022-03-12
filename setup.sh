@@ -1063,7 +1063,6 @@ rgkiosk() {
             --text="installation Canceled   ❌"
     fi
 }
-
 ## Checking Symantec Is Installed
 symc_chk() {
     file="/usr/lib/symantec/version.sh"
@@ -1103,8 +1102,8 @@ symc_rm() {
     fi
 }
 
-## Symantec Installation
-symc_ins() {
+## Symantec Installation For 150 Users
+symc_ins_1() {
     (
         echo "25"
         sleep 3
@@ -1145,6 +1144,71 @@ symc_ins() {
         zenity --window-icon ".ubuntusoftware/res/error.png" --width=200 --error \
             --text="installation Canceled   ❌"
     fi
+}
+
+## Symantec Installation For 50 Users
+symc_ins_2() {
+    (
+        echo "25"
+        sleep 3
+        echo "# Preparing ... "
+        url="https://bds.securitycloud.symantec.com/v1/downloads/8PZXtlH-5SsHTjb038ui_nI_BQM"
+        echo "50"
+        sleep 3
+        echo "# Downloading Symantec Endpoint Protection ... "
+        wget -O /tmp/LinuxInstaller $url 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon ".ubuntusoftware/res/download.png" --progress --width=500 --auto-close --title="Downloading SEP ..."
+        echo "70"
+        sleep 3
+        echo "# Installing Symantec Endpoint Protection ... "
+        cd /tmp/
+        chmod +x LinuxInstaller
+        ./LinuxInstaller >/dev/null
+        echo "80"
+        sleep 3
+        echo "# Configurating Symantec Endpoint Protection ... "
+        cd /usr/lib/symantec/
+        ./version.sh >/tmp/symver.txt
+        echo "90"
+        sleep 3
+        echo "# Installed Symantec Endpoint Protection ... "
+        rm -rf /tmp/LinuxInstaller
+    ) |
+        zenity --window-icon ".ubuntusoftware/res/symantec.png" --width=500 --progress \
+            --title="Symantec Endpoint Protection Installation" \
+            --text="Checking ..." \
+            --percentage=0 --auto-close
+    SYMC_VER=$(cat /tmp/symver.txt | grep "Symantec Endpoint Protection (Cloud)" | awk 'NR==1 {print $5}' | awk -F '.' '{print $1 "." $2}')
+    echo "Symantec $SYMC_VER $tmstamp" >>$log_file
+    awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Symantec" | grep "$tmstamp" >>"$reprt_path/report-$dstamp.txt"
+    zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Symantec Endpoint Protection Installed</span>\n\n<b><i>SEP Linux Version : $SYMC_VER </i></b>✅"
+    cd /tmp/
+    rm -rf LinuxInstaller symver.txt >/dev/null
+    if [[ $? == 1 ]]; then
+        zenity --window-icon ".ubuntusoftware/res/error.png" --width=200 --error \
+            --text="installation Canceled   ❌"
+    fi
+
+}
+## Symantec Choise
+symc_ins() {
+
+    SymantecType=$(zenity --window-icon ".ubuntusoftware/res/rage.png" --width=250 --height=190 --list --radiolist \
+        --title 'Symantec Server' \
+        --text 'Symantec Installation' \
+        --column 'Select' \
+        --ok-label="Next" \
+        --column 'Actions' TRUE "Server 1 (150 Users)" FALSE "Server 2 (50 Users)")
+    if [[ $? -eq 1 ]]; then
+        zenity --window-icon ".ubuntusoftware/res/error.png" --error --title="Declined" --width=200 \
+            --text="installation Canceled   ❌"
+        ins_del
+        exit 1
+    elif [[ $SymantecType == "Server 1 (150 Users)" ]]; then
+        symc_ins_1
+    elif [[ $SymantecType == "Server 2 (50 Users)" ]]; then
+        symc_ins_2
+    fi
+
 }
 
 ## Checking Pinta Is Installed

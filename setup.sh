@@ -28,9 +28,15 @@ reprt_add() {
     basfile=/etc/bash.bashrc
     word="report-exportcsv"
     chk_wrd=$(grep -ci "$word" $basfile)
+    STRING_SOFT="alias ubuntusoft='bash <(curl -Ss https://raw.githubusercontent.com/AShuuu-Technoid/Ubuntu_Software_Installtion/main/setup.sh)'"
 
     if [ "$chk_wrd" = "0" ]; then
         printf 'alias report-exportcsv="%s" ' "$(echo "sed 's/|/,/g'")" >>$basfile
+        source $basfile
+    fi
+    if ! grep -q "$STRING_SOFT" "$basfile"; then
+        printf "\n$STRING_SOFT" >>$basfile
+        source $basfile
         source $basfile
     fi
 }

@@ -338,43 +338,89 @@ snapd_chk() {
     fi
 }
 
-## Checking Postman Is Installed
-postman_chk() {
-    snapd_chk
-    pkgs='postman'
-    if ! snap list | grep $pkgs >/dev/null 2>&1; then
-        postman_in
-    else
-        PSM_VER=$(snap list | grep postman | awk '{print $2}')
-        zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=250 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Postman Already Installed </span>\n\n<b><i>Version : $PSM_VER   </i></b>✅"
+postman_rm() {
+    (
+        echo "55"
+        sleep 3
+        echo "# Removing Postman ... "
+        rm -rf /usr/bin/Postman
+        rm -rf /usr/share/applications/Postman.desktop
+        snap remove postman >/dev/null 2>&1
+        echo "75"
+        sleep 3
+        echo "# Removing Postman ... "
+    ) |
+        zenity --width=500 --window-icon ".ubuntusoftware/res/postman.png" --progress \
+            --title="Removing Postman" \
+            --text="Removing Postman..." \
+            --percentage=0 --auto-close
+    zenity --window-icon ".ubuntusoftware/res/done.png" --info --timeout 10 --width=200 --no-wrap --title="Postman" --text "<span foreground='black' font='13'><b>Postman </b>\nRemoved Sucessfully  ✅  </span>"
+    postman_chk
+    if [[ $? -eq 1 ]]; then
+        zenity --window-icon ".ubuntusoftware/res/error.png" --width=200 --error \
+            --text="Removing Canceled   ❌ "
     fi
 }
 
-## Postman Installation
+postman_chk() {
+    snapd_chk
+    pkgs='postman'
+    if ! $(snap list | grep $pkgs) 2>/dev/null && [[ ! -d "/usr/bin/Postman" ]]; then
+        postman_in
+    else
+        PSM_VER=$(snap list | grep postman | awk '{print $2}')
+        zenity --window-icon ".ubuntusoftware/res/done.png" --question --title="Postman Installation" --width=290 --text="<span foreground='black' font='13'>Postman Already Installed  ✅</span>\n\n<b><i>Do you want to update it ?</i></b>"
+        if [[ $? -eq 1 ]]; then
+            zenity --width=200 --error \
+                --text="installation Canceled   ❌"
+        else
+            postman_rm
+        fi
+    fi
+
+}
+
 postman_in() {
     (
-        echo "25"
+        echo "15"
+        sleep 3
+        echo "# Downloading Postman ... "
+        wget https://dl.pstmn.io/download/latest/linux64 -P /tmp 2>&1 | sed -u 's/.* \([0-9]\+%\)\ \+\([0-9.]\+.\) \(.*\)/\1\n# Downloading at \2\/s, ETA \3/' | zenity --window-icon ".ubuntusoftware/res/postman.png" --progress --width=500 --auto-close --title="Postman"
+        echo "45"
         sleep 3
         echo "# Installing Postman ... "
-        snap install postman >/dev/null 2>&1
-        echo "90"
+        tar -xvf /tmp/linux64 -C /usr/bin >/dev/null 2>&1
+        echo "75"
         sleep 3
-        echo "# Installed Postman ... "
+        echo "# Configuring Postman ... "
+        printf "[Desktop Entry]
+    Name=Postman API Tool
+    GenericName=Postman
+    Comment=Testing API
+    Exec=/usr/bin/Postman/Postman
+    Terminal=false
+    X-MultipleArgs=false
+    Type=Application
+    Icon=/usr/bin/Postman/app/resources/app/assets/icon.png
+    StartupWMClass=Postman
+    StartupNotify=true" >/usr/share/applications/Postman.desktop
+        echo "95"
+        sleep 3
+        echo "# Almost Done ... "
     ) |
         zenity --width=500 --window-icon ".ubuntusoftware/res/postman.png" --progress \
             --title="Postman Installation" \
             --text="Postman ..." \
             --percentage=0 --auto-close
-    PSM_VER=$(snap list | grep postman | awk '{print $2}')
-    echo "Postman $PSM_VER $tmstamp" >>$log_file
+    # PSM_VER=$(snap list | grep postman | awk '{print $2}')
+    echo "Postman Latest $tmstamp" >>$log_file
     awk '{printf "%-30s|%-18s|%-20s\n",$1,$2,$3}' $log_file | grep "Postman" | grep "$tmstamp" >>"$reprt_path/report-$dstamp.txt"
-    zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'> Postman Version </span>\n\n<b><i>Version : $PSM_VER   </i></b>✅"
+    zenity --window-icon ".ubuntusoftware/res/done.png" --info --width=290 --height=100 --timeout 15 --title="Version Details" --text "<span foreground='black' font='13'>Postman Installed  ✅</span>"
     if [[ $? == 1 ]]; then
         zenity --window-icon ".ubuntusoftware/res/error.png" --width=200 --error \
             --text="installation Canceled   ❌"
         ins_del
     fi
-
 }
 
 ## Checking MYSQL Client Is Installed

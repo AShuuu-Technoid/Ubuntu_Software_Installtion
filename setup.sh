@@ -616,7 +616,7 @@ usr_dir() {
         rgk_us="yes"
     elif [[ -d "$usr_path1" ]]; then
         usrpath=$usr_path1
-        usr_nm="RAGE///$usr"
+        usr_nm="RAGE\\$usr"
         rgk_us="yes"
     fi
 }
@@ -954,7 +954,7 @@ rgk_usr_dir() {
         rgk_us="yes"
     elif [[ -d "$usr_path1" ]]; then
         usrpath=$usr_path1
-        usr_nm="RAGE///$usr"
+        usr_nm="RAGE\\$usr"
         rgk_us="yes"
     fi
 }

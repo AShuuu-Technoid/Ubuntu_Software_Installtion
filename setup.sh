@@ -224,8 +224,9 @@ vpn_iitm() {
         gzip -dc /tmp/forticlientsslvpn_linux_4.4.2329.tar.gz | tar -xvzf - >/dev/null 2>&1
         echo "60"
         echo "Copying Files ..."
+        SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd)"
         cp -rf forticlientsslvpn /usr/bin/ >/dev/null 2>&1
-        cp -rf .ubuntusoftware/res/forticlient.png /usr/bin/forticlientsslvpn/ >/dev/null 2>&1
+        cp -rf $SCRIPT_DIR/.ubuntusoftware/res/forticlient.png /usr/bin/forticlientsslvpn/ >/dev/null 2>&1
         rm -rf forticlientsslvpn
         echo "75"
         echo "Configuring Files ..."

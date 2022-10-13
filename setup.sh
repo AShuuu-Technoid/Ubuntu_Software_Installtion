@@ -1534,7 +1534,7 @@ lan_las() {
         echo "25"
         echo "# Getting Data from lando ..."
         sleep 3
-        lan_lat=$(curl -s https://github.com/lando/lando/tags | grep "/lando/lando/releases/tag/v" | grep "<a href=" | sed 's|.*/||' | sed 's/.$//' | sed 's/.$//' | awk 'NR==1 {print $1}')
+        lan_lat=$(curl -s https://github.com/lando/lando/tags | grep "/lando/lando/releases/tag/v" | grep "<a href=" | sed 's|.*/lando||' | sed 's/.$//' | sed 's/.$//' | sed 's|.*">||' | awk -v FS='</a>' '{print $1}' | awk 'NR==1 {print $1}')
         selver=$(echo "lando-x64-$lan_lat.deb")
         url="https://github.com/lando/lando/releases/download/$lan_lat/$selver"
         echo "50"

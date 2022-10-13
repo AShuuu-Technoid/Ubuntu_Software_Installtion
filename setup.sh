@@ -1644,8 +1644,7 @@ lan_spc_l() {
 
 ## Lando Version List
 lan_spc() {
-    lst_l=$(curl -s https://github.com/lando/lando/tags | grep "/lando/lando/releases/tag/v" | grep "<a href=" | sed 's|.*/lando||' | sed 's/.$//' | sed
- 's/.$//' | sed 's|.*">||' | awk -v FS='</a>' '{print $1}')
+    lst_l=$(curl -s https://github.com/lando/lando/tags | grep "/lando/lando/releases/tag/v" | grep "<a href=" | sed 's|.*/lando||' | sed 's/.$//' | sed 's/.$//' | sed 's|.*">||' | awk -v FS='</a>' '{print $1}')
     choices=()
     mode="true"
     for name in $lst_l; do

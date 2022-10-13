@@ -1568,7 +1568,7 @@ lan_las() {
 ## Lando Version Entry Installation
 lan_nl() {
     ver_ned=$(zenity --window-icon ".ubuntusoftware/res/lando.png" --entry --width=200 --title "Lando" --text "Lando" --text="Enter Correct Version : ")
-    selver=$(echo "lando-v$ver_ned.deb")
+    selver=$(echo "lando-x64-v$ver_ned.deb")
     lan_nl_url="https://github.com/lando/lando/releases/download/v$ver_ned/$selver"
     # echo "$lan_nl_url"
     if curl --output /dev/null --silent --head --fail "$lan_nl_url"; then

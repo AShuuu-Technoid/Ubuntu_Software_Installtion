@@ -1612,7 +1612,7 @@ lan_nl_in() {
 ## Lando Specific Version Installation
 lan_spc_l() {
     (
-        selver=$(echo "lando-$choice.deb")
+        selver=$(echo "lando-x64-$choice.deb")
         url="https://github.com/lando/lando/releases/download/$choice/$selver"
         echo "50"
         echo "# Downloading Lando ..."

@@ -1123,10 +1123,10 @@ symc_chk() {
         zenity --window-icon ".ubuntusoftware/res/done.png" --question --title="Symantec Installation" --width=290 --text="<span foreground='black' font='13'>Symantec Endpoint Protection Installed  ✅</span>\n\n<b><i>Do you want to remove it ?</i></b>"
         if [ $? = 0 ]; then
             symc_rm
-            symc_ins
+            symc_ins_1
         fi
     else
-        symc_ins
+        symc_ins_1
     fi
 }
 
@@ -1244,26 +1244,26 @@ symc_ins_2() {
 
 }
 ## Symantec Choise
-symc_ins() {
+# symc_ins() {
 
-    SymantecType=$(zenity --window-icon ".ubuntusoftware/res/rage.png" --width=250 --height=190 --list --radiolist \
-        --title 'Symantec Server' \
-        --text 'Symantec Installation' \
-        --column 'Select' \
-        --ok-label="Next" \
-        --column 'Actions' TRUE "Server 1 (150 Users)" FALSE "Server 2 (50 Users)")
-    if [[ $? -eq 1 ]]; then
-        zenity --window-icon ".ubuntusoftware/res/error.png" --error --title="Declined" --width=200 \
-            --text="installation Canceled   ❌"
-        ins_del
-        exit 1
-    elif [[ $SymantecType == "Server 1 (200 Users)" ]]; then
-        symc_ins_1
-    #elif [[ $SymantecType == "Server 2 (50 Users)" ]]; then
-    #    symc_ins_2
-    fi
+#     SymantecType=$(zenity --window-icon ".ubuntusoftware/res/rage.png" --width=250 --height=190 --list --radiolist \
+#         --title 'Symantec Server' \
+#         --text 'Symantec Installation' \
+#         --column 'Select' \
+#         --ok-label="Next" \
+#         --column 'Actions' TRUE "Server 1 (150 Users)" FALSE "Server 2 (50 Users)")
+#     if [[ $? -eq 1 ]]; then
+#         zenity --window-icon ".ubuntusoftware/res/error.png" --error --title="Declined" --width=200 \
+#             --text="installation Canceled   ❌"
+#         ins_del
+#         exit 1
+#     elif [[ $SymantecType == "Server 1 (200 Users)" ]]; then
+#         symc_ins_1
+#     #elif [[ $SymantecType == "Server 2 (50 Users)" ]]; then
+#     #    symc_ins_2
+#     fi
 
-}
+# }
 
 ## Checking Pinta Is Installed
 pinta_chk() {

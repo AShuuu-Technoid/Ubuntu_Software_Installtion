@@ -1161,7 +1161,7 @@ symc_ins_1() {
         echo "25"
         sleep 3
         echo "# Preparing ... "
-        url="https://bds.securitycloud.symantec.com/v1/downloads/YJQDmz-e8IVi7rgx8JohjSJ8RDc"
+        url="https://bds.securitycloud.symantec.com/v1/downloads/n2Z_J97PMkYnpbEJK9B3yg-7QLc"
         echo "50"
         sleep 3
         echo "# Downloading Symantec Endpoint Protection ... "
@@ -1257,10 +1257,10 @@ symc_ins() {
             --text="installation Canceled   ❌"
         ins_del
         exit 1
-    elif [[ $SymantecType == "Server 1 (150 Users)" ]]; then
+    elif [[ $SymantecType == "Server 1 (200 Users)" ]]; then
         symc_ins_1
-    elif [[ $SymantecType == "Server 2 (50 Users)" ]]; then
-        symc_ins_2
+    #elif [[ $SymantecType == "Server 2 (50 Users)" ]]; then
+    #    symc_ins_2
     fi
 
 }
